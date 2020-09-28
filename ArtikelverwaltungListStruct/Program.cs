@@ -11,6 +11,7 @@ namespace ArtikelverwaltungListStruct
         public static void Main(string[] args)
         {
             Console.WriteLine("Bitte wählen sie aus, was sie machen wollen.");
+            Console.WriteLine("1 = ");
         }
     }
 }
