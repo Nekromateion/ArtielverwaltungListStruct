@@ -107,7 +107,7 @@ namespace ArtikelverwaltungListStructClientConsole
         {
             Console.Clear();
             string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
-            string[] artikelList = response.Split("-.-")
+            string[] artikelList = response.Split('~');
         }
         
         private static void AddArticle()
