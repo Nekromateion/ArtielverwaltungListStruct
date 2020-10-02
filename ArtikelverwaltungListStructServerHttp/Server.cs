@@ -167,7 +167,38 @@ using System.Diagnostics;
 
          private void RemoveReqest(HttpListenerContext context)
          {
-             
+             string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
+
+             if (content[1] == "name")
+             {
+                 bool done = false;
+                 int count = 0;
+                 foreach (Artikel artikel in _artikels)
+                 {
+                     if (artikel.name.Contains(content[2]) && !done)
+                     {
+                         Artikel toremove = _artikels[count];
+                         _artikels.Remove(toremove);
+                     }
+                     count++;
+                 }
+             }
+             else if(content[1] == "number")
+             {
+                 bool done = false;
+                 int count = 0;
+                 foreach (Artikel artikel in _artikels)
+                 {
+                     if (artikel.nummer == Convert.ToInt32(content[2]) && !done)
+                     {
+                         Artikel toremove = _artikels[count];
+                         _artikels.Remove(toremove);
+                         done = true;
+                     }
+                     count++;
+                 }
+             }
+             else SendResponse(context, "1: That is not a valid remove term");
          }
 
          private void ReadReqest(HttpListenerContext context)
