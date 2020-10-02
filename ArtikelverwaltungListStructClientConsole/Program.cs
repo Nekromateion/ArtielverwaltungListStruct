@@ -18,7 +18,7 @@ namespace ArtikelverwaltungListStructClientConsole
                 Console.Clear();
                 Thread writeThread = new Thread(() =>
                 {
-                    int delay = 20;
+                    int delay = 50;
                     while (true)
                     {
                         Console.WriteLine("Checking if server is reachable -");
@@ -75,7 +75,41 @@ namespace ArtikelverwaltungListStructClientConsole
                 }
             }
             Console.WriteLine("Please select one of the following options");
+            Console.WriteLine("e: Exit the application");
             Console.WriteLine("1: Read Current list");
+            Console.WriteLine("2: Add a new article");
+            Console.WriteLine("3: Delete a article");
+            Console.WriteLine("");
+            Console.Write("Your input: ");
+            string input = Console.ReadLine();
+            
+            if(input == "1" || input == "read" || input == "list") ReadList();
+            else if (input == "2" || input == "add" || input == "put") AddArticle();
+            else if (input == "3" || input == "remove" || input == "delete" || input == "del") DelArticle();
+            else if (input == "e" || input == "exit" || input == "close") Environment.Exit(0xDEAD);
+            else
+            {
+                Console.WriteLine("That is not a valid input");
+                Thread.Sleep(2500);
+            }
+        }
+
+        private static void ReadList()
+        {
+            Console.Clear();
+            
+        }
+        
+        private static void AddArticle()
+        {
+            Console.Clear();
+            
+        }
+        
+        private static void DelArticle()
+        {
+            Console.Clear();
+            
         }
     }
 }
