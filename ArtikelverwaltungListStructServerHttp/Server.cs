@@ -18,6 +18,7 @@ using System.Diagnostics;
          private string _rootDirectory;
          private HttpListener _listener;
          private int _port;
+         private string _key;
          private List<Artikel> _artikels = new List<Artikel>();
          private string waerung = String.Empty;
 
@@ -26,26 +27,40 @@ using System.Diagnostics;
              get { return _port; }
              private set { }
          }
+         
+         public string Key
+         {
+             get { return _key; }
+             private set { }
+         }
 
          public int RequestCount = 0;
 
-         public Server(int port)
+         public Server(int port, string key)
          {
-             this.Initialize(port);
+             this.Initialize(port, key);
          }
 
-         public Server()
+         public Server(string key)
          {
              TcpListener l = new TcpListener(IPAddress.Loopback, 0);
              l.Start();
              int port = ((IPEndPoint) l.LocalEndpoint).Port;
              l.Stop();
-             this.Initialize(port);
+             this.Initialize(port, key);
          }
 
          public void Stop()
          {
              Console.WriteLine($"[{this.Port}] Server on port {this.Port} is stopping...");
+             Console.WriteLine($"[{this.Port}] Saving contents...");
+             File.WriteAllText("save", "");
+             foreach (Artikel artikel in _artikels)
+             {
+                 File.AppendAllText("save", $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + Environment.NewLine);
+             }
+             Console.WriteLine($"[{this.Port}] Contents saved.");
+             Console.WriteLine($"[{this.Port}] Aborting server thread...");
              _serverThread.Abort();
              Console.WriteLine($"[{this.Port}] Server thread aborted");
              _listener.Stop();
@@ -95,9 +110,12 @@ using System.Diagnostics;
              context.Response.OutputStream.Close();
          }
 
-         private void Initialize(int port)
+         private void Initialize(int port, string key)
          {
+             Console.WriteLine($"[{this.Port}] Setting variables...");
              this._port = port;
+             this._key = key;
+             Console.WriteLine($"[{this.Port}] Variables set.");
              Console.WriteLine($"[{this.Port}] Creating server thread...");
              _serverThread = new Thread(this.Listen);
              Console.WriteLine($"[{this.Port}] Server thread created proceeding to start it...");
