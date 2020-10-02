@@ -193,7 +193,28 @@ namespace ArtikelverwaltungListStructClientConsole
                 Console.Write("Your input: ");
                 string input = Console.ReadLine();
                 Console.Clear();
-                
+                if (input == "1")
+                {
+                    Console.Write("Name: ");
+                    string name = Console.ReadLine();
+                    string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/remove/name/{name}");
+                    if (response != "0")
+                    {
+                        Console.WriteLine(response);
+                        Thread.Sleep(2500);
+                    }
+                }
+                else if (input == "2")
+                {
+                    Console.Write("ID: ");
+                    string Id = Console.ReadLine();
+                    string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/remove/name/{Id}");
+                    if (response != "0")
+                    {
+                        Console.WriteLine(response);
+                        Thread.Sleep(2500);
+                    }
+                }
             }
             catch (Exception e)
             {
