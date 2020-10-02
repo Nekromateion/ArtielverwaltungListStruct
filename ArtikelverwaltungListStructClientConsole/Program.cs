@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Threading;
 
@@ -9,9 +10,10 @@ namespace ArtikelverwaltungListStructClientConsole
         private static string _serverIp = string.Empty;
         private static string _serverPort = string.Empty;
         private static string _currency = String.Empty;
+        private static bool serverAvailable = false;
+        private static bool doRun = true;
         public static void Main(string[] args)
         {
-            bool serverAvailable = false;
             while (!serverAvailable)
             {
                 Console.Write("Please input the Servers IP: ");
@@ -86,6 +88,7 @@ namespace ArtikelverwaltungListStructClientConsole
                 Console.Clear();
                 Console.WriteLine("Please select one of the following options");
                 Console.WriteLine("e: Exit the application");
+                Console.WriteLine("c: Close the server");
                 Console.WriteLine("1: Read Current list");
                 Console.WriteLine("2: Add a new article");
                 Console.WriteLine("3: Delete a article");
@@ -96,7 +99,8 @@ namespace ArtikelverwaltungListStructClientConsole
                 if(input == "1" || input == "read" || input == "list") ReadList();
                 else if (input == "2" || input == "add" || input == "put") AddArticle();
                 else if (input == "3" || input == "remove" || input == "delete" || input == "del") DelArticle();
-                else if (input == "e" || input == "exit" || input == "close") Environment.Exit(0xDEAD);
+                else if (input == "e" || input == "exit") Environment.Exit(0xDEAD);
+                else if (input == "c" || input == "close" || input == "abort") CloseServer();
                 else
                 {
                     Console.WriteLine("That is not a valid input");
@@ -143,6 +147,20 @@ namespace ArtikelverwaltungListStructClientConsole
         {
             Console.Clear();
             
+        }
+        
+        private static void CloseServer()
+        {
+            Console.Clear();
+            Console.Write("Please input the close key: ");
+            string key = Console.ReadLine();
+            Console.Clear();
+            string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{key}");
+            if (response == "0")
+            {
+                Console.WriteLine("Server is closing...");
+                Thread.Sleep(2500);
+            }
         }
     }
 }
