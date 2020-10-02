@@ -297,11 +297,35 @@ namespace ArtikelverwaltungListStructClientConsole
                     }
                     else if (input == "2")
                     {
-                        
+                        Console.Write("Price: ");
+                        string toSearch = Console.ReadLine();
+                        Console.Clear();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
+                        foreach (Artikel artikel in all)
+                        {
+                            if (artikel.preis == Convert.ToDouble(toSearch))
+                            {
+                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
+                            }
+                        }
+                        Utils.PrintLine();
                     }
                     else if (input == "3")
                     {
-                        
+                        Console.Write("Count: ");
+                        string toSearch = Console.ReadLine();
+                        Console.Clear();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
+                        foreach (Artikel artikel in all)
+                        {
+                            if (artikel.bestand == Convert.ToInt32(toSearch))
+                            {
+                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
+                            }
+                        }
+                        Utils.PrintLine();
                     }
                 }
                 else
