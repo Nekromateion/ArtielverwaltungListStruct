@@ -112,11 +112,18 @@ namespace ArtikelverwaltungListStructClientConsole
             if (!response.StartsWith("1"))
             {
                 string[] artikelList = response.Split('~');
+                Utils.PrintLine();
+                Utils.PrintRow(ConsoleColor.White, new string[]{"ID", "Name", $"Price ({_currency})", "Count"});
                 foreach (string artikel in artikelList)
                 {
                     string[] list = artikel.Split('|');
-                    Console.WriteLine($"{list[1].Replace("~", string.Empty).Replace("|", String.Empty)} {list[0].Replace("~", string.Empty).Replace("|", String.Empty)} {list[2].Replace("~", string.Empty).Replace("|", String.Empty)} {_currency} {list[3].Replace("~", string.Empty).Replace("|", String.Empty)}");
+                    string id = list[1].Replace("~", string.Empty).Replace("|", String.Empty);
+                    string name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                    string price = list[2].Replace("~", string.Empty).Replace("|", String.Empty);
+                    string count = list[3].Replace("~", string.Empty).Replace("|", String.Empty);
+                    Utils.PrintRow(ConsoleColor.White, new string[]{id, name, price, count});
                 }
+                Utils.PrintLine();
             }
             else
             {
