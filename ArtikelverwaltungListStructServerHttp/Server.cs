@@ -129,15 +129,29 @@ using System.Diagnostics;
          {
              
          }
+
+         private void AddReqest(HttpListenerContext context)
+         {
+             
+         }
+         
+         private void RemoveReqest(HttpListenerContext context)
+         {
+             
+         }
+         
+         private void ReadReqest(HttpListenerContext context)
+         {
+             
+         }
          
          private void WorkWithRequest(HttpListenerContext context)
          {
              string endpoint = context.Request.Url.AbsolutePath.Split('/')[1];
              Console.WriteLine($"[{this.Port}] Request({context.Request.RemoteEndPoint}) with ID {RequestCount} called endpoint: {endpoint}");
-             if(endpoint == "add") doWork();
-             else if(endpoint == "read") doWork();
-             else if(endpoint == "remove") doWork();
-
+             if(endpoint == "add") AddReqest(context);
+             else if(endpoint == "remove") RemoveReqest(context);
+             else if(endpoint == "read") ReadReqest(context);
              else
              {
                  Console.ForegroundColor = ConsoleColor.DarkRed;
