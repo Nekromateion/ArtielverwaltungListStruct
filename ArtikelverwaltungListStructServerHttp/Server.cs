@@ -318,6 +318,7 @@ using System.Diagnostics;
                  Console.WriteLine($"[{this.Port}] Request({context.Request.RemoteEndPoint}) with ID {RequestCount} called a not implemented endpoint...");
                  Console.ForegroundColor = ConsoleColor.White;
                  SendResponse(context, "The requested endpoint is not implemented...");
+                 Console.ForegroundColor = ConsoleColor.White;
              }
          }
      }
