@@ -250,6 +250,11 @@ using System.Diagnostics;
                  SendResponse(context, "Unauthorized: Wrong key...");
              }
          }
+         
+         private void StatusRequest(HttpListenerContext context)
+         {
+             SendResponse(context, "0");
+         }
 
          private void WorkWithRequest(HttpListenerContext context)
          {
@@ -301,6 +306,7 @@ using System.Diagnostics;
                  }
              }
              else if(endpoint == "close") CloseRequest(context);
+             else if (endpoint == "status") StatusRequest(context);
              else
              {
                  Console.ForegroundColor = ConsoleColor.DarkRed;
