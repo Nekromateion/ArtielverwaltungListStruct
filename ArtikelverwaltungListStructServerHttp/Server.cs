@@ -153,9 +153,9 @@ using System.Diagnostics;
              string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
              Artikel temp = new Artikel();
              temp.name = content[2];
-             temp.bestand = Convert.ToInt32(content[3]);
-             temp.nummer = Convert.ToInt32(content[4]);
-             temp.preis = Convert.ToDouble(content[5]);
+             temp.nummer = Convert.ToInt32(content[3]);
+             temp.preis = Convert.ToDouble(content[4]);
+             temp.bestand = Convert.ToInt32(content[5]);
              _artikels.Add(temp);
              SendResponse(context, "0");
          }
@@ -164,38 +164,48 @@ using System.Diagnostics;
          {
              string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
 
-             if (content[1] == "name")
+             if (content[2] == "name")
              {
+                 Artikel toremove = new Artikel();
                  bool done = false;
                  int count = 0;
                  foreach (Artikel artikel in _artikels)
                  {
-                     if (artikel.name.Contains(content[2]) && !done)
+                     if (artikel.name.Contains(content[3]) && !done)
                      {
-                         Artikel toremove = _artikels[count];
-                         _artikels.Remove(toremove);
+                         toremove = _artikels[count];
                          done = true;
                      }
                      count++;
                  }
-                 if(done) SendResponse(context, "0");
+
+                 if (done)
+                 {
+                     _artikels.Remove(toremove);
+                     SendResponse(context, "0");
+                 }
                  else SendResponse(context, "2: No item with that name was found in the list");
              }
-             else if(content[1] == "number")
+             else if(content[2] == "id")
              {
+                 Artikel toremove = new Artikel();
                  bool done = false;
                  int count = 0;
                  foreach (Artikel artikel in _artikels)
                  {
-                     if (artikel.nummer == Convert.ToInt32(content[2]) && !done)
+                     if (artikel.nummer == Convert.ToInt32(content[3]) && !done)
                      {
-                         Artikel toremove = _artikels[count];
-                         _artikels.Remove(toremove);
+                         toremove = _artikels[count];
                          done = true;
                      }
                      count++;
                  }
-                 if(done) SendResponse(context, "0");
+
+                 if (done)
+                 {
+                     _artikels.Remove(toremove);
+                     SendResponse(context, "0");
+                 }
                  else SendResponse(context, "2: No item with that number was found in the list");
              }
              else SendResponse(context, "1: That is not a valid remove term");
