@@ -221,7 +221,7 @@ using System.Diagnostics;
                      count++;
                      if (count != _artikels.Count)
                      {
-                         toReturn += $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + "-.-";
+                         toReturn += $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + "~";
                      }
                      else
                      {
