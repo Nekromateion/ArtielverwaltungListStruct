@@ -74,8 +74,7 @@ using System.Diagnostics;
          private void Process(HttpListenerContext context)
          {
              this.RequestCount++;
-             int requestId = this.RequestCount;
-             Console.WriteLine($"[{this.Port}] New request({context.Request.RemoteEndPoint}) with ID {requestId} to: {context.Request.Url}");
+             Console.WriteLine($"[{this.Port}] New request({context.Request.RemoteEndPoint}) with ID {RequestCount} to: {context.Request.Url}");
 
              
              
@@ -86,7 +85,7 @@ using System.Diagnostics;
              catch (Exception ex)
              {
                  Console.ForegroundColor = ConsoleColor.Red;
-                 Console.WriteLine($"[{this.Port}] error while processing request ID {requestId}");
+                 Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
                  Console.WriteLine(ex);
                  context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                  Console.ForegroundColor = ConsoleColor.White;
@@ -107,10 +106,9 @@ using System.Diagnostics;
              Console.WriteLine($"[{this.Port}] Server is running on port {this.Port}");
          }
 
-         private void Saver(HttpListenerContext context)
+         private void SendResponse(HttpListenerContext context, string response)
          {
-             string test = "test";
-             byte[] bytes = Encoding.ASCII.GetBytes(test);
+             byte[] bytes = Encoding.ASCII.GetBytes(response);
              Stream input = new MemoryStream(bytes);
                  
              context.Response.ContentType = "text/plain";
@@ -127,9 +125,25 @@ using System.Diagnostics;
              context.Response.OutputStream.Flush();
          }
 
-         private void WorkWithRequest(HttpListenerContext context)
+         private void doWork()
          {
              
+         }
+         
+         private void WorkWithRequest(HttpListenerContext context)
+         {
+             string endpoint = context.Request.Url.AbsolutePath.Split('/')[1];
+             Console.WriteLine($"[{this.Port}] Request({context.Request.RemoteEndPoint}) with ID {RequestCount} called endpoint: {endpoint}");
+             if(endpoint == "add") doWork();
+             else if(endpoint == "") doWork();
+
+             else
+             {
+                 Console.ForegroundColor = ConsoleColor.DarkRed;
+                 Console.WriteLine($"[{this.Port}] Request({context.Request.RemoteEndPoint}) with ID {RequestCount} called a not implemented endpoint...");
+                 Console.ForegroundColor = ConsoleColor.White;
+                 SendResponse(context, "The requested endpoint is not implemented...");
+             }
          }
      }
  }
