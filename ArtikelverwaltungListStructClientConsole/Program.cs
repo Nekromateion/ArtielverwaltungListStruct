@@ -17,6 +17,7 @@ namespace ArtikelverwaltungListStructClientConsole
                 try
                 {
                     new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/status");
+                    Thread.Sleep(5000);
                     unreachablecount = 0;
                 }
                 catch (Exception)
