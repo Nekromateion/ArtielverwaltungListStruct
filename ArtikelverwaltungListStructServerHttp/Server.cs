@@ -15,7 +15,6 @@ using System.Diagnostics;
      {
 
          private Thread _serverThread;
-         private string _rootDirectory;
          private HttpListener _listener;
          private int _port;
          private string _key;
