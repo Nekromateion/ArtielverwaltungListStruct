@@ -9,8 +9,10 @@ namespace ArtikelverwaltungListStruct
         public static void Main(string[] args)
         {
             Console.Title = "Artikelverwaltungs Server";
-            
-            Server server = new Server(8080);
+            Console.Write("Please input the server close key: ");
+            string key = Console.ReadLine();
+            Console.Clear();
+            Server server = new Server(8080, key);
         }
     }
 }
