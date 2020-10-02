@@ -179,9 +179,12 @@ using System.Diagnostics;
                      {
                          Artikel toremove = _artikels[count];
                          _artikels.Remove(toremove);
+                         done = true;
                      }
                      count++;
                  }
+                 if(done) SendResponse(context, "0");
+                 else SendResponse(context, "2: No item with that name was found in the list");
              }
              else if(content[1] == "number")
              {
@@ -197,6 +200,8 @@ using System.Diagnostics;
                      }
                      count++;
                  }
+                 if(done) SendResponse(context, "0");
+                 else SendResponse(context, "2: No item with that number was found in the list");
              }
              else SendResponse(context, "1: That is not a valid remove term");
          }
