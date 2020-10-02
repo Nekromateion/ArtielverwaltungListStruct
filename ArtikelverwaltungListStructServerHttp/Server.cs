@@ -170,7 +170,7 @@ using System.Diagnostics;
                  int count = 0;
                  foreach (Artikel artikel in _artikels)
                  {
-                     if (artikel.name.Contains(content[3]) && !done)
+                     if (artikel.name.ToLower().Contains(content[3].ToLower()) && !done)
                      {
                          toremove = _artikels[count];
                          done = true;
