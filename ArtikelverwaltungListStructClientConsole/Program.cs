@@ -116,57 +116,115 @@ namespace ArtikelverwaltungListStructClientConsole
 
         private static void ReadList()
         {
-            Console.Clear();
-            string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
-            if (!response.StartsWith("1"))
+            try
             {
-                string[] artikelList = response.Split('~');
-                Utils.PrintLine();
-                Utils.PrintRow(ConsoleColor.White, new string[]{"ID", "Name", $"Price ({_currency})", "Count"});
-                foreach (string artikel in artikelList)
+                Console.Clear();
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
+                if (!response.StartsWith("1"))
                 {
-                    string[] list = artikel.Split('|');
-                    string id = list[1].Replace("~", string.Empty).Replace("|", String.Empty);
-                    string name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
-                    string price = list[2].Replace("~", string.Empty).Replace("|", String.Empty);
-                    string count = list[3].Replace("~", string.Empty).Replace("|", String.Empty);
-                    Utils.PrintRow(ConsoleColor.White, new string[]{id, name, price, count});
+                    string[] artikelList = response.Split('~');
+                    Utils.PrintLine();
+                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID", "Name", $"Price ({_currency})", "Count"});
+                    foreach (string artikel in artikelList)
+                    {
+                        string[] list = artikel.Split('|');
+                        string id = list[1].Replace("~", string.Empty).Replace("|", String.Empty);
+                        string name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                        string price = list[2].Replace("~", string.Empty).Replace("|", String.Empty);
+                        string count = list[3].Replace("~", string.Empty).Replace("|", String.Empty);
+                        Utils.PrintRow(ConsoleColor.White, new string[]{id, name, price, count});
+                    }
+                    Utils.PrintLine();
                 }
-                Utils.PrintLine();
-            }
-            else
-            {
-                Console.WriteLine(response);
-            }
+                else
+                {
+                    Console.WriteLine(response);
+                }
 
-            Console.ReadKey();
+                Console.ReadKey();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
         }
         
         private static void AddArticle()
         {
-            Console.Clear();
-            
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Please input the details about the article:");
+                Console.Write("ID: ");
+                string id = Console.ReadLine();
+                Console.Write("Name: ");
+                string name = Console.ReadLine();
+                Console.Write("Price: ");
+                string price = Console.ReadLine();
+                Console.Write("Count: ");
+                string count = Console.ReadLine();
+                Console.Clear();
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/add/{name}/{id}/{price}/{count}");
+                if (response != "0")
+                {
+                    Console.WriteLine("IDK how you got here but you did so dafuq?!");
+                    Thread.Sleep(2500);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
         }
         
         private static void DelArticle()
         {
-            Console.Clear();
-            
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Please select by what criteria you want to delete:");
+                Console.WriteLine("1: Name");
+                Console.WriteLine("2: ID");
+                Console.WriteLine("");
+                Console.Write("Your input: ");
+                string input = Console.ReadLine();
+                Console.Clear();
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
         }
         
         private static void CloseServer()
         {
-            Console.Clear();
-            Console.Write("Please input the close key: ");
-            string key = Console.ReadLine();
-            Console.Clear();
-            string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{key}");
-            if (response == "0")
+            try
             {
-                Console.WriteLine("Server is closing...");
+                Console.Clear();
+                Console.Write("Please input the close key: ");
+                string key = Console.ReadLine();
+                Console.Clear();
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{key}");
+                if (response == "0")
+                {
+                    Console.WriteLine("Server is closing...");
+                    Thread.Sleep(2500);
+                    doRun = false;
+                    serverAvailable = false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
                 Thread.Sleep(2500);
-                doRun = false;
-                serverAvailable = false;
             }
         }
     }
