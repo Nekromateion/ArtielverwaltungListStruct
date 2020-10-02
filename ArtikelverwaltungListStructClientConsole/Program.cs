@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using System.Threading;
+using ArtikelverwaltungListStruct;
 
 namespace ArtikelverwaltungListStructClientConsole
 {
@@ -240,6 +242,74 @@ namespace ArtikelverwaltungListStructClientConsole
                     doRun = false;
                     serverAvailable = false;
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        
+        private static void SearchList()
+        {
+            try
+            {
+                Console.Clear();
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
+                if (!response.StartsWith("1"))
+                {
+                    List<Artikel> all = new List<Artikel>();
+                    string[] artikelList = response.Split('~');
+                    foreach (string artikel in artikelList)
+                    {
+                        Artikel temp = new Artikel();
+                        string[] list = artikel.Split('|');
+                        temp.nummer = Convert.ToInt32(list[1].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                        temp.preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
+                        all.Add(temp);
+                    }
+                    Console.WriteLine("By what do you want to search?");
+                    Console.WriteLine("1: Name");
+                    Console.WriteLine("2: Price");
+                    Console.WriteLine("3: Count");
+                    Console.WriteLine("");
+                    Console.Write("Your input: ");
+                    string input = Console.ReadLine();
+                    Console.Clear();
+                    if (input == "1")
+                    {
+                        Console.Write("Name: ");
+                        string toSearch = Console.ReadLine();
+                        Console.Clear();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
+                        foreach (Artikel artikel in all)
+                        {
+                            if (artikel.name.Contains(toSearch))
+                            {
+                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
+                            }
+                        }
+                        Utils.PrintLine();
+                    }
+                    else if (input == "2")
+                    {
+                        
+                    }
+                    else if (input == "3")
+                    {
+                        
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(response);
+                }
+
+                Console.ReadKey();
             }
             catch (Exception e)
             {
