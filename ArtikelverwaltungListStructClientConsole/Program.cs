@@ -8,6 +8,7 @@ namespace ArtikelverwaltungListStructClientConsole
     {
         private static string _serverIp = string.Empty;
         private static string _serverPort = string.Empty;
+        private static string _currency = String.Empty;
         public static void Main(string[] args)
         {
             bool serverAvailable = false;
@@ -78,6 +79,7 @@ namespace ArtikelverwaltungListStructClientConsole
                     Console.Clear();
                 }
             }
+            _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
 
             while (true)
             {
@@ -113,7 +115,7 @@ namespace ArtikelverwaltungListStructClientConsole
                 foreach (string artikel in artikelList)
                 {
                     string[] list = artikel.Split('|');
-                    Console.WriteLine($"{list[1].Replace("~", string.Empty).Replace("|", String.Empty)} {list[0].Replace("~", string.Empty).Replace("|", String.Empty)} {list[2].Replace("~", string.Empty).Replace("|", String.Empty)} {list[3].Replace("~", string.Empty).Replace("|", String.Empty)}");
+                    Console.WriteLine($"{list[1].Replace("~", string.Empty).Replace("|", String.Empty)} {list[0].Replace("~", string.Empty).Replace("|", String.Empty)} {list[2].Replace("~", string.Empty).Replace("|", String.Empty)} {_currency} {list[3].Replace("~", string.Empty).Replace("|", String.Empty)}");
                 }
             }
             else
