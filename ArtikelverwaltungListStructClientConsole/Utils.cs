@@ -4,7 +4,7 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     public class Utils
     {
-        static int tableWidth = 73;
+        static int tableWidth = 80;
         public static void WriteLine(object obj, ConsoleColor? color = null)
         {
             if (color != null)
@@ -14,7 +14,7 @@ namespace ArtikelverwaltungListStructClientConsole
         }
         public static void PrintLine(ConsoleColor? color = null)
         {
-            WriteLine(new string('-', tableWidth), color);
+            WriteLine(new string('-', tableWidth + 1), color);
         }
 
         public static void PrintRow(ConsoleColor? color = null, params string[] columns)
