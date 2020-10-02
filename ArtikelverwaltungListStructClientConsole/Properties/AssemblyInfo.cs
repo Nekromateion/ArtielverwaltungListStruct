@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ArtikelverwaltungListStruct")]
+[assembly: AssemblyTitle("ArtikelverwaltungListStructClientConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ArtikelverwaltungListStruct")]
+[assembly: AssemblyProduct("ArtikelverwaltungListStructClientConsole")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0F1AECB4-C91F-4D93-8673-44191F08DB6E")]
+[assembly: Guid("B1B716A7-9FFD-4FDF-98AB-1B9DE3BFAB9B")]
 
 // Version information for an assembly consists of the following four values:
 //
