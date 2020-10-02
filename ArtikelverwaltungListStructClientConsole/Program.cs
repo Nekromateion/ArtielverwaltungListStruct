@@ -9,6 +9,31 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     internal class Program
     {
+        private static Thread upChecker = new Thread(() =>
+        {
+            int unreachablecount = 0;
+            while (true)
+            {
+                try
+                {
+                    new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/status");
+                    unreachablecount = 0;
+                }
+                catch (Exception)
+                {
+                    unreachablecount++;
+                }
+
+                if (unreachablecount == 5)
+                {
+                    Console.Clear();
+                    Console.WriteLine("The connection the server unexpectedly closed");
+                    Thread.Sleep(2500);
+                    doRun = false;
+                    serverAvailable = false;
+                }
+            }
+        });
         private static string _serverIp = string.Empty;
         private static string _serverPort = string.Empty;
         private static string _currency = String.Empty;
@@ -87,6 +112,7 @@ namespace ArtikelverwaltungListStructClientConsole
                         Console.Clear();
                     }
                 }
+                upChecker.Start();
                 _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
 
                 while (doRun)
