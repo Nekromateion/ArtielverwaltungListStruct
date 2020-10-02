@@ -17,7 +17,7 @@ namespace ArtikelverwaltungListStructClientConsole
                 Console.Clear();
                 Thread writeThread = new Thread(() =>
                 {
-                    int delay = 50;
+                    int delay = 20;
                     while (true)
                     {
                         Console.WriteLine("Checking if server is reachable -");
