@@ -107,7 +107,21 @@ namespace ArtikelverwaltungListStructClientConsole
         {
             Console.Clear();
             string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
-            string[] artikelList = response.Split('~');
+            if (!response.StartsWith("1"))
+            {
+                string[] artikelList = response.Split('~');
+                foreach (string artikel in artikelList)
+                {
+                    string[] list = artikel.Split('|');
+                    Console.WriteLine($"{list[1].Replace("~", string.Empty).Replace("|", String.Empty)} {list[0].Replace("~", string.Empty).Replace("|", String.Empty)} {list[2].Replace("~", string.Empty).Replace("|", String.Empty)} {list[3].Replace("~", string.Empty).Replace("|", String.Empty)}");
+                }
+            }
+            else
+            {
+                Console.WriteLine(response);
+            }
+
+            Console.ReadKey();
         }
         
         private static void AddArticle()
