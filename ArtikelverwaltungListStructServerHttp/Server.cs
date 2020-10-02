@@ -109,6 +109,7 @@ using System.Diagnostics;
                      temp.nummer = Convert.ToInt32(content[1].Replace("|", string.Empty));
                      temp.preis = Convert.ToDouble(content[2].Replace("|", String.Empty));
                      temp.bestand = Convert.ToInt32(content[3].Replace("|", String.Empty));
+                     _artikels.Add(temp);
                  }
                  Console.WriteLine($"[{this.Port}] Read past content.");
              }
@@ -174,9 +175,18 @@ using System.Diagnostics;
              string toReturn = string.Empty;
              if (_artikels.Count != 0)
              {
+                 int count = 0;
                  foreach (Artikel artikel in _artikels)
                  {
-                     toReturn += $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + Environment.NewLine;
+                     count++;
+                     if (count != _artikels.Count)
+                     {
+                         toReturn += $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + "-.-";
+                     }
+                     else
+                     {
+                         toReturn += $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}";
+                     }
                  }
                  SendResponse(context, toReturn);
              }
