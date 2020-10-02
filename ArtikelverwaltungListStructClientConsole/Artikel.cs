@@ -1,4 +1,4 @@
-﻿namespace ArtikelverwaltungListStructClientConsole
+﻿namespace ArtikelverwaltungListStruct
 {
     public struct Artikel
     {
