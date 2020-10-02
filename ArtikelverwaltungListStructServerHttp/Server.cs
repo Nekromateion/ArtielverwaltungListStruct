@@ -79,10 +79,7 @@ using System.Diagnostics;
                      HttpListenerContext context = _listener.GetContext();
                      Process(context);
                  }
-                 catch (Exception ex)
-                 {
-
-                 }
+                 catch (Exception) { }
              }
          }
 
@@ -101,17 +98,24 @@ using System.Diagnostics;
 
          private void Initialize(int port, string key)
          {
-             Console.WriteLine($"[{this.Port}] Reading past content...");
-             foreach (string line in File.ReadAllLines("save"))
+             if (File.Exists("save"))
              {
-                 string[] content = line.Split('|');
-                 Artikel temp = new Artikel();
-                 temp.name = content[0].Replace("|", string.Empty);
-                 temp.nummer = Convert.ToInt32(content[1].Replace("|", string.Empty));
-                 temp.preis = Convert.ToDouble(content[2].Replace("|", String.Empty));
-                 temp.bestand = Convert.ToInt32(content[3].Replace("|", String.Empty));
+                 Console.WriteLine($"[{this.Port}] Reading past content...");
+                 foreach (string line in File.ReadAllLines("save"))
+                 {
+                     string[] content = line.Split('|');
+                     Artikel temp = new Artikel();
+                     temp.name = content[0].Replace("|", string.Empty);
+                     temp.nummer = Convert.ToInt32(content[1].Replace("|", string.Empty));
+                     temp.preis = Convert.ToDouble(content[2].Replace("|", String.Empty));
+                     temp.bestand = Convert.ToInt32(content[3].Replace("|", String.Empty));
+                 }
+                 Console.WriteLine($"[{this.Port}] Read past content.");
              }
-             Console.WriteLine($"[{this.Port}] Read past content.");
+             else
+             {
+                 Console.WriteLine($"[{this.Port}] no past content to read");
+             }
              Console.WriteLine($"[{this.Port}] Setting variables...");
              this._port = port;
              this._key = key;
@@ -156,6 +160,7 @@ using System.Diagnostics;
              temp.bestand = Convert.ToInt32(content[3]);
              temp.nummer = Convert.ToInt32(content[4]);
              temp.preis = Convert.ToDouble(content[5]);
+             _artikels.Add(temp);
              SendResponse(context, "0");
          }
 
@@ -166,7 +171,19 @@ using System.Diagnostics;
 
          private void ReadReqest(HttpListenerContext context)
          {
-             
+             string toReturn = string.Empty;
+             if (_artikels.Count != 0)
+             {
+                 foreach (Artikel artikel in _artikels)
+                 {
+                     toReturn += $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + Environment.NewLine;
+                 }
+                 SendResponse(context, toReturn);
+             }
+             else
+             {
+                 SendResponse(context, "1: List is empty nothing to return");
+             }
          }
          
          private void CloseRequest(HttpListenerContext context)
@@ -176,6 +193,10 @@ using System.Diagnostics;
              {
                  SendResponse(context, "0");
                  Stop();
+             }
+             else
+             {
+                 SendResponse(context, "Unauthorized: Wrong key...");
              }
          }
 
