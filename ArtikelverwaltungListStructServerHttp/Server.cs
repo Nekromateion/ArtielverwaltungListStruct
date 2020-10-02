@@ -93,18 +93,7 @@ using System.Diagnostics;
 
              
              
-             try
-             {
-                 WorkWithRequest(context);
-             }
-             catch (Exception ex)
-             {
-                 Console.ForegroundColor = ConsoleColor.Red;
-                 Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
-                 Console.WriteLine(ex);
-                 context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-                 Console.ForegroundColor = ConsoleColor.White;
-             }
+             WorkWithRequest(context);
 
 
              context.Response.OutputStream.Close();
@@ -112,6 +101,17 @@ using System.Diagnostics;
 
          private void Initialize(int port, string key)
          {
+             Console.WriteLine($"[{this.Port}] Reading past content...");
+             foreach (string line in File.ReadAllLines("save"))
+             {
+                 string[] content = line.Split('|');
+                 Artikel temp = new Artikel();
+                 temp.name = content[0].Replace("|", string.Empty);
+                 temp.nummer = Convert.ToInt32(content[1].Replace("|", string.Empty));
+                 temp.preis = Convert.ToDouble(content[2].Replace("|", String.Empty));
+                 temp.bestand = Convert.ToInt32(content[3].Replace("|", String.Empty));
+             }
+             Console.WriteLine($"[{this.Port}] Read past content.");
              Console.WriteLine($"[{this.Port}] Setting variables...");
              this._port = port;
              this._key = key;
@@ -171,16 +171,63 @@ using System.Diagnostics;
          
          private void CloseRequest(HttpListenerContext context)
          {
-             
+             string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
+             if (content[2] == _key)
+             {
+                 SendResponse(context, "0");
+                 Stop();
+             }
          }
 
          private void WorkWithRequest(HttpListenerContext context)
          {
              string endpoint = context.Request.Url.AbsolutePath.Split('/')[1];
              Console.WriteLine($"[{this.Port}] Request({context.Request.RemoteEndPoint}) with ID {RequestCount} called endpoint: {endpoint}");
-             if(endpoint == "add") AddReqest(context);
-             else if(endpoint == "remove") RemoveReqest(context);
-             else if(endpoint == "read") ReadReqest(context);
+             if (endpoint == "add")
+             {
+                 try
+                 {
+                     AddReqest(context);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.ForegroundColor = ConsoleColor.Red;
+                     Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
+                     Console.WriteLine(ex);
+                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                     Console.ForegroundColor = ConsoleColor.White;
+                 }
+             }
+             else if (endpoint == "remove")
+             {
+                 try
+                 {
+                     RemoveReqest(context);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.ForegroundColor = ConsoleColor.Red;
+                     Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
+                     Console.WriteLine(ex);
+                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                     Console.ForegroundColor = ConsoleColor.White;
+                 }
+             }
+             else if (endpoint == "read")
+             {
+                 try
+                 {
+                     ReadReqest(context);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.ForegroundColor = ConsoleColor.Red;
+                     Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
+                     Console.WriteLine(ex);
+                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                     Console.ForegroundColor = ConsoleColor.White;
+                 }
+             }
              else if(endpoint == "close") CloseRequest(context);
              else
              {
