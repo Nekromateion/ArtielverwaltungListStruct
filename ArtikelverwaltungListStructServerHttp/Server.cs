@@ -148,11 +148,6 @@ using System.Diagnostics;
              context.Response.OutputStream.Flush();
          }
 
-         private void doWork()
-         {
-             
-         }
-
          private void AddReqest(HttpListenerContext context)
          {
              string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
