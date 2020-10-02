@@ -35,9 +35,10 @@ namespace ArtikelverwaltungListStructClientConsole
                 }
             }
         });
+        
         private static string _serverIp = string.Empty;
         private static string _serverPort = string.Empty;
-        private static string _currency = String.Empty;
+        private static string _currency = string.Empty;
         private static bool serverAvailable = false;
         private static bool doRun = true;
         public static void Main(string[] args)
@@ -88,7 +89,10 @@ namespace ArtikelverwaltungListStructClientConsole
                     try
                     {
                         string response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
+                        response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
+                        Console.WriteLine(1);
                         writeThread.Abort();
+                        Console.WriteLine(2);
                         if (response != "0")
                         {
                             Console.Clear();
@@ -98,10 +102,15 @@ namespace ArtikelverwaltungListStructClientConsole
                         }
                         else
                         {
+                            Console.WriteLine(3);
                             Console.Clear();
+                            Console.WriteLine(4);
                             serverAvailable = true;
+                            Console.WriteLine(5);
                             _serverIp = serverip;
+                            Console.WriteLine(6);
                             _serverPort = serverport;
+                            Console.WriteLine(7);
                         }
                     }
                     catch (Exception)
@@ -112,9 +121,14 @@ namespace ArtikelverwaltungListStructClientConsole
                         Thread.Sleep(2500);
                         Console.Clear();
                     }
+                    Console.WriteLine(8);
                 }
+                Console.WriteLine(9);
+                Console.WriteLine(10);
                 upChecker.Start();
-                _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
+                Console.WriteLine(_serverIp + ":" + _serverPort);
+                new Thread(() => {_currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");}).Start();
+                Console.WriteLine(11);
 
                 while (doRun)
                 {
