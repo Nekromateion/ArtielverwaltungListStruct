@@ -6,6 +6,8 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     internal class Program
     {
+        private static string _serverIp = string.Empty;
+        private static string _serverPort = string.Empty;
         public static void Main(string[] args)
         {
             bool serverAvailable = false;
@@ -63,6 +65,8 @@ namespace ArtikelverwaltungListStructClientConsole
                     {
                         Console.Clear();
                         serverAvailable = true;
+                        _serverIp = serverip;
+                        _serverPort = serverport;
                     }
                 }
                 catch (Exception)
@@ -74,30 +78,36 @@ namespace ArtikelverwaltungListStructClientConsole
                     Console.Clear();
                 }
             }
-            Console.WriteLine("Please select one of the following options");
-            Console.WriteLine("e: Exit the application");
-            Console.WriteLine("1: Read Current list");
-            Console.WriteLine("2: Add a new article");
-            Console.WriteLine("3: Delete a article");
-            Console.WriteLine("");
-            Console.Write("Your input: ");
-            string input = Console.ReadLine();
-            
-            if(input == "1" || input == "read" || input == "list") ReadList();
-            else if (input == "2" || input == "add" || input == "put") AddArticle();
-            else if (input == "3" || input == "remove" || input == "delete" || input == "del") DelArticle();
-            else if (input == "e" || input == "exit" || input == "close") Environment.Exit(0xDEAD);
-            else
+
+            while (true)
             {
-                Console.WriteLine("That is not a valid input");
-                Thread.Sleep(2500);
+                Console.Clear();
+                Console.WriteLine("Please select one of the following options");
+                Console.WriteLine("e: Exit the application");
+                Console.WriteLine("1: Read Current list");
+                Console.WriteLine("2: Add a new article");
+                Console.WriteLine("3: Delete a article");
+                Console.WriteLine("");
+                Console.Write("Your input: ");
+                string input = Console.ReadLine();
+            
+                if(input == "1" || input == "read" || input == "list") ReadList();
+                else if (input == "2" || input == "add" || input == "put") AddArticle();
+                else if (input == "3" || input == "remove" || input == "delete" || input == "del") DelArticle();
+                else if (input == "e" || input == "exit" || input == "close") Environment.Exit(0xDEAD);
+                else
+                {
+                    Console.WriteLine("That is not a valid input");
+                    Thread.Sleep(2500);
+                }
             }
         }
 
         private static void ReadList()
         {
             Console.Clear();
-            
+            string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
+            string[] artikelList = response.Split("-.-")
         }
         
         private static void AddArticle()
