@@ -169,6 +169,11 @@ using System.Diagnostics;
              
          }
          
+         private void CloseRequest(HttpListenerContext context)
+         {
+             
+         }
+
          private void WorkWithRequest(HttpListenerContext context)
          {
              string endpoint = context.Request.Url.AbsolutePath.Split('/')[1];
@@ -176,6 +181,7 @@ using System.Diagnostics;
              if(endpoint == "add") AddReqest(context);
              else if(endpoint == "remove") RemoveReqest(context);
              else if(endpoint == "read") ReadReqest(context);
+             else if(endpoint == "close") CloseRequest(context);
              else
              {
                  Console.ForegroundColor = ConsoleColor.DarkRed;
