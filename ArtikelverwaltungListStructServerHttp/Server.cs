@@ -132,12 +132,18 @@ using System.Diagnostics;
 
          private void AddReqest(HttpListenerContext context)
          {
-             
+             string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
+             Artikel temp = new Artikel();
+             temp.name = content[2];
+             temp.bestand = Convert.ToInt32(content[3]);
+             temp.nummer = Convert.ToInt32(content[4]);
+             temp.preis = Convert.ToDouble(content[5]);
+             SendResponse(context, "0");
          }
 
          private void RemoveReqest(HttpListenerContext context)
          {
-
+             
          }
 
          private void ReadReqest(HttpListenerContext context)
