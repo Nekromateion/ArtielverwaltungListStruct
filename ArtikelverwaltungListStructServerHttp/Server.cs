@@ -135,7 +135,8 @@ using System.Diagnostics;
              string endpoint = context.Request.Url.AbsolutePath.Split('/')[1];
              Console.WriteLine($"[{this.Port}] Request({context.Request.RemoteEndPoint}) with ID {RequestCount} called endpoint: {endpoint}");
              if(endpoint == "add") doWork();
-             else if(endpoint == "") doWork();
+             else if(endpoint == "read") doWork();
+             else if(endpoint == "remove") doWork();
 
              else
              {
