@@ -77,25 +77,11 @@ using System.Diagnostics;
              int requestId = this.RequestCount;
              Console.WriteLine($"[{this.Port}] New request({context.Request.RemoteEndPoint}) with ID {requestId} to: {context.Request.Url}");
 
-
+             
+             
              try
              {
-                 string test = "test";
-                 byte[] bytes = Encoding.ASCII.GetBytes(test);
-                 Stream input = new MemoryStream(bytes);
-                 
-                 context.Response.ContentType = "text/plain";
-                 context.Response.ContentLength64 = input.Length;
-                 context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
-
-                 byte[] buffer = new byte[1024 * 16];
-                 int nbytes;
-                 while ((nbytes = input.Read(buffer, 0, buffer.Length)) > 0)
-                     context.Response.OutputStream.Write(buffer, 0, nbytes);
-                 input.Close();
-
-                 context.Response.StatusCode = (int) HttpStatusCode.OK;
-                 context.Response.OutputStream.Flush();
+                 WorkWithRequest(context);
              }
              catch (Exception ex)
              {
@@ -121,6 +107,29 @@ using System.Diagnostics;
              Console.WriteLine($"[{this.Port}] Server is running on port {this.Port}");
          }
 
+         private void Saver(HttpListenerContext context)
+         {
+             string test = "test";
+             byte[] bytes = Encoding.ASCII.GetBytes(test);
+             Stream input = new MemoryStream(bytes);
+                 
+             context.Response.ContentType = "text/plain";
+             context.Response.ContentLength64 = input.Length;
+             context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
 
+             byte[] buffer = new byte[1024 * 16];
+             int nbytes;
+             while ((nbytes = input.Read(buffer, 0, buffer.Length)) > 0)
+                 context.Response.OutputStream.Write(buffer, 0, nbytes);
+             input.Close();
+
+             context.Response.StatusCode = (int) HttpStatusCode.OK;
+             context.Response.OutputStream.Flush();
+         }
+
+         private void WorkWithRequest(HttpListenerContext context)
+         {
+             
+         }
      }
  }
