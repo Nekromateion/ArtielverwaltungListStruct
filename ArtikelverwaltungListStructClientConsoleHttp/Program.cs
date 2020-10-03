@@ -143,11 +143,14 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 }
                 upChecker.Start();
                 Logger.AddLine("Started up checker thread");
-                Console.WriteLine(_serverIp + ":" + _serverPort);
+                long startTimeCurrency = DateTime.Now.Ticks;
                 _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
+                long endTimeCurrency = DateTime.Now.Ticks;
+                Logger.AddLine($"currency request took: {(endTimeCurrency / TimeSpan.TicksPerMillisecond) - (startTimeCurrency / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeCurrency-startTimeCurrency} ticks)");
 
                 while (doRun)
                 {
+                    long startTimeMenuPrint = DateTime.Now.Ticks;
                     Console.Clear();
                     Console.WriteLine("Please select one of the following options");
                     Console.WriteLine("e: Exit the application");
@@ -157,6 +160,8 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine("3: Delete a article");
                     Console.WriteLine("");
                     Console.Write("Your input: ");
+                    long endTimeMenuPrint = DateTime.Now.Ticks;
+                    Logger.AddLine($"printing menu took: {(endTimeMenuPrint / TimeSpan.TicksPerMillisecond) - (startTimeMenuPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeMenuPrint-startTimeMenuPrint} ticks)");
                     string input = Console.ReadLine();
             
                     if(input == "1" || input == "read" || input == "list") ReadList();
@@ -175,10 +180,13 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
 
         private static void ReadList()
         {
+            Logger.AddLine("Called");
             try
             {
                 Console.Clear();
+                long startTimeReq = DateTime.Now.Ticks;
                 string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
+                long endTimeReq = DateTime.Now.Ticks;
                 if (!response.StartsWith("1"))
                 {
                     string[] artikelList = response.Split('~');
