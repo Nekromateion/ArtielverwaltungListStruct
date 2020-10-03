@@ -99,10 +99,15 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Logger.AddLine("Started write thread for waiting animation");
                     try
                     {
+                        long startTimeServerCheck = DateTime.Now.Ticks;
                         string response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
+                        long endTimeServerCheck = DateTime.Now.Ticks;
+                        Logger.AddLine($"Server was reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
                         writeThread.Abort();
+                        Logger.AddLine("Stopped write thread");
                         if (response != "0")
                         {
+                            Logger.AddLine("Server was reachable but is not compatible with this application");
                             Console.Clear();
                             Console.WriteLine("The given server was reachable but is not a valid server type in a valid ip and port...");
                             Thread.Sleep(2500);
@@ -110,15 +115,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         }
                         else
                         {
-                            Console.WriteLine(3);
                             Console.Clear();
-                            Console.WriteLine(4);
                             serverAvailable = true;
-                            Console.WriteLine(5);
                             _serverIp = serverip;
-                            Console.WriteLine(6);
                             _serverPort = serverport;
-                            Console.WriteLine(7);
                         }
                     }
                     catch (Exception)
