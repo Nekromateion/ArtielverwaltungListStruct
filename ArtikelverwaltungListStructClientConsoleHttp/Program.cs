@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Threading;
 using ArtikelverwaltungListStruct;
@@ -45,6 +46,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         public static void Main(string[] args)
         {
             Logger.LogName = $"{DateTime.Now.ToString()}.log";
+            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
             while (true)
             {
                 Console.Clear();
