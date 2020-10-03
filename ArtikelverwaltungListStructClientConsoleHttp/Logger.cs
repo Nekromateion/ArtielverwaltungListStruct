@@ -12,9 +12,15 @@ namespace ArtikelverwaltungListStructClientConsole
 
         private static void Init()
         {
-            
+            AddLines(new string[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
+            AddEmpty();
         }
 
+        private static void AddEmpty()
+        {
+            File.AppendAllText(LogFile, Environment.NewLine);
+        }
+        
         private static void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
             int pos = callerPath.LastIndexOf(@"\") + 1;
