@@ -45,6 +45,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         private static bool doRun = true;
         public static void Main(string[] args)
         {
+            long startTimeInit = DateTime.Now.Ticks;
             Logger.LogName = $"{DateTime.Now.ToString()}.log";
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
             Directory.CreateDirectory(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"));
@@ -54,6 +55,8 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 doRun = true;
                 while (!serverAvailable)
                 {
+                    long endTimeInit = DateTime.Now.Ticks;
+                    Logger.
                     Console.Write("Please input the Servers IP: ");
                     string serverip = Console.ReadLine();
                     Console.Write("Please input the Servers Port: ");
