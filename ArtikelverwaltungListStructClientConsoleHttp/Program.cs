@@ -13,22 +13,27 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
     {
         private static Thread upChecker = new Thread(() =>
         {
+            Logger.AddLine("upchecker thread init");
             int unreachablecount = 0;
             while (true)
             {
                 try
                 {
+                    Logger.AddLine("upchecker : starting check");
                     new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/status");
+                    Logger.AddLine("upchecker : server is reachable");
                     Thread.Sleep(5000);
                     unreachablecount = 0;
                 }
                 catch (Exception)
                 {
                     unreachablecount++;
+                    Logger.AddLine($"upchecker : !!! SERVER NOT REACHABLE !!! ({unreachablecount})");
                 }
 
                 if (unreachablecount == 5)
                 {
+                    Logger.AddLine("upchecker : !!! SERVER WAS NOT REACHABLE FOR 5 TRIES ABORTING CONNECTION !!!");
                     Console.Clear();
                     Console.WriteLine("The connection the server unexpectedly closed");
                     Thread.Sleep(2500);
@@ -97,9 +102,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     });
                     writeThread.Start();
                     Logger.AddLine("Started write thread for waiting animation");
+                    long startTimeServerCheck = DateTime.Now.Ticks;
                     try
                     {
-                        long startTimeServerCheck = DateTime.Now.Ticks;
                         string response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
                         long endTimeServerCheck = DateTime.Now.Ticks;
                         Logger.AddLine($"Server was reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
@@ -115,6 +120,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         }
                         else
                         {
+                            Logger.AddLine("Server was reachable and is a valid server");
                             Console.Clear();
                             serverAvailable = true;
                             _serverIp = serverip;
@@ -123,7 +129,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     }
                     catch (Exception)
                     {
+                        long endTimeServerCheck = DateTime.Now.Ticks;
+                        Logger.AddLine($"Server was not reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
                         writeThread.Abort();
+                        Logger.AddLine("Stopped write thread");
                         Console.Clear();
                         Console.WriteLine("The given server is unreachable please type in a valid ip and port...");
                         Thread.Sleep(2500);
@@ -131,6 +140,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     }
                 }
                 upChecker.Start();
+                Logger.AddLine("Started up checker thread");
                 Console.WriteLine(_serverIp + ":" + _serverPort);
                 new Thread(() => {_currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");}).Start();
 
