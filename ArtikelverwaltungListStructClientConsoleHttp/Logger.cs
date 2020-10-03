@@ -16,12 +16,12 @@ namespace ArtikelverwaltungListStructClientConsole
             AddEmpty();
         }
 
-        private static void AddEmpty()
+        public static void AddEmpty()
         {
             File.AppendAllText(LogFile, Environment.NewLine);
         }
         
-        private static void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+        public static void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
             int pos = callerPath.LastIndexOf(@"\") + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
