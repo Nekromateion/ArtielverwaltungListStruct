@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungListStructServerHttp", "ArtikelverwaltungListStructServerHttp\ArtikelverwaltungListStructServerHttp.csproj", "{0F1AECB4-C91F-4D93-8673-44191F08DB6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungListStructClientConsole", "ArtikelverwaltungListStructClientConsole\ArtikelverwaltungListStructClientConsole.csproj", "{B1B716A7-9FFD-4FDF-98AB-1B9DE3BFAB9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungListStructClientConsoleHttp", "ArtikelverwaltungListStructClientConsoleHttp\ArtikelverwaltungListStructClientConsoleHttp.csproj", "{B1B716A7-9FFD-4FDF-98AB-1B9DE3BFAB9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
