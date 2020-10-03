@@ -13,5 +13,13 @@ namespace ArtikelverwaltungListStructClientConsole
         {
             
         }
+
+        private static void AddLines(string[] lines)
+        {
+            foreach (string line in lines)
+            {
+                
+            }
+        }
     }
 }
