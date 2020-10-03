@@ -19,9 +19,11 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             {
                 try
                 {
+                    long startTime = DateTime.Now.Ticks;
                     Logger.AddLine("upchecker : starting check");
                     new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/status");
-                    Logger.AddLine("upchecker : server is reachable");
+                    long endTime = DateTime.Now.Ticks;
+                    Logger.AddLine($"upchecker : server is reachable Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
                     Thread.Sleep(5000);
                     unreachablecount = 0;
                 }
@@ -142,7 +144,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 upChecker.Start();
                 Logger.AddLine("Started up checker thread");
                 Console.WriteLine(_serverIp + ":" + _serverPort);
-                new Thread(() => {_currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");}).Start();
+                _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
 
                 while (doRun)
                 {
