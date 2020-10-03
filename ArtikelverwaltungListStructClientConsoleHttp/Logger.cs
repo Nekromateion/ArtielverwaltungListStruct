@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace ArtikelverwaltungListStructClientConsole
 {
@@ -14,12 +15,21 @@ namespace ArtikelverwaltungListStructClientConsole
             
         }
 
-        private static void AddLines(string[] lines)
+        private static void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
+            int pos = callerPath.LastIndexOf(@"\") + 1;
+            callerPath = callerPath.Substring(pos, callerPath.Length - pos);
             foreach (string line in lines)
             {
-                
+                File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
             }
+        }
+        
+        public void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+        {
+            int pos = callerPath.LastIndexOf(@"\") + 1;
+            callerPath = callerPath.Substring(pos, callerPath.Length - pos);
+            File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
         }
     }
 }
