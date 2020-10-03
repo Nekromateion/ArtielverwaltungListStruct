@@ -56,11 +56,13 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 while (!serverAvailable)
                 {
                     long endTimeInit = DateTime.Now.Ticks;
-                    Logger.
+                    Logger.AddLine($"Init took {(endTimeInit / TimeSpan.TicksPerMillisecond) - (startTimeInit / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeInit-startTimeInit} ticks)");
                     Console.Write("Please input the Servers IP: ");
                     string serverip = Console.ReadLine();
+                    Logger.AddLine($"User input for server ip was {serverip}");
                     Console.Write("Please input the Servers Port: ");
                     string serverport = Console.ReadLine();
+                    Logger.AddLine($"User input for server port was {serverport}");
                     Console.Clear();
                     Thread writeThread = new Thread(() =>
                     {
@@ -94,10 +96,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         }
                     });
                     writeThread.Start();
+                    Logger.AddLine("Started write thread for waiting animation");
                     try
                     {
                         string response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
-                        response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
                         writeThread.Abort();
                         if (response != "0")
                         {
