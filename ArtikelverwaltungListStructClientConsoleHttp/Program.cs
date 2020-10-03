@@ -47,6 +47,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         {
             Logger.LogName = $"{DateTime.Now.ToString()}.log";
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
+            Directory.CreateDirectory(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"));
             while (true)
             {
                 Console.Clear();
