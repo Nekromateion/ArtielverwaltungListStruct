@@ -44,7 +44,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         private static bool doRun = true;
         public static void Main(string[] args)
         {
-            Logger.LogName = $"{DateTime.Now.ToString()}";
+            Logger.LogName = $"{DateTime.Now.ToString()}.log";
             while (true)
             {
                 Console.Clear();
