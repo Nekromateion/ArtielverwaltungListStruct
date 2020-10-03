@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using ArtikelverwaltungListStruct;
@@ -187,8 +188,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 long startTimeReq = DateTime.Now.Ticks;
                 string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
                 long endTimeReq = DateTime.Now.Ticks;
+                Logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
                 if (!response.StartsWith("1"))
                 {
+                    long startTimeReadPrint = DateTime.Now.Ticks;
                     string[] artikelList = response.Split('~');
                     Utils.PrintLine();
                     Utils.PrintRow(ConsoleColor.White, new string[]{"ID", "Name", $"Price ({_currency})", "Count"});
@@ -202,9 +205,12 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         Utils.PrintRow(ConsoleColor.White, new string[]{id, name, price, count});
                     }
                     Utils.PrintLine();
+                    long endTimeReadPrint = DateTime.Now.Ticks;
+                    Logger.AddLine($"reading and printing {artikelList.Length} took: Action took: {(endTimeReadPrint / TimeSpan.TicksPerMillisecond) - (startTimeReadPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReadPrint-startTimeReadPrint} ticks)");
                 }
                 else
                 {
+                    Logger.AddLine("Server returned a unprocessable string " + response);
                     Console.WriteLine(response);
                 }
 
@@ -212,7 +218,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
             catch (Exception e)
             {
+                Logger.AddLine("An error occured");
                 Console.WriteLine("An error occured");
+                Logger.AddLine(e.Message);
                 Console.WriteLine(e);
                 Thread.Sleep(2500);
             }
