@@ -31,7 +31,7 @@ namespace ArtikelverwaltungListStructClientConsole
             }
         }
         
-        public void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+        public static void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
             int pos = callerPath.LastIndexOf(@"\") + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
