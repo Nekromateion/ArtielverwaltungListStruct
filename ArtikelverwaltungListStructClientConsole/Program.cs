@@ -90,9 +90,7 @@ namespace ArtikelverwaltungListStructClientConsole
                     {
                         string response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
                         response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
-                        Console.WriteLine(1);
                         writeThread.Abort();
-                        Console.WriteLine(2);
                         if (response != "0")
                         {
                             Console.Clear();
@@ -121,14 +119,10 @@ namespace ArtikelverwaltungListStructClientConsole
                         Thread.Sleep(2500);
                         Console.Clear();
                     }
-                    Console.WriteLine(8);
                 }
-                Console.WriteLine(9);
-                Console.WriteLine(10);
                 upChecker.Start();
                 Console.WriteLine(_serverIp + ":" + _serverPort);
                 new Thread(() => {_currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");}).Start();
-                Console.WriteLine(11);
 
                 while (doRun)
                 {
