@@ -153,7 +153,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 long startTimeCurrency = DateTime.Now.Ticks;
                 _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
                 long endTimeCurrency = DateTime.Now.Ticks;
-                Logger.AddLine($"currency request took: {(endTimeCurrency / TimeSpan.TicksPerMillisecond) - (startTimeCurrency / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeCurrency-startTimeCurrency} ticks)");
+                _logger.AddLine($"currency request took: {(endTimeCurrency / TimeSpan.TicksPerMillisecond) - (startTimeCurrency / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeCurrency-startTimeCurrency} ticks)");
                 #endregion
                 #region adminKey
                 Console.Clear();
@@ -185,7 +185,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine("");
                     Console.Write("Your input: ");
                     long endTimeMenuPrint = DateTime.Now.Ticks;
-                    Logger.AddLine($"printing menu took: {(endTimeMenuPrint / TimeSpan.TicksPerMillisecond) - (startTimeMenuPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeMenuPrint-startTimeMenuPrint} ticks)");
+                    _logger.AddLine($"printing menu took: {(endTimeMenuPrint / TimeSpan.TicksPerMillisecond) - (startTimeMenuPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeMenuPrint-startTimeMenuPrint} ticks)");
                     string input = Console.ReadLine().ToLower();
 
                     if(input == "1" || input == "read" || input == "list") ReadList();
@@ -209,14 +209,14 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
 
         private static void ReadList()
         {
-            Logger.AddLine("Called");
+            _logger.AddLine("Called");
             try
             {
                 Console.Clear();
                 long startTimeReq = DateTime.Now.Ticks;
                 string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
                 long endTimeReq = DateTime.Now.Ticks;
-                Logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
+                _logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
                 if (!response.StartsWith("1"))
                 {
                     long startTimeReadPrint = DateTime.Now.Ticks;
@@ -234,11 +234,11 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     }
                     Utils.PrintLine();
                     long endTimeReadPrint = DateTime.Now.Ticks;
-                    Logger.AddLine($"reading and printing {artikelList.Length} took: Action took: {(endTimeReadPrint / TimeSpan.TicksPerMillisecond) - (startTimeReadPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReadPrint-startTimeReadPrint} ticks)");
+                    _logger.AddLine($"reading and printing {artikelList.Length} took: Action took: {(endTimeReadPrint / TimeSpan.TicksPerMillisecond) - (startTimeReadPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReadPrint-startTimeReadPrint} ticks)");
                 }
                 else
                 {
-                    Logger.AddLine("Server returned a unprocessable string " + response);
+                    _logger.AddLine("Server returned a unprocessable string " + response);
                     Console.WriteLine(response);
                 }
 
@@ -246,9 +246,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
             catch (Exception e)
             {
-                Logger.AddLine("An error occured");
+                _logger.AddLine("An error occured");
                 Console.WriteLine("An error occured");
-                Logger.AddLine(e.Message);
+                _logger.AddLine(e.Message);
                 Console.WriteLine(e);
                 Thread.Sleep(2500);
             }
