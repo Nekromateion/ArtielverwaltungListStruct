@@ -476,8 +476,8 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             try
             {
                 Console.Clear();
-                Console.WriteLine("Server is saving all data...");
-                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/save/{_key}");
+                Console.WriteLine("Server clearing all data...");
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/clear/{_key}");
                 if (response == "0")
                 {
                     Console.Clear();
