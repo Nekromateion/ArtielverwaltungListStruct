@@ -8,10 +8,11 @@ namespace ArtikelverwaltungListStructClientConsole
     {
         private static string LogName = string.Empty;
         
-        private string LogFile = Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString(), "NW"), "Artikelverwaltung"), LogName);
+        private string LogFile = Path.Combine("Logs", LogName);
 
         public void Init()
         {
+            Directory.CreateDirectory("Logs");
             LogName = DateTime.Now.ToString() + ".log";
             AddLines(new string[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
             AddEmpty();
