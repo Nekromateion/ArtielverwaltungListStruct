@@ -313,16 +313,16 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 {
                     long startTimeReadPrint = DateTime.Now.Ticks;
                     string[] artikelList = response.Split('~');
+                    List<Artikel> artList = new List<Artikel>();
                     foreach (string artikel in artikelList)
                     {
                         string[] list = artikel.Split('|');
-                        string id = list[1].Replace("~", string.Empty).Replace("|", String.Empty);
-                        string name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
-                        string price = list[2].Replace("~", string.Empty).Replace("|", String.Empty);
-                        string count = list[3].Replace("~", string.Empty).Replace("|", String.Empty);
-                        Utils.PrintRow(ConsoleColor.White, new string[]{id, name, price, count});
+                        Artikel temp = new Artikel();
+                        temp.nummer = Convert.ToInt32(list[1].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                        temp.preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
                     }
-                    Utils.PrintLine();
                     long endTimeReadPrint = DateTime.Now.Ticks;
                     Logger.AddLine($"reading, sorting and printing {artikelList.Length} took: Action took: {(endTimeReadPrint / TimeSpan.TicksPerMillisecond) - (startTimeReadPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReadPrint-startTimeReadPrint} ticks)");
                 }
