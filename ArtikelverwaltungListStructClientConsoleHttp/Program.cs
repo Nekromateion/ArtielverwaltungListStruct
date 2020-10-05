@@ -329,21 +329,21 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         
         private static void SortList()
         {
-            Logger.AddLine("Called");
+            _logger.AddLine("Called");
             try
             {
                 Console.Clear();
                 long startTimeReq = DateTime.Now.Ticks;
                 string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
                 long endTimeReq = DateTime.Now.Ticks;
-                Logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
+                _logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
                 if (!response.StartsWith("1"))
                 {
-                    Logger.AddLine("Starting to process request");
+                    _logger.AddLine("Starting to process request");
                     string[] artikelList = response.Split('~');
-                    Logger.AddLine("converted to array");
+                    _logger.AddLine("converted to array");
                     List<Artikel> artList = new List<Artikel>();
-                    Logger.AddLine("starting to add articles to the list");
+                    _logger.AddLine("starting to add articles to the list");
                     foreach (string artikel in artikelList)
                     {
                         string[] list = artikel.Split('|');
@@ -354,7 +354,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         temp.bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
                         artList.Add(temp);
                     }
-                    Logger.AddLine("added all articles to the list");
+                    _logger.AddLine("added all articles to the list");
                     Console.WriteLine("What do you want to sort by?");
                     Console.WriteLine("1: ID");
                     Console.WriteLine("2: Name");
@@ -363,7 +363,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine();
                     Console.Write("Your input: ");
                     string input = Console.ReadLine().ToLower();
-                    Logger.AddLine("Sorting list");
+                    _logger.AddLine("Sorting list");
                     if (input == "1" || input == "id")
                     {
                         artList = artList.OrderBy(x => x.nummer).ToList();
@@ -410,11 +410,11 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     }
                     
                     
-                    Logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
+                    _logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
                 }
                 else
                 {
-                    Logger.AddLine("Server returned a unprocessable string " + response);
+                    _logger.AddLine("Server returned a unprocessable string " + response);
                     Console.WriteLine(response);
                 }
 
@@ -422,9 +422,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
             catch (Exception e)
             {
-                Logger.AddLine("An error occured");
+                _logger.AddLine("An error occured");
                 Console.WriteLine("An error occured");
-                Logger.AddLine(e.Message);
+                _logger.AddLine(e.Message);
                 Console.WriteLine(e);
                 Thread.Sleep(2500);
             }
