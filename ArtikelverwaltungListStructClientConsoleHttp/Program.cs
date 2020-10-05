@@ -167,8 +167,8 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.Clear();
                     Console.WriteLine("Please select one of the following options");
                     Console.WriteLine("e: Exit the application");
-                    Console.WriteLine("c: Close the server");
-                    Console.WriteLine("s: Save the list to servers disk");
+                    if(_key != string.Empty) Console.WriteLine("c: Close the server");
+                    if(_key != string.Empty) Console.WriteLine("s: Save the list to servers disk");
                     Console.WriteLine("1: Read Current list");
                     Console.WriteLine("2: Add a new article");
                     Console.WriteLine("3: Delete a article");
@@ -186,7 +186,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     else if (input == "4" || input == "search" || input == "seek") SearchList();
                     else if (input == "5" || input == "sort" || input == "group") SortList();
                     else if (input == "e" || input == "exit") Environment.Exit(0xDEAD);
-                    else if (input == "c" || input == "close" || input == "abort") CloseServer();
+                    else if (input == "c" || input == "close" || input == "abort"){ if(_key != string.Empty) CloseServer(); }
                     else
                     {
                         Console.WriteLine("That is not a valid input");
