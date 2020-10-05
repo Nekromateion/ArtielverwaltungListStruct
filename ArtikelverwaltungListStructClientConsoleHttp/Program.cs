@@ -14,29 +14,29 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
     {
         private static Thread upChecker = new Thread(() =>
         {
-            _logger.AddLine("upchecker thread init");
+            //_logger.AddLine("upchecker thread init");
             int unreachablecount = 0;
             while (true)
             {
                 try
                 {
                     long startTime = DateTime.Now.Ticks;
-                    _logger.AddLine("upchecker : starting check");
+                    //_logger.AddLine("upchecker : starting check");
                     new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/status");
                     long endTime = DateTime.Now.Ticks;
-                    _logger.AddLine($"upchecker : server is reachable Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
+                    //_logger.AddLine($"upchecker : server is reachable Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
                     Thread.Sleep(5000);
                     unreachablecount = 0;
                 }
                 catch (Exception)
                 {
                     unreachablecount++;
-                    _logger.AddLine($"upchecker : !!! SERVER NOT REACHABLE !!! ({unreachablecount})");
+                    //_logger.AddLine($"upchecker : !!! SERVER NOT REACHABLE !!! ({unreachablecount})");
                 }
 
                 if (unreachablecount == 5)
                 {
-                    _logger.AddLine("upchecker : !!! SERVER WAS NOT REACHABLE FOR 5 TRIES ABORTING CONNECTION !!!");
+                    //_logger.AddLine("upchecker : !!! SERVER WAS NOT REACHABLE FOR 5 TRIES ABORTING CONNECTION !!!");
                     Console.Clear();
                     Console.WriteLine("The connection the server unexpectedly closed");
                     Thread.Sleep(2500);
@@ -523,13 +523,13 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     if (input == "1")
                     {
                         Console.Write("Name: ");
-                        string toSearch = Console.ReadLine();
+                        string toSearch = Console.ReadLine().ToLower();
                         Console.Clear();
                         Utils.PrintLine();
                         Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
                         foreach (Artikel artikel in all)
                         {
-                            if (artikel.name.Contains(toSearch))
+                            if (artikel.name.ToLower().Contains(toSearch))
                             {
                                 Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
                             }
