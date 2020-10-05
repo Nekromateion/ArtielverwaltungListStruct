@@ -57,13 +57,13 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         {
             #region b4init
             long startTimeInit = DateTime.Now.Ticks;
-            Directory.CreateDirectory("Logs");
-            _logger.Init();
+            //_logger.Init();
             #endregion
             while (true)
             {
                 #region init
                 Console.Clear();
+                _logger.Init();
                 doRun = true;
                 while (!serverAvailable)
                 {
