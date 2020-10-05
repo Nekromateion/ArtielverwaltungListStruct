@@ -14,29 +14,29 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
     {
         private static Thread upChecker = new Thread(() =>
         {
-            Logger.AddLine("upchecker thread init");
+            _logger.AddLine("upchecker thread init");
             int unreachablecount = 0;
             while (true)
             {
                 try
                 {
                     long startTime = DateTime.Now.Ticks;
-                    Logger.AddLine("upchecker : starting check");
+                    _logger.AddLine("upchecker : starting check");
                     new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/status");
                     long endTime = DateTime.Now.Ticks;
-                    Logger.AddLine($"upchecker : server is reachable Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
+                    _logger.AddLine($"upchecker : server is reachable Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
                     Thread.Sleep(5000);
                     unreachablecount = 0;
                 }
                 catch (Exception)
                 {
                     unreachablecount++;
-                    Logger.AddLine($"upchecker : !!! SERVER NOT REACHABLE !!! ({unreachablecount})");
+                    _logger.AddLine($"upchecker : !!! SERVER NOT REACHABLE !!! ({unreachablecount})");
                 }
 
                 if (unreachablecount == 5)
                 {
-                    Logger.AddLine("upchecker : !!! SERVER WAS NOT REACHABLE FOR 5 TRIES ABORTING CONNECTION !!!");
+                    _logger.AddLine("upchecker : !!! SERVER WAS NOT REACHABLE FOR 5 TRIES ABORTING CONNECTION !!!");
                     Console.Clear();
                     Console.WriteLine("The connection the server unexpectedly closed");
                     Thread.Sleep(2500);
@@ -59,7 +59,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             long startTimeInit = DateTime.Now.Ticks;
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
             Directory.CreateDirectory(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"));
-            _logger.LogName = $"{DateTime.Now.ToString()}.log";
+            _logger. = $"{DateTime.Now.ToString()}.log";
             _logger.Init();
             #endregion
             while (true)
