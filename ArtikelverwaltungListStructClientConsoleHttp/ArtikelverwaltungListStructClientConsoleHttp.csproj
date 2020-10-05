@@ -11,6 +11,9 @@
         <AssemblyName>ArtikelverwaltungListStructClientConsoleHttp</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>NekroWorks.snk</AssemblyOriginatorKeyFile>
+        <PublicSign>true</PublicSign>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
