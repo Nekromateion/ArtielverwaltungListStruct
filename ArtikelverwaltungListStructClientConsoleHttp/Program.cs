@@ -156,18 +156,23 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine("Please select one of the following options");
                     Console.WriteLine("e: Exit the application");
                     Console.WriteLine("c: Close the server");
+                    Console.WriteLine("s: Save the list to servers disk");
                     Console.WriteLine("1: Read Current list");
                     Console.WriteLine("2: Add a new article");
                     Console.WriteLine("3: Delete a article");
+                    Console.WriteLine("4: Search in list");
+                    Console.WriteLine("5: Sort list");
                     Console.WriteLine("");
                     Console.Write("Your input: ");
                     long endTimeMenuPrint = DateTime.Now.Ticks;
                     Logger.AddLine($"printing menu took: {(endTimeMenuPrint / TimeSpan.TicksPerMillisecond) - (startTimeMenuPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeMenuPrint-startTimeMenuPrint} ticks)");
-                    string input = Console.ReadLine();
-            
+                    string input = Console.ReadLine().ToLower();
+
                     if(input == "1" || input == "read" || input == "list") ReadList();
                     else if (input == "2" || input == "add" || input == "put") AddArticle();
                     else if (input == "3" || input == "remove" || input == "delete" || input == "del") DelArticle();
+                    else if (input == "4" || input == "search" || input == "seek") SearchList();
+                    else if (input == "5" || input == "sort" || input == "group") SortList();
                     else if (input == "e" || input == "exit") Environment.Exit(0xDEAD);
                     else if (input == "c" || input == "close" || input == "abort") CloseServer();
                     else
@@ -335,12 +340,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine();
                     Console.Write("Your input: ");
                     string input = Console.ReadLine();
-
                     if (input == "1" || input.ToLower() == "id")
                     {
                         Logger.AddLine("Sorting list");
-                    
-                        
+                        artList = artList.OrderBy(x => x.nummer).ToList();
                         Logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
                     }
                 }
