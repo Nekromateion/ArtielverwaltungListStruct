@@ -6,22 +6,22 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     public class Logger
     {
-        public static string LogName { get; set; }
+        public string LogName = String.Empty;
 
-        private static string LogFile = Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"), LogName);
+        private string LogFile = Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString(), "NW"), "Artikelverwaltung"), LogName);
 
-        private static void Init()
+        public void Init()
         {
             AddLines(new string[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
             AddEmpty();
         }
 
-        public static void AddEmpty()
+        public void AddEmpty()
         {
             File.AppendAllText(LogFile, Environment.NewLine);
         }
         
-        public static void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+        public void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
             int pos = callerPath.LastIndexOf(@"\") + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
@@ -31,7 +31,7 @@ namespace ArtikelverwaltungListStructClientConsole
             }
         }
         
-        public static void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+        public void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
             int pos = callerPath.LastIndexOf(@"\") + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
