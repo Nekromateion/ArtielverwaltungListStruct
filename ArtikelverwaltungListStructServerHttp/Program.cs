@@ -15,7 +15,7 @@ namespace ArtikelverwaltungListStruct
             Console.Write("Please enter the IP you want the server to use:");
             Ip = Console.ReadLine();
             Console.Clear();
-            Console.Write("Please input the server close key: ");
+            Console.Write("Please input the admin key: ");
             string key = Console.ReadLine();
             Console.Clear();
             Console.Write("Please input the currency you want the server to use: ");
