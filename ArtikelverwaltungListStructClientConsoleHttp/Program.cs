@@ -351,12 +351,23 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine("4: Count");
                     Console.WriteLine();
                     Console.Write("Your input: ");
-                    string input = Console.ReadLine();
-                    if (input == "1" || input.ToLower() == "id")
+                    string input = Console.ReadLine().ToLower();
+                    if (input == "1" || input == "id")
                     {
                         Logger.AddLine("Sorting list");
                         artList = artList.OrderBy(x => x.nummer).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"^ID^", "Name", "Price", "Count"});
+                        foreach (Artikel art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
                         Logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
+                    }
+                    else if (input == "2" || input == "name")
+                    {
+                        
                     }
                 }
                 else
