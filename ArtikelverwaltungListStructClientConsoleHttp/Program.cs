@@ -171,14 +171,15 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     long startTimeMenuPrint = DateTime.Now.Ticks;
                     Console.Clear();
                     Console.WriteLine("Please select one of the following options");
-                    Console.WriteLine("e: Exit the application");
-                    if(_key != string.Empty) Console.WriteLine("c: Close the server");
-                    if(_key != string.Empty) Console.WriteLine("s: Save the list to servers disk");
-                    Console.WriteLine("1: Read Current list");
-                    Console.WriteLine("2: Add a new article");
-                    Console.WriteLine("3: Delete a article");
-                    Console.WriteLine("4: Search in list");
-                    Console.WriteLine("5: Sort list");
+                    Console.WriteLine("e : Exit the application");
+                    if(_key != string.Empty) Console.WriteLine("c : Close the server");
+                    if(_key != string.Empty) Console.WriteLine("s : Save the list to servers disk");
+                    if(_key != string.Empty) Console.WriteLine("cl: Clear the list on the server");
+                    Console.WriteLine("1 : Read Current list");
+                    Console.WriteLine("2 : Add a new article");
+                    Console.WriteLine("3 : Delete a article");
+                    Console.WriteLine("4 : Search in list");
+                    Console.WriteLine("5 : Sort list");
                     Console.WriteLine("");
                     Console.Write("Your input: ");
                     long endTimeMenuPrint = DateTime.Now.Ticks;
@@ -193,7 +194,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     else if (input == "e" || input == "exit") Environment.Exit(0xDEAD);
                     else if (input == "c" || input == "close" || input == "abort"){ if(_key != string.Empty) CloseServer(); }
                     else if (input == "s" || input == "save" || input == "speichern"){if(_key != string.Empty) Save(); }
-                    else if (input == "cl" || input == "save" || input == "speichern"){if(_key != string.Empty) Save(); }
+                    else if (input == "cl" || input == "clear" || input == "clean" || input == "empty"){if(_key != string.Empty) Save(); }
                     else
                     {
                         Console.WriteLine("That is not a valid input");
