@@ -52,13 +52,15 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         private static string _key = string.Empty;
         private static bool serverAvailable = false;
         private static bool doRun = true;
+        private static Logger _logger = new Logger();
         public static void Main(string[] args)
         {
             #region b4init
             long startTimeInit = DateTime.Now.Ticks;
-            Logger.LogName = $"{DateTime.Now.ToString()}.log";
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
             Directory.CreateDirectory(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"));
+            _logger.LogName = $"{DateTime.Now.ToString()}.log";
+            _logger.Init();
             #endregion
             while (true)
             {
@@ -68,13 +70,13 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 while (!serverAvailable)
                 {
                     long endTimeInit = DateTime.Now.Ticks;
-                    Logger.AddLine($"Init took {(endTimeInit / TimeSpan.TicksPerMillisecond) - (startTimeInit / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeInit-startTimeInit} ticks)");
+                    _logger.AddLine($"Init took {(endTimeInit / TimeSpan.TicksPerMillisecond) - (startTimeInit / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeInit-startTimeInit} ticks)");
                     Console.Write("Please input the Servers IP: ");
                     string serverip = Console.ReadLine();
-                    Logger.AddLine($"User input for server ip was {serverip}");
+                    _logger.AddLine($"User input for server ip was {serverip}");
                     Console.Write("Please input the Servers Port: ");
                     string serverport = Console.ReadLine();
-                    Logger.AddLine($"User input for server port was {serverport}");
+                    _logger.AddLine($"User input for server port was {serverport}");
                     Console.Clear();
                     Thread writeThread = new Thread(() =>
                     {
@@ -108,18 +110,18 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         }
                     });
                     writeThread.Start();
-                    Logger.AddLine("Started write thread for waiting animation");
+                    _logger.AddLine("Started write thread for waiting animation");
                     long startTimeServerCheck = DateTime.Now.Ticks;
                     try
                     {
                         string response = new WebClient().DownloadString($"http://{serverip}:{serverport}/status");
                         long endTimeServerCheck = DateTime.Now.Ticks;
-                        Logger.AddLine($"Server was reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
+                        _logger.AddLine($"Server was reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
                         writeThread.Abort();
-                        Logger.AddLine("Stopped write thread");
+                        _logger.AddLine("Stopped write thread");
                         if (response != "0")
                         {
-                            Logger.AddLine("Server was reachable but is not compatible with this application");
+                            _logger.AddLine("Server was reachable but is not compatible with this application");
                             Console.Clear();
                             Console.WriteLine("The given server was reachable but is not a valid server type in a valid ip and port...");
                             Thread.Sleep(2500);
@@ -127,7 +129,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         }
                         else
                         {
-                            Logger.AddLine("Server was reachable and is a valid server");
+                            _logger.AddLine("Server was reachable and is a valid server");
                             Console.Clear();
                             serverAvailable = true;
                             _serverIp = serverip;
@@ -137,9 +139,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     catch (Exception)
                     {
                         long endTimeServerCheck = DateTime.Now.Ticks;
-                        Logger.AddLine($"Server was not reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
+                        _logger.AddLine($"Server was not reachable... Action took: {(endTimeServerCheck / TimeSpan.TicksPerMillisecond) - (startTimeServerCheck / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeServerCheck-startTimeServerCheck} ticks)");
                         writeThread.Abort();
-                        Logger.AddLine("Stopped write thread");
+                        _logger.AddLine("Stopped write thread");
                         Console.Clear();
                         Console.WriteLine("The given server is unreachable please type in a valid ip and port...");
                         Thread.Sleep(2500);
@@ -147,7 +149,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     }
                 }
                 upChecker.Start();
-                Logger.AddLine("Started up checker thread");
+                _logger.AddLine("Started up checker thread");
                 long startTimeCurrency = DateTime.Now.Ticks;
                 _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
                 long endTimeCurrency = DateTime.Now.Ticks;
