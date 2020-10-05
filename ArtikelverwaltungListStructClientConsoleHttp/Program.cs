@@ -471,6 +471,27 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
         }
         
+        private static void Clear()
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Server is saving all data...");
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/save/{_key}");
+                if (response == "0")
+                {
+                    Console.Clear();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Clear();
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        
         private static void SearchList()
         {
             try
