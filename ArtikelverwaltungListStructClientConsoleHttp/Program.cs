@@ -54,12 +54,15 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         private static bool doRun = true;
         public static void Main(string[] args)
         {
+            #region b4init
             long startTimeInit = DateTime.Now.Ticks;
             Logger.LogName = $"{DateTime.Now.ToString()}.log";
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
             Directory.CreateDirectory(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"));
+            #endregion
             while (true)
             {
+                #region init
                 Console.Clear();
                 doRun = true;
                 while (!serverAvailable)
@@ -149,7 +152,8 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 _currency = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/curr");
                 long endTimeCurrency = DateTime.Now.Ticks;
                 Logger.AddLine($"currency request took: {(endTimeCurrency / TimeSpan.TicksPerMillisecond) - (startTimeCurrency / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeCurrency-startTimeCurrency} ticks)");
-
+                #endregion
+                #region adminKey
                 Console.Clear();
                 Console.WriteLine("Do you have the server admin key? (y = yes)");
                 string inp = Console.ReadLine().ToLower();
@@ -160,7 +164,8 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     _key = Console.ReadLine();
                 }
                 Console.Clear();
-                
+                #endregion
+                #region menu
                 while (doRun)
                 {
                     long startTimeMenuPrint = DateTime.Now.Ticks;
@@ -187,12 +192,14 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     else if (input == "5" || input == "sort" || input == "group") SortList();
                     else if (input == "e" || input == "exit") Environment.Exit(0xDEAD);
                     else if (input == "c" || input == "close" || input == "abort"){ if(_key != string.Empty) CloseServer(); }
+                    else if (input == "s" || input == "save" || input == "speichern"){if(_key != string.Empty) Save(); }
                     else
                     {
                         Console.WriteLine("That is not a valid input");
                         Thread.Sleep(2500);
                     }
                 }
+                #endregion
             }
         }
 
