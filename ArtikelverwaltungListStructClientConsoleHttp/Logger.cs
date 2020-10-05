@@ -6,9 +6,7 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     public class Logger
     {
-        public string LogName = String.Empty;
-
-        private string LogFile = Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString(), "NW"), "Artikelverwaltung"), LogName);
+        private string LogFile = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString(), "NW"), "Artikelverwaltung");
 
         public void Init()
         {
