@@ -66,6 +66,17 @@ using System.Diagnostics;
              Console.WriteLine($"[{this.Port}] listener stopped");
          }
 
+         public void Save()
+         {
+             Console.WriteLine($"[{this.Port}] Saving contents...");
+             File.WriteAllText("save", "");
+             foreach (Artikel artikel in _artikels)
+             {
+                 File.AppendAllText("save", $"{artikel.name}|{artikel.nummer}|{artikel.preis}|{artikel.bestand}" + Environment.NewLine);
+             }
+             Console.WriteLine($"[{this.Port}] Contents saved.");
+         }
+
          private void Listen()
          {
              _listener = new HttpListener();
@@ -250,6 +261,20 @@ using System.Diagnostics;
              }
          }
          
+         private void SaveRequest(HttpListenerContext context)
+         {
+             string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
+             if (content[2] == _key)
+             {
+                 SendResponse(context, "0");
+                 Stop();
+             }
+             else
+             {
+                 SendResponse(context, "Unauthorized: Wrong key...");
+             }
+         }
+         
          private void StatusRequest(HttpListenerContext context)
          {
              SendResponse(context, "0");
@@ -309,6 +334,22 @@ using System.Diagnostics;
                      Console.ForegroundColor = ConsoleColor.White;
                  }
              }
+             else if (endpoint == "save")
+             {
+                 try
+                 {
+                     SaveRequest(context);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.ForegroundColor = ConsoleColor.Red;
+                     Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
+                     Console.WriteLine(ex);
+                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                     Console.ForegroundColor = ConsoleColor.White;
+                 }
+             }
+                 
              else if(endpoint == "close") CloseRequest(context);
              else if(endpoint == "status") StatusRequest(context);
              else if (endpoint == "curr") CurrencyRequest(context);
