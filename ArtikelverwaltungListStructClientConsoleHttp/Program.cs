@@ -59,7 +59,6 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             long startTimeInit = DateTime.Now.Ticks;
             Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"));
             Directory.CreateDirectory(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "NW"), "Artikelverwaltung"));
-            _logger. = $"{DateTime.Now.ToString()}.log";
             _logger.Init();
             #endregion
             while (true)
