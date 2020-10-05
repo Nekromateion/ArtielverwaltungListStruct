@@ -49,6 +49,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         private static string _serverIp = string.Empty;
         private static string _serverPort = string.Empty;
         private static string _currency = string.Empty;
+        private static string _key = string.Empty;
         private static bool serverAvailable = false;
         private static bool doRun = true;
         public static void Main(string[] args)
@@ -149,6 +150,17 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 long endTimeCurrency = DateTime.Now.Ticks;
                 Logger.AddLine($"currency request took: {(endTimeCurrency / TimeSpan.TicksPerMillisecond) - (startTimeCurrency / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeCurrency-startTimeCurrency} ticks)");
 
+                Console.Clear();
+                Console.WriteLine("Do you have the server admin key? (y = yes)");
+                string inp = Console.ReadLine().ToLower();
+                if (inp == "y" || inp == "yes")
+                {
+                    Console.Clear();
+                    Console.Write("Please input the admin key: ");
+                    _key = Console.ReadLine();
+                }
+                Console.Clear();
+                
                 while (doRun)
                 {
                     long startTimeMenuPrint = DateTime.Now.Ticks;
