@@ -266,8 +266,8 @@ using System.Diagnostics;
              string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
              if (content[2] == _key)
              {
+                 Save();
                  SendResponse(context, "0");
-                 Stop();
              }
              else
              {
@@ -283,6 +283,21 @@ using System.Diagnostics;
          private void CurrencyRequest(HttpListenerContext context)
          {
              SendResponse(context, Program.currency);
+         }
+
+         private void ClearRequest(HttpListenerContext context)
+         {
+             string[] content = context.Request.Url.AbsolutePath.Replace("%20", " ").Split('/');
+             if (content[2] == _key)
+             {
+                 _artikels = new List<Artikel>();
+                 Save();
+                 SendResponse(context, "0");
+             }
+             else
+             {
+                 SendResponse(context, "Unauthorized: Wrong key...");
+             }
          }
 
          private void WorkWithRequest(HttpListenerContext context)
@@ -349,7 +364,21 @@ using System.Diagnostics;
                      Console.ForegroundColor = ConsoleColor.White;
                  }
              }
-                 
+             else if (endpoint == "clear")
+             {
+                 try
+                 {
+                     ClearRequest(context);
+                 }
+                 catch (Exception ex)
+                 {
+                     Console.ForegroundColor = ConsoleColor.Red;
+                     Console.WriteLine($"[{this.Port}] error while processing request ID {RequestCount}");
+                     Console.WriteLine(ex);
+                     context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                     Console.ForegroundColor = ConsoleColor.White;
+                 }
+             }
              else if(endpoint == "close") CloseRequest(context);
              else if(endpoint == "status") StatusRequest(context);
              else if (endpoint == "curr") CurrencyRequest(context);
