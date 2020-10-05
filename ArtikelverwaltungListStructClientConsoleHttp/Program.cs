@@ -299,6 +299,51 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
         }
         
+        private static void SortList()
+        {
+            Logger.AddLine("Called");
+            try
+            {
+                Console.Clear();
+                long startTimeReq = DateTime.Now.Ticks;
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/read");
+                long endTimeReq = DateTime.Now.Ticks;
+                Logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
+                if (!response.StartsWith("1"))
+                {
+                    long startTimeReadPrint = DateTime.Now.Ticks;
+                    string[] artikelList = response.Split('~');
+                    foreach (string artikel in artikelList)
+                    {
+                        string[] list = artikel.Split('|');
+                        string id = list[1].Replace("~", string.Empty).Replace("|", String.Empty);
+                        string name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                        string price = list[2].Replace("~", string.Empty).Replace("|", String.Empty);
+                        string count = list[3].Replace("~", string.Empty).Replace("|", String.Empty);
+                        Utils.PrintRow(ConsoleColor.White, new string[]{id, name, price, count});
+                    }
+                    Utils.PrintLine();
+                    long endTimeReadPrint = DateTime.Now.Ticks;
+                    Logger.AddLine($"reading, sorting and printing {artikelList.Length} took: Action took: {(endTimeReadPrint / TimeSpan.TicksPerMillisecond) - (startTimeReadPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReadPrint-startTimeReadPrint} ticks)");
+                }
+                else
+                {
+                    Logger.AddLine("Server returned a unprocessable string " + response);
+                    Console.WriteLine(response);
+                }
+
+                Console.ReadKey();
+            }
+            catch (Exception e)
+            {
+                Logger.AddLine("An error occured");
+                Console.WriteLine("An error occured");
+                Logger.AddLine(e.Message);
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        
         private static void CloseServer()
         {
             try
