@@ -352,9 +352,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.WriteLine();
                     Console.Write("Your input: ");
                     string input = Console.ReadLine().ToLower();
+                    Logger.AddLine("Sorting list");
                     if (input == "1" || input == "id")
                     {
-                        Logger.AddLine("Sorting list");
                         artList = artList.OrderBy(x => x.nummer).ToList();
                         Utils.PrintLine();
                         Utils.PrintRow(ConsoleColor.White, new []{"^ID^", "Name", "Price", "Count"});
@@ -363,12 +363,43 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                             Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
                         }
                         Utils.PrintLine();
-                        Logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
                     }
                     else if (input == "2" || input == "name")
                     {
-                        
+                        artList = artList.OrderBy(x => x.name).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"ID", "^Name^", "Price", "Count"});
+                        foreach (Artikel art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
                     }
+                    else if (input == "3" || input == "price" || input == "preis")
+                    {
+                        artList = artList.OrderBy(x => x.preis).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"ID", "Name", "^Price^", "Count"});
+                        foreach (Artikel art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
+                    }
+                    else if (input == "4" || input == "count" || input == "bestand")
+                    {
+                        artList = artList.OrderBy(x => x.bestand).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"ID", "Name", "Price", "^Count^"});
+                        foreach (Artikel art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
+                    }
+                    
+                    
+                    Logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
                 }
                 else
                 {
@@ -393,10 +424,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             try
             {
                 Console.Clear();
-                Console.Write("Please input the close key: ");
-                string key = Console.ReadLine();
-                Console.Clear();
-                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{key}");
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{_key}");
                 if (response == "0")
                 {
                     Console.WriteLine("Server is closing...");
@@ -407,6 +435,27 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
             catch (Exception e)
             {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        
+        private static void Save()
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Server is saving all data...");
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/save/{_key}");
+                if (response == "0")
+                {
+                    Console.Clear();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Clear();
                 Console.WriteLine("An error occured");
                 Console.WriteLine(e);
                 Thread.Sleep(2500);
