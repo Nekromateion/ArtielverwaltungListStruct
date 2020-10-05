@@ -4,7 +4,7 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     public class Utils
     {
-        static int tableWidth = 80;
+        static int tableWidth = 90;
         public static void WriteLine(object obj, ConsoleColor? color = null)
         {
             if (color != null)
