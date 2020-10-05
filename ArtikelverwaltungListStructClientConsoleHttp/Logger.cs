@@ -6,14 +6,12 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     public class Logger
     {
-        private static string LogName = string.Empty;
-        
-        private string LogFile = Path.Combine("Logs", LogName);
+        private string LogFile = @"Logs\";
 
         public void Init()
         {
             Directory.CreateDirectory("Logs");
-            LogName = DateTime.Now.ToString() + ".log";
+            LogFile += DateTime.Now.ToString() + ".log";
             AddLines(new string[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
             AddEmpty();
         }
