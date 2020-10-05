@@ -311,9 +311,11 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 Logger.AddLine($"read request was successful took: {(endTimeReq / TimeSpan.TicksPerMillisecond) - (startTimeReq / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReq-startTimeReq} ticks)");
                 if (!response.StartsWith("1"))
                 {
-                    long startTimeReadPrint = DateTime.Now.Ticks;
+                    Logger.AddLine("Starting to process request");
                     string[] artikelList = response.Split('~');
+                    Logger.AddLine("converted to array");
                     List<Artikel> artList = new List<Artikel>();
+                    Logger.AddLine("starting to add articles to the list");
                     foreach (string artikel in artikelList)
                     {
                         string[] list = artikel.Split('|');
@@ -322,9 +324,25 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         temp.name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
                         temp.preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
                         temp.bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
+                        artList.Add(temp);
                     }
-                    long endTimeReadPrint = DateTime.Now.Ticks;
-                    Logger.AddLine($"reading, sorting and printing {artikelList.Length} took: Action took: {(endTimeReadPrint / TimeSpan.TicksPerMillisecond) - (startTimeReadPrint / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeReadPrint-startTimeReadPrint} ticks)");
+                    Logger.AddLine("added all articles to the list");
+                    Console.WriteLine("What do you want to sort by?");
+                    Console.WriteLine("1: ID");
+                    Console.WriteLine("2: Name");
+                    Console.WriteLine("3: Price");
+                    Console.WriteLine("4: Count");
+                    Console.WriteLine();
+                    Console.Write("Your input: ");
+                    string input = Console.ReadLine();
+
+                    if (input == "1" || input.ToLower() == "id")
+                    {
+                        Logger.AddLine("Sorting list");
+                    
+                        
+                        Logger.AddLine($"reading, sorting and printing {artikelList.Length} done");
+                    }
                 }
                 else
                 {
