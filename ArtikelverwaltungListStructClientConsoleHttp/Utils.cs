@@ -14,7 +14,7 @@ namespace ArtikelverwaltungListStructClientConsole
         }
         public static void PrintLine(ConsoleColor? color = null)
         {
-            WriteLine(new string('-', tableWidth + 1), color);
+            WriteLine(new string('-', tableWidth - 1), color);
         }
 
         public static void PrintRow(ConsoleColor? color = null, params string[] columns)
