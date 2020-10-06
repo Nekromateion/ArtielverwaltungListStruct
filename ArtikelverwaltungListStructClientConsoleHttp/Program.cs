@@ -254,6 +254,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         
         private static void AddArticle()
         {
+            _logger.AddLine("Called");
             try
             {
                 Console.Clear();
@@ -284,6 +285,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         
         private static void DelArticle()
         {
+            _logger.AddLine("Called");
             try
             {
                 Console.Clear();
