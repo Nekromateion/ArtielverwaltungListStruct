@@ -1,12 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace ArtikelverwaltungListStructClientConsole
 {
     public class Logger
     {
-        private string LogFile = String.Empty;
+        private static List<string> _queue = new List<string>();
+        
+        private Thread _queueHandler = new Thread(() =>
+        {
+            if (_queue.Count != 0)
+            {
+                if (_queue[0] == "empty")
+                {
+                    File.AppendAllText(LogFile, Environment.NewLine);
+                }
+                else
+                {
+                    File.AppendAllText(LogFile, _queue[0] + Environment.NewLine);
+                }
+            }
+        });
+
+        private static string LogFile = String.Empty;
 
         public void Init()
         {
@@ -18,7 +37,8 @@ namespace ArtikelverwaltungListStructClientConsole
 
         public void AddEmpty()
         {
-            File.AppendAllText(LogFile, Environment.NewLine);
+            _queue.Add("empty");
+            //File.AppendAllText(LogFile, Environment.NewLine);
         }
         
         public void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
@@ -27,7 +47,8 @@ namespace ArtikelverwaltungListStructClientConsole
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
             foreach (string line in lines)
             {
-                File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
+                _queue.Add($"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}");
+                //File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
             }
         }
         
@@ -35,7 +56,8 @@ namespace ArtikelverwaltungListStructClientConsole
         {
             int pos = callerPath.LastIndexOf(@"\") + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
-            File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
+            _queue.Add($"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}");
+            //File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
         }
     }
 }
