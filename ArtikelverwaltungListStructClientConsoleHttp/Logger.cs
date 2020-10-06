@@ -12,16 +12,22 @@ namespace ArtikelverwaltungListStructClientConsole
         
         private Thread _queueHandler = new Thread(() =>
         {
-            if (_queue.Count != 0)
+            while (true)
             {
-                if (_queue[0] == "empty")
+                if (_queue.Count != 0)
                 {
-                    File.AppendAllText(LogFile, Environment.NewLine);
+                    if (_queue[0] == "empty")
+                    {
+                        File.AppendAllText(LogFile, Environment.NewLine);
+                        _queue.Remove(_queue[0]);
+                    }
+                    else
+                    {
+                        File.AppendAllText(LogFile, _queue[0] + Environment.NewLine);
+                        _queue.Remove(_queue[0]);
+                    }
                 }
-                else
-                {
-                    File.AppendAllText(LogFile, _queue[0] + Environment.NewLine);
-                }
+                Thread.Sleep(1000);
             }
         });
 
@@ -31,6 +37,7 @@ namespace ArtikelverwaltungListStructClientConsole
         {
             Directory.CreateDirectory("Logs");
             LogFile = Path.Combine("Logs", (DateTime.Now.ToString() + ".log").Replace('/', '-').Replace(':', '-').Replace(' ', '_'));
+            _queueHandler.Start();
             AddLines(new string[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
             AddEmpty();
         }
