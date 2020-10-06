@@ -12,8 +12,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
 {
     internal class Program
     {
-        private static Thread upChecker = new Thread(() =>
-        {
+        private static Thread upChecker = new Thread(() => {
             _logger.AddLine("upchecker thread init");
             int unreachablecount = 0;
             while (true)
@@ -45,7 +44,6 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 }
             }
         });
-        
         private static string _serverIp = string.Empty;
         private static string _serverPort = string.Empty;
         private static string _currency = string.Empty;
@@ -203,7 +201,6 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 #endregion
             }
         }
-
         #region user
         private static void ReadList()
         {
