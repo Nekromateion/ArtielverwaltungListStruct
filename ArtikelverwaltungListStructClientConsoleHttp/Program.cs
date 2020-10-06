@@ -57,13 +57,12 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
         {
             #region b4init
             long startTimeInit = DateTime.Now.Ticks;
-            //_logger.Init();
+            _logger.Init();
             #endregion
             while (true)
             {
                 #region init
                 Console.Clear();
-                _logger.Init();
                 doRun = true;
                 while (!serverAvailable)
                 {
@@ -205,6 +204,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
             }
         }
 
+        #region user
         private static void ReadList()
         {
             _logger.AddLine("Called");
@@ -429,71 +429,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 Thread.Sleep(2500);
             }
         }
-        
-        private static void CloseServer()
-        {
-            try
-            {
-                Console.Clear();
-                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{_key}");
-                if (response == "0")
-                {
-                    Console.WriteLine("Server is closing...");
-                    Thread.Sleep(2500);
-                    doRun = false;
-                    serverAvailable = false;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occured");
-                Console.WriteLine(e);
-                Thread.Sleep(2500);
-            }
-        }
-        
-        private static void Save()
-        {
-            try
-            {
-                Console.Clear();
-                Console.WriteLine("Server is saving all data...");
-                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/save/{_key}");
-                if (response == "0")
-                {
-                    Console.Clear();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.Clear();
-                Console.WriteLine("An error occured");
-                Console.WriteLine(e);
-                Thread.Sleep(2500);
-            }
-        }
-        
-        private static void Clear()
-        {
-            try
-            {
-                Console.Clear();
-                Console.WriteLine("Server clearing all data...");
-                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/clear/{_key}");
-                if (response == "0")
-                {
-                    Console.Clear();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.Clear();
-                Console.WriteLine("An error occured");
-                Console.WriteLine(e);
-                Thread.Sleep(2500);
-            }
-        }
-        
+
         private static void SearchList()
         {
             try
@@ -585,5 +521,71 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 Thread.Sleep(2500);
             }
         }
+        #endregion
+        #region administrative
+        private static void CloseServer()
+        {
+            try
+            {
+                Console.Clear();
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/close/{_key}");
+                if (response == "0")
+                {
+                    Console.WriteLine("Server is closing...");
+                    Thread.Sleep(2500);
+                    doRun = false;
+                    serverAvailable = false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        
+        private static void Save()
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Server is saving all data...");
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/save/{_key}");
+                if (response == "0")
+                {
+                    Console.Clear();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Clear();
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        
+        private static void Clear()
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("Server clearing all data...");
+                string response = new WebClient().DownloadString($"http://{_serverIp}:{_serverPort}/clear/{_key}");
+                if (response == "0")
+                {
+                    Console.Clear();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Clear();
+                Console.WriteLine("An error occured");
+                Console.WriteLine(e);
+                Thread.Sleep(2500);
+            }
+        }
+        #endregion
     }
 }
