@@ -10,7 +10,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
 {
     public class SocketManager
     {
-        public static WebSocket Socket = new WebSocket("ws://localhost/artikelverwaltung");
+        public static WebSocket Socket = new WebSocket($"ws://{Program.ipOrPort}/artikelverwaltung");
     }
 
     public class LogHandler
@@ -21,11 +21,14 @@ namespace ArtikelverwaltungClientWebsocketLoader
     internal class Program
     {
         public static ApplicationController controller { get; set; }
+        internal static string ipOrPort;
         
         public static void Main(string[] args)
         {
             Logger logger = LogHandler.logger;
             logger.Init();
+            Console.Write("Please enter the server ip/hostname: ");
+            ipOrPort = Console.ReadLine();
             // ToDo: add the option for a centralized update server
             Console.WriteLine("Setting methods");
             logger.AddEmpty();
@@ -94,16 +97,19 @@ namespace ArtikelverwaltungClientWebsocketLoader
 
         private static void OnMessage(object sender, MessageEventArgs e)
         {
-            if (e.IsText)
+            if (e.IsBinary)
             {
-                if (e.Data.StartsWith("oki here you go buddy  "))
+                if (!isLoaded)
                 {
-                    Console.WriteLine("Server sent assembly");
-                    assembly = Convert.FromBase64String(new StreamReader(e.Data.Substring(22)).ReadToEnd());
+                    Console.WriteLine("Received assembly");
+                    assembly = e.RawData;
+                    isLoaded = true;
+                    Console.WriteLine("loaded assembly into ram");
                 }
             }
         }
 
         internal static byte[] assembly;
+        private static bool isLoaded = false;
     }
 }
