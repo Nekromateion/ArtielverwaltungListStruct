@@ -37,6 +37,10 @@ namespace ArtikelverwaltungClientWebsocket
             }
             else if (e.IsBinary)
             {
+                // might use this to make a forms version
+                // which would allow the user to set a image
+                // for the product 
+                // yes yes real fancy stuffs
                 logger.AddLine("message was binary");
             }
             else if (e.IsPing)
