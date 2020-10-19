@@ -21,7 +21,7 @@ namespace ArtikelverwaltungClientWebsocket
 
         private static void OnMessage(object sender, MessageEventArgs e)
         {
-            
+            Console.WriteLine("Received message from server");
         }
     }
 }

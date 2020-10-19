@@ -19,6 +19,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
         
         public static void Main(string[] args)
         {
+            // add the option for a centralized update server
             Console.WriteLine("Setting methods");
             SocketManager.Socket.OnMessage += OnMessage;
             Console.WriteLine("Set methods\nConnecting to server...");
