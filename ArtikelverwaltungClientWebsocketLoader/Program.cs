@@ -12,6 +12,11 @@ namespace ArtikelverwaltungClientWebsocketLoader
     {
         public static WebSocket Socket = new WebSocket("ws://localhost/artikelverwaltung");
     }
+
+    public class LogHandler
+    {
+        public static Logger logger = new Logger();
+    }
     
     internal class Program
     {
@@ -19,12 +24,20 @@ namespace ArtikelverwaltungClientWebsocketLoader
         
         public static void Main(string[] args)
         {
-            // add the option for a centralized update server
+            Logger logger = LogHandler.logger;
+            logger.Init();
+            // ToDo: add the option for a centralized update server
             Console.WriteLine("Setting methods");
+            logger.AddEmpty();
+            logger.AddLine("Setting up methods");
             SocketManager.Socket.OnMessage += OnMessage;
+            logger.AddLine("Set up methods");
             Console.WriteLine("Set methods\nConnecting to server...");
+            logger.AddLine("Connecting to server");
             SocketManager.Socket.Connect();
             Console.WriteLine("Connected to servers");
+            logger.AddLine("Connected to the server");
+            logger.AddLine("Sending ");
             Console.WriteLine("Sending request to server");
             SocketManager.Socket.Send("yo server gib assembly plz");
             Console.WriteLine("Sent request waiting for assembly to be loaded");
