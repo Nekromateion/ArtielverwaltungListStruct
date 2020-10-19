@@ -42,7 +42,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
             logger.AddLine("Connected to the server");
             logger.AddLine("Sending request");
             Console.WriteLine("Sending request to server");
-            SocketManager.Socket.Send("yo server gib assembly plz");
+            SocketManager.Socket.Send("request assembly");
             Console.WriteLine("Sent request waiting for assembly to be loaded");
             logger.AddLine("Sent request");
             logger.AddLine("waiting for assembly to be created");
