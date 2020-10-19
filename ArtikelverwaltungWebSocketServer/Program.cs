@@ -69,6 +69,7 @@ namespace ArtikelverwaltungWebSocketServer
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
+            Console.ReadLine();
         }
     }
 }
