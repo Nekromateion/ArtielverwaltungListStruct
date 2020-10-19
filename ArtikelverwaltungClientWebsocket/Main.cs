@@ -16,8 +16,12 @@ namespace ArtikelverwaltungClientWebsocket
             ConnectionManager.socket = ArtikelverwaltungClientWebsocketLoader.SocketManager.Socket;
             Console.WriteLine("Got socket");
             Console.WriteLine("Setting up methods");
+            ConnectionManager.socket.OnMessage += OnMessage;
         }
-        
+
+        private static void OnMessage(object sender, MessageEventArgs e)
+        {
             
+        }
     }
 }
