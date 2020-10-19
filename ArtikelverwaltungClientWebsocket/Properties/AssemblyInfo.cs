@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ArtikelverwalktungClientWebsocket")]
+[assembly: AssemblyTitle("ArtikelverwaltungClientWebsocket")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ArtikelverwalktungClientWebsocket")]
+[assembly: AssemblyProduct("ArtikelverwaltungClientWebsocket")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("C85DF1E6-F3D6-4085-8B07-FCFCF5D49BAF")]
+[assembly: Guid("07CDD8CA-2E90-4882-A086-20AF5F4431CB")]
 
 // Version information for an assembly consists of the following four values:
 //
