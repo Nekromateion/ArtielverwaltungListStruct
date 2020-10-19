@@ -102,10 +102,12 @@ namespace ArtikelverwaltungClientWebsocketLoader
             {
                 if (!isLoaded)
                 {
+                    LogHandler.logger.AddLine("received assembly");
                     Console.WriteLine("Received assembly");
                     assembly = e.RawData;
                     isLoaded = true;
                     Console.WriteLine("loaded assembly into ram");
+                    LogHandler.logger.AddLine("loaded assembly");
                 }
             }
         }
