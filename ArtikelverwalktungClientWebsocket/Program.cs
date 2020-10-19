@@ -15,6 +15,8 @@ namespace ArtikelverwalktungClientWebsocket
     
     internal class Program
     {
+        public static ApplicationController controller { get; set; }
+        
         public static void Main(string[] args)
         {
             Console.WriteLine("Setting methods");
@@ -29,11 +31,14 @@ namespace ArtikelverwalktungClientWebsocket
             Console.WriteLine("Loading assembly");
             foreach (Type type in GetLoadableTypes(Assembly.Load(assembly)))
             {
-                if ("Program".Equals(type.Name))
+                if ("Main".Equals(type.Name))
                 {
                     try
                     {
-
+                        controller = new ApplicationController();
+                        controller.Create(type);
+                        Console.WriteLine("Loaded Assembly");
+                        controller.OnApplicationStart();
                     }
                     catch (Exception e)
                     {
