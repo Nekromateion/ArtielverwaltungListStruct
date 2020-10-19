@@ -26,6 +26,12 @@ namespace ArtikelverwaltungClientWebsocket
             logger.AddLine("method setup done");
         }
 
+        
+        // ToDo: Finsish this ( OnMessage in client )
+        // imma just stop working on thsi project for now 
+        // its nearly 6 am 
+        // see you in 4 hours
+        // i hope......
         private static void OnMessage(object sender, MessageEventArgs e)
         {
             Console.WriteLine("Received message from server");
@@ -45,6 +51,7 @@ namespace ArtikelverwaltungClientWebsocket
             }
             else if (e.IsPing)
             {
+                // i dont even know if i will fuccin use this i doubt it
                 logger.AddLine("message was ping");
             }
             else
