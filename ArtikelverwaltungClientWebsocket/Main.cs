@@ -25,6 +25,13 @@ namespace ArtikelverwaltungClientWebsocket
             ConnectionManager.socket.OnMessage += OnMessage;
             Console.WriteLine("Method setup done");
             logger.AddLine("method setup done");
+            Menu();
+        }
+
+        public static void Menu()
+        {
+            logger.AddLine();
+            
         }
 
         
@@ -42,6 +49,11 @@ namespace ArtikelverwaltungClientWebsocket
             {
                 logger.AddLine("message was text");
                 logger.AddLine("received data: " + e.Data);
+                if (e.Data.StartsWith("data sync "))
+                {
+                    logger.AddLine("message was a data sync");
+                    string data = e.Data.Substring(9); // i will have to wait with continueing to work on this part since i dont know yet how i will send the data
+                }
             }
             else if (e.IsBinary)
             {
@@ -58,7 +70,7 @@ namespace ArtikelverwaltungClientWebsocket
             }
             else
             {
-                logger.AddLine("Server sent a invalid messageq");
+                logger.AddLine("Server sent a invalid message");
             }
         }
     }
