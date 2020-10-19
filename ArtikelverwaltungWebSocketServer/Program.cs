@@ -66,7 +66,7 @@ namespace ArtikelverwaltungWebSocketServer
             {
                 socket = new WebSocketServer("127.0.0.1");
             }
-            socket.AddWebSocketService<Client>("/client");
+            socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
         }
