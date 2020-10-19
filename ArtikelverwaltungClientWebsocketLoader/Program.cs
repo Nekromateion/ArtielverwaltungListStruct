@@ -10,7 +10,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
 {
     public class SocketManager
     {
-        public static WebSocket Socket = new WebSocket($"ws://{Program.ipOrPort}/artikelverwaltung");
+        public static WebSocket Socket;
     }
 
     public class LogHandler
@@ -21,14 +21,15 @@ namespace ArtikelverwaltungClientWebsocketLoader
     internal class Program
     {
         public static ApplicationController controller { get; set; }
-        internal static string ipOrPort;
-        
+
         public static void Main(string[] args)
         {
             Logger logger = LogHandler.logger;
             logger.Init();
             Console.Write("Please enter the server ip/hostname: ");
-            ipOrPort = Console.ReadLine();
+            string urlInput = Console.ReadLine();
+            string url = "ws://" + urlInput + "/artikelverwaltung";
+            SocketManager.Socket = new WebSocket(url);
             // ToDo: add the option for a centralized update server
             Console.WriteLine("Setting methods");
             logger.AddEmpty();

@@ -23,6 +23,7 @@ namespace ArtikelverwaltungClientWebsocket
             logger.AddLine("setting up methods");
             Console.WriteLine("Setting up methods");
             ConnectionManager.socket.OnMessage += OnMessage;
+            Console.WriteLine("Method setup done");
             logger.AddLine("method setup done");
         }
 
