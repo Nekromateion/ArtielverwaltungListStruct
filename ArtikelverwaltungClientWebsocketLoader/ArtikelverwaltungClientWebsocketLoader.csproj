@@ -8,7 +8,7 @@
         <OutputType>Exe</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>ArtikelverwalktungClientWebsocket</RootNamespace>
-        <AssemblyName>ArtikelverwalktungClientWebsocket</AssemblyName>
+        <AssemblyName>ArtikelverwaltungClientWebsocketLoader</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>

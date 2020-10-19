@@ -4,7 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungListStruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungListStructClientConsoleHttp", "ArtikelverwaltungListStructClientConsoleHttp\ArtikelverwaltungListStructClientConsoleHttp.csproj", "{B1B716A7-9FFD-4FDF-98AB-1B9DE3BFAB9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwalktungClientWebsocket", "ArtikelverwalktungClientWebsocket\ArtikelverwalktungClientWebsocket.csproj", "{C85DF1E6-F3D6-4085-8B07-FCFCF5D49BAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungClientWebsocketLoader", "ArtikelverwaltungClientWebsocketLoader\ArtikelverwaltungClientWebsocketLoader.csproj", "{C85DF1E6-F3D6-4085-8B07-FCFCF5D49BAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungClientWebsocket", "ArtikelverwaltungClientWebsocket\ArtikelverwaltungClientWebsocket.csproj", "{07CDD8CA-2E90-4882-A086-20AF5F4431CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +26,9 @@ Global
 		{C85DF1E6-F3D6-4085-8B07-FCFCF5D49BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C85DF1E6-F3D6-4085-8B07-FCFCF5D49BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C85DF1E6-F3D6-4085-8B07-FCFCF5D49BAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07CDD8CA-2E90-4882-A086-20AF5F4431CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CDD8CA-2E90-4882-A086-20AF5F4431CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CDD8CA-2E90-4882-A086-20AF5F4431CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07CDD8CA-2E90-4882-A086-20AF5F4431CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
