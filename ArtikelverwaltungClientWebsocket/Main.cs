@@ -33,6 +33,7 @@ namespace ArtikelverwaltungClientWebsocket
         // its nearly 6 am 
         // see you in 4 hours
         // i hope......
+        // okay so i just got back to this and i have no clue wtf i did here or wanted to do
         private static void OnMessage(object sender, MessageEventArgs e)
         {
             Console.WriteLine("Received message from server");
