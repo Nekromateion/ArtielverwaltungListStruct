@@ -6,7 +6,7 @@ using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace ArtikelverwalktungClientWebsocket
+namespace ArtikelverwaltungClientWebsocketLoader
 {
     public class SocketManager
     {

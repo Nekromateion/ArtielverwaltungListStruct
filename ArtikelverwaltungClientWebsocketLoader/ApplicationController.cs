@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace ArtikelverwalktungClientWebsocket
+namespace ArtikelverwaltungClientWebsocketLoader
 {
     public class ApplicationController
     {

@@ -1,4 +1,6 @@
-﻿namespace ArtikelverwaltungClientWebsocket
+﻿using ArtikelverwaltungClientWebsocketLoader;
+
+namespace ArtikelverwaltungClientWebsocket
 {
     public class Main
     {
