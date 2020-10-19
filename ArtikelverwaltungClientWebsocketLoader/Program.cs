@@ -37,7 +37,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
             SocketManager.Socket.Connect();
             Console.WriteLine("Connected to servers");
             logger.AddLine("Connected to the server");
-            logger.AddLine("Sending ");
+            logger.AddLine("Sending request");
             Console.WriteLine("Sending request to server");
             SocketManager.Socket.Send("yo server gib assembly plz");
             Console.WriteLine("Sent request waiting for assembly to be loaded");
