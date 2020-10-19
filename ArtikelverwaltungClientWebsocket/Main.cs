@@ -14,6 +14,10 @@ namespace ArtikelverwaltungClientWebsocket
         {
             Console.WriteLine("Getting webhook from loader");
             ConnectionManager.socket = ArtikelverwaltungClientWebsocketLoader.SocketManager.Socket;
+            Console.WriteLine("Got socket");
+            Console.WriteLine("Setting up methods");
         }
+        
+            
     }
 }
