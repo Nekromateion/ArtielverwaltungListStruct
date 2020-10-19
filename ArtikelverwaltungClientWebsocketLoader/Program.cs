@@ -41,7 +41,11 @@ namespace ArtikelverwaltungClientWebsocketLoader
             Console.WriteLine("Sending request to server");
             SocketManager.Socket.Send("yo server gib assembly plz");
             Console.WriteLine("Sent request waiting for assembly to be loaded");
+            logger.AddLine("Sent request");
+            logger.AddLine("waiting for assembly to be created");
             while (assembly == null) { Thread.Sleep(10);}
+            logger.AddLine("assembly created");
+            logger.AddLine("loading assembly");
             Console.WriteLine("Loading assembly");
             foreach (Type type in GetLoadableTypes(Assembly.Load(assembly)))
             {
@@ -52,6 +56,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
                         controller = new ApplicationController();
                         controller.Create(type);
                         Console.WriteLine("Loaded Assembly");
+                        logger.AddLine("loaded assembly");
                         controller.OnApplicationStart();
                     }
                     catch (Exception e)
