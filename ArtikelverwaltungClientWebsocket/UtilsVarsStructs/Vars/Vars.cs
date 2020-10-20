@@ -5,7 +5,6 @@ namespace ArtikelverwaltungClientWebsocket
         public static string Version = "b1";
         public static string AdminKey { get; set; }
         public static string EditKey { get; set; }
-        
         public static int ConnectedUsers { get; set; }
     }
 }
