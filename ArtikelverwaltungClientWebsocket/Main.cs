@@ -30,8 +30,8 @@ namespace ArtikelverwaltungClientWebsocket
 
         public static void Menu()
         {
-            logger.AddLine();
-            
+            logger.AddLine("Called");
+            Console
         }
 
         
