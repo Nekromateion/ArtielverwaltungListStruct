@@ -26,7 +26,12 @@ namespace ArtikelverwaltungWebSocketServer
                     }
                     else if (e.Data == "request data")
                     {
-                        Console.WriteLine("Cleint Requested ");
+                        Console.WriteLine("Cleint Requested data");
+                        string data = string.Empty;
+                        if (Data.Articles.Count > 0)
+                        {
+                            Send("1: ");
+                        }
                     }
                 }
                 else
