@@ -98,7 +98,7 @@ namespace ArtikelverwaltungWebSocketServer
             string input = Console.ReadLine();
             if (input == "g")
             {
-                socket = new WebSocketServer(80);   
+                socket = new WebSocketServer(80);
             }
             else
             {
