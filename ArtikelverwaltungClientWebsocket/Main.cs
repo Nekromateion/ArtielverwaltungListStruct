@@ -135,9 +135,10 @@ namespace ArtikelverwaltungClientWebsocket
                     Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
                     Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
                 }
-                else if (e.Data.StartsWith())
+                else if (e.Data.StartsWith("data req "))
                 {
-                    
+                    logger.AddLine("message was data request response");
+                    string data = e.Data.Substring(8);
                 }
             }
             else if (e.IsBinary)
