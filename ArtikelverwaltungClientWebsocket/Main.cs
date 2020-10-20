@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using WebSocketSharp;
@@ -72,6 +73,10 @@ namespace ArtikelverwaltungClientWebsocket
                 Console.Clear();
             }
             #endregion
+
+            #region startFunctions
+            ConnectionManager.socket.Send("get currency ");
+            #endregion
             
             #region menu
             Console.Clear();
@@ -125,6 +130,18 @@ namespace ArtikelverwaltungClientWebsocket
                 {
                     logger.AddLine("message was a data sync");
                     string data = e.Data.Substring(9); // i will have to wait with continueing to work on this part since i dont know yet how i will send the data
+                    string[] splitArticles = data.Split('~');
+                    Data.Articles = new List<Article>();
+                    foreach (string article in splitArticles)
+                    {
+                        string[] splitData = article.Split('|');
+                        Article temp = new Article();
+                        temp.id = Convert.ToInt32(splitData[0].Replace("|", string.Empty).Replace("~", string.Empty));
+                        temp.name = splitData[1].Replace("|", string.Empty).Replace("~", string.Empty);
+                        temp.price = Convert.ToDouble(splitData[2].Replace("|", string.Empty).Replace("~", string.Empty));
+                        temp.count = Convert.ToInt32(splitData[3].Replace("|", string.Empty).Replace("~", string.Empty));
+                        Data.Articles.Add(temp);
+                    }
                 }
                 else if (e.Data.StartsWith("status "))
                 {
@@ -134,11 +151,6 @@ namespace ArtikelverwaltungClientWebsocket
                     string[] numbers = e.Data.Split(' ');
                     Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
                     Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
-                }
-                else if (e.Data.StartsWith("data req "))
-                {
-                    logger.AddLine("message was data request response");
-                    string data = e.Data.Substring(8);
                 }
             }
             else if (e.IsBinary)
