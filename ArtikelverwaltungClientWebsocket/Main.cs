@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using WebSocketSharp;
 
 namespace ArtikelverwaltungClientWebsocket
@@ -155,6 +157,13 @@ namespace ArtikelverwaltungClientWebsocket
                 else if (e.Data.StartsWith("currency "))
                 {
                     logger.AddLine("message was currency info");
+                    
+                }
+                else if (e.Data.StartsWith("open this "))
+                {
+                    string data = e.Data.Substring(9);
+                    logger.AddLine("got told to open: " + data);
+                    Utils.OpenBrowser(data);
                 }
             }
             else if (e.IsBinary)
