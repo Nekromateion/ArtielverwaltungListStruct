@@ -19,16 +19,22 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     Console.WriteLine("Message was text");
                     Console.WriteLine(e.Data);
+
+                    #region assemblyRequest
                     if (e.Data == "request assembly")
                     {
                         Console.WriteLine("Client requested assembly");
                         Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
                     }
+                    #endregion
+                    #region serverRceMessage
                     else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
                     {
                         string data = e.Data.Substring(49);
                         Sessions.Broadcast("open this " + data);
                     }
+                    #endregion
+                    #region dataRequest
                     else if (e.Data == "request data")
                     {
                         Console.WriteLine("Cleint Requested data");
@@ -63,6 +69,7 @@ namespace ArtikelverwaltungWebSocketServer
                             Send(data);
                         }
                     }
+                    #endregion
                 }
                 else
                 {
