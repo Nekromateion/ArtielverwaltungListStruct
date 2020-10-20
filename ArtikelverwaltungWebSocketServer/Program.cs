@@ -27,10 +27,35 @@ namespace ArtikelverwaltungWebSocketServer
                     else if (e.Data == "request data")
                     {
                         Console.WriteLine("Cleint Requested data");
-                        string data = string.Empty;
+                        string data = "data req ";
                         if (Data.Articles.Count > 0)
                         {
-                            Send("1: ");
+                            Console.WriteLine("1: List is empty");
+                            data = "1: Nothing in list";
+                            Send(data);
+                        }
+                        else
+                        {
+                            int count = 0;
+                            foreach (Article article in Data.Articles)
+                            {
+                                count++;
+                                if (count != Data.Articles.Count)
+                                {
+                                    data += article.id + "|";
+                                    data += article.name + "|";
+                                    data += article.price + "|";
+                                    data += article.count + "~";
+                                }
+                                else
+                                {
+                                    data += article.id + "|";
+                                    data += article.name + "|";
+                                    data += article.price + "|";
+                                    data += article.count;
+                                }
+                            }
+                            Send(data);
                         }
                     }
                 }
