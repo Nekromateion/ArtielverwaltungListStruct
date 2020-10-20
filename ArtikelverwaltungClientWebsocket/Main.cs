@@ -75,7 +75,7 @@ namespace ArtikelverwaltungClientWebsocket
             #endregion
 
             #region startFunctions
-            ConnectionManager.socket.Send("get currency ");
+            ConnectionManager.socket.Send("get currency");
             #endregion
             
             #region menu
@@ -151,6 +151,10 @@ namespace ArtikelverwaltungClientWebsocket
                     string[] numbers = e.Data.Split(' ');
                     Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
                     Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
+                }
+                else if (e.Data.StartsWith("currency "))
+                {
+                    logger.AddLine("message was currency info");
                 }
             }
             else if (e.IsBinary)
