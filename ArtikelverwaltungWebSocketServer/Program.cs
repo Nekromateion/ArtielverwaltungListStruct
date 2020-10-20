@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Contexts;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -101,20 +102,24 @@ namespace ArtikelverwaltungWebSocketServer
         public static void Main(string[] args)
         {
             WebSocketServer socket;
-            Console.WriteLine("Do you want to start the server global or only local? (g = global | l = local)");
+            Console.Write("Do you want to start the server global or only local? (g = global | l = local)");
             string input = Console.ReadLine();
+            int port;
             if (input == "g")
             {
-                socket = new WebSocketServer(80);
+                Console.WriteLine("Please input the port you want the server to use");
+                port = Convert.ToInt32(Console.ReadLine());
+                socket = new WebSocketServer(port);
             }
             else
             {
                 socket = new WebSocketServer("ws://127.0.0.1");
+                port = 80;
             }
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
-            WebSocket client = new WebSocket("ws://127.0.0.1/artikelverwaltung");
+            WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             client.Connect();
             while (true)
             {
