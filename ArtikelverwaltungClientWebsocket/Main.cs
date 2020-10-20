@@ -78,7 +78,7 @@ namespace ArtikelverwaltungClientWebsocket
             Console.WriteLine("e : Exit the application");
             if (Vars.AdminKey != null)
             {
-                Console.WriteLine("c : Close the server");
+                Console.WriteLine("c : Save the list and close the server");
                 Console.WriteLine("s : Save the list to servers disk");
                 Console.WriteLine("cl: Clear the list on the server");   
             }
@@ -96,8 +96,12 @@ namespace ArtikelverwaltungClientWebsocket
             #endregion
 
             #region menuInputHandler
-            if(input == "1" || input == "r" || input == "read") Functions.LocalFunctions.Userfunctions.ReadList();
-            else if (input == "2" || input == "search") Functions.LocalFunctions.Userfunctions.SearchList();
+            if (input == "1") Functions.LocalFunctions.Userfunctions.ReadList();
+            else if (input == "2") Functions.LocalFunctions.Userfunctions.SearchList();
+            else if (input == "3") Functions.LocalFunctions.Userfunctions.SortList();
+            else if (input == "4"){ if(Vars.EditKey != null || Vars.AdminKey != null) Functions.ServerFunctions.Editfunctions.AddArticle();}
+            else if (input == "5"){ if(Vars.EditKey != null || Vars.AdminKey != null) Functions.ServerFunctions.Editfunctions.RemoveArticle();}
+            
             #endregion
         }
 

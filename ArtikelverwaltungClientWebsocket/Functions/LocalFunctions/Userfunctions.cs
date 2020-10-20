@@ -13,5 +13,10 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
         {
             
         }
+
+        internal static void SortList()
+        {
+            
+        }
     }
 }
