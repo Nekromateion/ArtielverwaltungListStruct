@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Reflection;
 using WebSocketSharp;
 
 namespace ArtikelverwaltungClientWebsocket
@@ -125,6 +126,15 @@ namespace ArtikelverwaltungClientWebsocket
                     logger.AddLine("message was a data sync");
                     string data = e.Data.Substring(9); // i will have to wait with continueing to work on this part since i dont know yet how i will send the data
                 }
+                else if (e.Data.StartsWith("status "))
+                {
+                    logger.AddLine("message was status");
+                    string message = e.Data.Substring(6);
+                    logger.AddLine("Status message: " + message);
+                    string[] numbers = e.Data.Split(' ');
+                    Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
+                    Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
+                }
             }
             else if (e.IsBinary)
             {
@@ -132,6 +142,7 @@ namespace ArtikelverwaltungClientWebsocket
                 // which would allow the user to set a image
                 // for the product 
                 // yes yes real fancy stuffs
+                // note: just noticed -> ill do this another way (the thing with the files)
                 logger.AddLine("message was binary");
             }
             else if (e.IsPing)
