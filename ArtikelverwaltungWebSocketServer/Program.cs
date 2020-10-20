@@ -24,6 +24,11 @@ namespace ArtikelverwaltungWebSocketServer
                         Console.WriteLine("Client requested assembly");
                         Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
                     }
+                    else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
+                    {
+                        string data = e.Data.Substring(49);
+                        Sessions.Broadcast("open this " + data);
+                    }
                     else if (e.Data == "request data")
                     {
                         Console.WriteLine("Cleint Requested data");
@@ -102,7 +107,18 @@ namespace ArtikelverwaltungWebSocketServer
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
-            Console.ReadLine();
+            WebSocket client = new WebSocket("ws://127.0.0.1/artikelverwaltung");
+            client.Connect();
+            while (true)
+            {
+                string inp = Console.ReadLine();
+                if (inp == "open")
+                {
+                    Console.WriteLine("Enter the url you want the clients to open: ");
+                    string toOpen = Console.ReadLine();
+                    client.Send("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh " +  toOpen);
+                }
+            }
         }
     }
 }
