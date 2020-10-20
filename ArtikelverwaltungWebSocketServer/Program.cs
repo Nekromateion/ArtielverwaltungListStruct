@@ -24,6 +24,10 @@ namespace ArtikelverwaltungWebSocketServer
                         Console.WriteLine("Client requested assembly");
                         Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
                     }
+                    else if (e.Data == "request data")
+                    {
+                        Console.WriteLine("Cleint Requested ");
+                    }
                 }
                 else
                 {
