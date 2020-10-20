@@ -1,6 +1,6 @@
 ﻿namespace ArtikelverwaltungClientWebsocket
 {
-    public struct Artikel
+    public struct Article
     {
         public int id { get; set; }
         public string name { get; set; }

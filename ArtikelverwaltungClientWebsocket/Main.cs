@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using WebSocketSharp;
 
 namespace ArtikelverwaltungClientWebsocket
@@ -31,7 +32,73 @@ namespace ArtikelverwaltungClientWebsocket
         public static void Menu()
         {
             logger.AddLine("Called");
-            Console
+
+            #region functionInputs
+            // ToDo: finish this
+            
+            //string[] readNames;
+            using (WebClient client = new WebClient())
+            {
+                //readNames = client.DownloadString("https://media.nekro-works.de/readNames.txt");
+            }
+            #endregion
+
+            #region adminKey
+            Console.Clear();
+            Console.WriteLine("Do you have the server admin key? (y = yes)");
+            string key = Console.ReadLine().ToLower();
+            if (key == "y" || key == "yes")
+            {
+                Console.Clear();
+                Console.Write("Please input the admin key: ");
+                Vars.AdminKey = Console.ReadLine();
+            }
+            Console.Clear();
+            #endregion
+
+            #region editKey
+            if (Vars.AdminKey == null)
+            {
+                Console.Clear();
+                Console.WriteLine("Do you have the server edit key? (y = yes)");
+                string key2 = Console.ReadLine().ToLower();
+                if (key2 == "y" || key2 == "yes")
+                {
+                    Console.Clear();
+                    Console.Write("Please input the admin key: ");
+                    Vars.EditKey = Console.ReadLine();
+                }
+                Console.Clear();
+            }
+            #endregion
+            
+            #region menu
+            Console.Clear();
+            Console.WriteLine("Please select one of the following options");
+            Console.WriteLine("e : Exit the application");
+            if (Vars.AdminKey != null)
+            {
+                Console.WriteLine("c : Close the server");
+                Console.WriteLine("s : Save the list to servers disk");
+                Console.WriteLine("cl: Clear the list on the server");   
+            }
+            Console.WriteLine("1 : Read Current list");
+            Console.WriteLine("2 : Search in list");
+            Console.WriteLine("3 : Sort list");
+            if (Vars.EditKey != null)
+            {
+                Console.WriteLine("4 : Add a new article");
+                Console.WriteLine("5 : Delete a article");
+            }
+            Console.WriteLine("");
+            Console.Write("Your input: ");
+            string input = Console.ReadLine().ToLower();
+            #endregion
+
+            #region menuInputHandler
+            if(input == "1" || input == "r" || input == "read") Functions.LocalFunctions.Userfunctions.ReadList();
+            else if (input == "2" || input == "search") Functions.LocalFunctions.Userfunctions.SearchList();
+            #endregion
         }
 
         

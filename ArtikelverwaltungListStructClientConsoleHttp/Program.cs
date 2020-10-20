@@ -151,6 +151,7 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                 _logger.AddLine($"currency request took: {(endTimeCurrency / TimeSpan.TicksPerMillisecond) - (startTimeCurrency / TimeSpan.TicksPerMillisecond)} milliseconds ({endTimeCurrency-startTimeCurrency} ticks)");
                 #endregion
                 #region adminKey
+
                 Console.Clear();
                 Console.WriteLine("Do you have the server admin key? (y = yes)");
                 string inp = Console.ReadLine().ToLower();
@@ -160,7 +161,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     Console.Write("Please input the admin key: ");
                     _key = Console.ReadLine();
                 }
+
                 Console.Clear();
+
                 #endregion
                 #region menu
                 while (doRun)
