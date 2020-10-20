@@ -48,7 +48,6 @@ namespace ArtikelverwaltungWebSocketServer
 
             protected override void OnError(ErrorEventArgs e)
             {
-                activeConnections--;
                 Console.WriteLine(e.Message);
             }
         }
