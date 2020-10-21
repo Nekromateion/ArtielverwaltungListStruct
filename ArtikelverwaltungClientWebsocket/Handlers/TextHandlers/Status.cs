@@ -1,4 +1,4 @@
-﻿namespace ArtikelverwaltungClientWebsocket.Handlers
+﻿namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
 {
     public class Status
     {
