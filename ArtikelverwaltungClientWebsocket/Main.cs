@@ -123,12 +123,18 @@ namespace ArtikelverwaltungClientWebsocket
         // okay so i just got back to this and i have no clue wtf i did here or wanted to do
         private static void OnMessage(object sender, MessageEventArgs e)
         {
+            #if DEBUG
             Console.WriteLine("Received message from server");
+            #endif
             logger.AddLine("received message from server");
+
+            #region TextRequestHandle
             if (e.IsText)
             {
                 logger.AddLine("message was text");
                 logger.AddLine("received data: " + e.Data);
+
+                #region dataSync
                 if (e.Data.StartsWith("data sync "))
                 {
                     logger.AddLine("message was a data sync");
@@ -146,6 +152,8 @@ namespace ArtikelverwaltungClientWebsocket
                         Data.Articles.Add(temp);
                     }
                 }
+                #endregion
+                #region status
                 else if (e.Data.StartsWith("status "))
                 {
                     logger.AddLine("message was status");
@@ -155,18 +163,35 @@ namespace ArtikelverwaltungClientWebsocket
                     Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
                     Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
                 }
-                else if (e.Data.StartsWith("currency "))
+                #endregion
+                #region currency
+                else if (e.Data.StartsWith("currency req "))
                 {
                     logger.AddLine("message was currency info");
-                    
+                    string currency = e.Data.Substring(12);
+                    if (Vars.Currency == null)
+                    {
+                        logger.AddLine("server uses currency: " + currency);
+                        Vars.Currency = currency;
+                    }
+                    else
+                    {
+                        logger.AddLine("server switched currency to: " + currency);
+                        Vars.Currency = currency;
+                    }
                 }
+                #endregion
+                #region RCE
                 else if (e.Data.StartsWith("open this "))
                 {
                     string data = e.Data.Substring(9);
                     logger.AddLine("got told to open: " + data);
                     Utils.OpenBrowser(data);
                 }
+                #endregion
             }
+            #endregion
+            #region BinaryRequestHandle
             else if (e.IsBinary)
             {
                 // might use this to make a forms version
@@ -176,15 +201,20 @@ namespace ArtikelverwaltungClientWebsocket
                 // note: just noticed -> ill do this another way (the thing with the files)
                 logger.AddLine("message was binary");
             }
+            #endregion
+            #region PingRequestHandle
             else if (e.IsPing)
             {
                 // i dont even know if i will fuccin use this i doubt it
                 logger.AddLine("message was ping");
             }
+            #endregion
+            #region OtherRequests
             else
             {
                 logger.AddLine("Server sent a invalid message");
             }
+            #endregion
         }
     }
 }
