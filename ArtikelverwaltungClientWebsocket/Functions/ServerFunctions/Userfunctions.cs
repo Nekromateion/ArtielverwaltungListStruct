@@ -6,7 +6,10 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
         {
             ConnectionManager.socket.Send("request data");
         }
-        
-        internal static void 
+
+        internal static void InitCurrency()
+        {
+            ConnectionManager.socket.Send("get currency");
+        }
     }
 }
