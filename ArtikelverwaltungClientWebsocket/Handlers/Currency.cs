@@ -2,6 +2,9 @@
 {
     public class Currency
     {
-        
+        internal static void Handle(string data)
+        {
+            
+        }
     }
 }
