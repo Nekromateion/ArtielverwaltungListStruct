@@ -94,7 +94,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
                     Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({Vars.Currency})","->Count<-"});
                     foreach (Article article in Data.Articles)
                     {
-                        if (article.price == Convert.ToDouble(toSearch))
+                        if (article.count == Convert.ToDouble(toSearch))
                         {
                             Utils.PrintRow(ConsoleColor.White, new string[]{article.id.ToString(), article.name, article.price.ToString(), article.count.ToString()});
                         }
