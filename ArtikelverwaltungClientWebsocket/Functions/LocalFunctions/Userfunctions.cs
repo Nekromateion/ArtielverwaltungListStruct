@@ -44,7 +44,50 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
                 Console.WriteLine("By what do you want to search?");
                 Console.WriteLine("1: Name");
                 Console.WriteLine("2: Price");
-                long startTime = DateTime.Now.Ticks;
+                Console.WriteLine("3: Count");
+                Console.WriteLine();
+                Console.Write("Your input: ");
+                string input = Console.ReadLine();
+                Console.Clear();
+                long startTime = Int64.MaxValue;
+                if (input == "1")
+                {
+                    Console.Write("Name: ");
+                    string toSearch = Console.ReadLine().ToLower();
+                    startTime = DateTime.Now.Ticks;
+                    Console.Clear();
+                    Utils.PrintLine();
+                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","-Name-",$"Price({Vars.Currency})","Count"});
+                    foreach (Article article in Data.Articles)
+                    {
+                        if (article.name.ToLower().Contains(toSearch))
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new string[]{article.id.ToString(), article.name, article.price.ToString(), article.count.ToString()});
+                        }
+                    }
+                    Utils.PrintLine();
+                }
+                else if (input == "2")
+                {
+                    Console.Write("Price: ");
+                    string toSearch = Console.ReadLine();
+                    startTime = DateTime.Now.Ticks;
+                    Console.Clear();
+                    Utils.PrintLine();
+                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"-Price({Vars.Currency})-","Count"});
+                    foreach (Article article in Data.Articles)
+                    {
+                        if (article.price == Convert.ToDouble(toSearch))
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new string[]{article.id.ToString(), article.name, article.price.ToString(), article.count.ToString()});
+                        }
+                    }
+                    Utils.PrintLine();
+                }
+                else if (input == "3")
+                {
+                    
+                }
                 long endTime = DateTime.Now.Ticks;
                 logger.AddLine($"reading and printing {Data.Articles.Count} took: Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
                 Console.Write("Press any key to return to the menu...");
