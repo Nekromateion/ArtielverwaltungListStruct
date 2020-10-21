@@ -8,11 +8,6 @@ using WebSocketSharp;
 
 namespace ArtikelverwaltungClientWebsocket
 {
-    public class ConnectionManager
-    {
-        public static WebSocket socket;
-    }
-    
     public class Main
     {
         private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
@@ -110,6 +105,10 @@ namespace ArtikelverwaltungClientWebsocket
             else if (input == "3") Functions.LocalFunctions.Userfunctions.SortList();
             else if (input == "4"){ if(Vars.EditKey != null || Vars.AdminKey != null) Functions.ServerFunctions.Editfunctions.AddArticle();}
             else if (input == "5"){ if(Vars.EditKey != null || Vars.AdminKey != null) Functions.ServerFunctions.Editfunctions.RemoveArticle();}
+            else if (input == "e") Environment.Exit(0xDEAD);
+            else if (input == "c") { if (Vars.AdminKey != null) Functions.ServerFunctions.Adminfunctions.CloseServer(); }
+            else if (input == "s") { if (Vars.AdminKey != null) Functions.ServerFunctions.Adminfunctions.SaveList(); }
+            else if (input == "cl") { if (Vars.AdminKey != null) Functions.ServerFunctions.Adminfunctions.ClearList(); }
             
             #endregion
         }
