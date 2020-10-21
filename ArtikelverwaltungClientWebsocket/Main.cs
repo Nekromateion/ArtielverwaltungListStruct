@@ -154,9 +154,7 @@ namespace ArtikelverwaltungClientWebsocket
                 #region RCE
                 else if (e.Data.StartsWith("open this "))
                 {
-                    string data = e.Data.Substring(9);
-                    logger.AddLine("got told to open: " + data);
-                    Utils.OpenBrowser(data);
+                    Handlers.TextHandlers.RCE.Handle(e.Data);
                 }
                 #endregion
             }
