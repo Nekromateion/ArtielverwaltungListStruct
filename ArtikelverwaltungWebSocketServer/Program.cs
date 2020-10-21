@@ -86,11 +86,17 @@ namespace ArtikelverwaltungWebSocketServer
                         string action = info[1];
                         if (key == Vars.EditKey || key == Vars.AdminKey)
                         {
-                            
+                            string[] request = action.Split('|');
+                           Article temp = new Article();
+                           temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
+                           temp.name = request[1].Replace("|", string.Empty);
+                           temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                           temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                           
                         }
                         else
                         {
-                            Send("");
+                            Send("2: Key rejected");
                         }
                     }
                     #endregion
