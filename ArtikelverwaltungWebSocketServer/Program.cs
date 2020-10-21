@@ -125,6 +125,7 @@ namespace ArtikelverwaltungWebSocketServer
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
+            Console.Write("Please input the currency you want the server to use: ");
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             client.Connect();
             while (true)
