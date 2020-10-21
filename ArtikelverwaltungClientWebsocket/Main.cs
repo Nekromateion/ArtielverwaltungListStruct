@@ -72,6 +72,7 @@ namespace ArtikelverwaltungClientWebsocket
             #endregion
 
             #region startFunctions
+            Functions.ServerFunctions.Userfunctions.RequestStatusBroadcast();
             Functions.ServerFunctions.Userfunctions.InitCurrency();
             Functions.ServerFunctions.Userfunctions.InitList();
             #endregion
