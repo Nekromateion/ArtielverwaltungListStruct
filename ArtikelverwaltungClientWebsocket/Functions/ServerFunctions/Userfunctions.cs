@@ -11,5 +11,10 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
         {
             ConnectionManager.socket.Send("get currency");
         }
+
+        internal static void RequestStatusBroadcast()
+        {
+            
+        }
     }
 }
