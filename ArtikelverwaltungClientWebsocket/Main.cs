@@ -142,12 +142,7 @@ namespace ArtikelverwaltungClientWebsocket
                 #region status
                 else if (e.Data.StartsWith("status "))
                 {
-                    logger.AddLine("message was status");
-                    string message = e.Data.Substring(6);
-                    logger.AddLine("Status message: " + message);
-                    string[] numbers = e.Data.Split(' ');
-                    Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
-                    Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
+                    Handlers.TextHandlers.Status.Handle(e.Data);
                 }
                 #endregion
                 #region currency
