@@ -12,7 +12,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
 
         internal static void RemoveArticle()
         {
-            
+            logger.AddLine("called");
         }
     }
 }
