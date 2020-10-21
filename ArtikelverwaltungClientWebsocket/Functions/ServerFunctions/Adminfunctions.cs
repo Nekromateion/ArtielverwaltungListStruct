@@ -7,17 +7,17 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
         
         internal static void CloseServer()
         {
-            
+            logger.AddLine("called");
         }
 
         internal static void SaveList()
         {
-            
+            logger.AddLine("called");
         }
 
         internal static void ClearList()
         {
-            
+            logger.AddLine("called");
         }
     }
 }
