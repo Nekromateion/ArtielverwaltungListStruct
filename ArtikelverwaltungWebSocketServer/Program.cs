@@ -28,6 +28,12 @@ namespace ArtikelverwaltungWebSocketServer
                         Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
                     }
                     #endregion
+                    #region getCurrency
+                    else if (e.Data == "get currency")
+                    {
+                        
+                    }
+                    #endregion
                     #region serverRceMessage
                     else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
                     {
