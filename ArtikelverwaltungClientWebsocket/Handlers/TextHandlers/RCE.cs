@@ -1,4 +1,6 @@
-﻿namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
+﻿using System;
+
+namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
 {
     public class RCE
     {
@@ -7,9 +9,10 @@
 
         internal static void Handle(string data)
         {
-            string toOpen = data.Substring(9);
+            logger.AddLine("called");
+            string toOpen = data.Substring(11);
             logger.AddLine("got told to open: " + toOpen);
-            Utils.OpenBrowser(data);
+            Utils.OpenBrowser(toOpen);
         }
     }
 }
