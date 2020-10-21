@@ -73,7 +73,7 @@ namespace ArtikelverwaltungClientWebsocket
 
             #region startFunctions
             ConnectionManager.socket.Send("get currency");
-            ConnectionManager.socket.Send("request data");
+            Functions.ServerFunctions.Userfunctions.InitList();
             #endregion
             
             #region menu
