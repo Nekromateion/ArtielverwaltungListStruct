@@ -31,7 +31,7 @@ namespace ArtikelverwaltungWebSocketServer
                     #region getCurrency
                     else if (e.Data == "get currency")
                     {
-                        
+                        Send("currency req " + Vars.Currency);
                     }
                     #endregion
                     #region serverRceMessage
@@ -126,6 +126,10 @@ namespace ArtikelverwaltungWebSocketServer
             socket.Start();
             Console.WriteLine("Server started");
             Console.Write("Please input the currency you want the server to use: ");
+            while (Vars.Currency == null)
+            {
+                Vars.Currency = Console.ReadLine();
+            }
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             client.Connect();
             while (true)
