@@ -77,6 +77,10 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     #endregion
+                    else if (e.Data.StartsWith(""))
+                    {
+                        
+                    }
                 }
                 else
                 {
