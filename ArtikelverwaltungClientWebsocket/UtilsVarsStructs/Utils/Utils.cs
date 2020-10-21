@@ -6,9 +6,12 @@ namespace ArtikelverwaltungClientWebsocket
 {
     public class Utils
     {
+        private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
+            ArtikelverwaltungClientWebsocketLoader.LogHandler.logger;
         static int tableWidth = 90;
         public static void WriteLine(object obj, ConsoleColor? color = null)
         {
+            logger.AddLine("called");
             if (color != null)
                 Console.ForegroundColor = color.Value;
             Console.WriteLine(obj);
@@ -16,11 +19,13 @@ namespace ArtikelverwaltungClientWebsocket
         }
         public static void PrintLine(ConsoleColor? color = null)
         {
+            logger.AddLine("called");
             WriteLine(new string('-', tableWidth - 1), color);
         }
 
         public static void PrintRow(ConsoleColor? color = null, params string[] columns)
         {
+            logger.AddLine("called");
             int width = (tableWidth - columns.Length) / columns.Length;
             string row = "|";
 
@@ -34,6 +39,7 @@ namespace ArtikelverwaltungClientWebsocket
         
         static string AlignCentre(string text, int width)
         {
+            logger.AddLine("called");
             text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
 
             if (string.IsNullOrEmpty(text))
@@ -48,6 +54,7 @@ namespace ArtikelverwaltungClientWebsocket
         
         public static void OpenBrowser(string url)
         {
+            logger.AddLine("called");
             try
             {
                 Process.Start(url);
