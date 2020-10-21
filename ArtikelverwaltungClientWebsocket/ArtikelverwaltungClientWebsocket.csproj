@@ -47,6 +47,7 @@
         <Compile Include="Functions\ServerFunctions\Adminfunctions.cs" />
         <Compile Include="Functions\ServerFunctions\Editfunctions.cs" />
         <Compile Include="Functions\ServerFunctions\Userfunctions.cs" />
+        <Compile Include="Handlers\Currency.cs" />
         <Compile Include="Handlers\DataSync.cs" />
         <Compile Include="Handlers\Status.cs" />
         <Compile Include="Main.cs" />
