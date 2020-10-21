@@ -148,18 +148,7 @@ namespace ArtikelverwaltungClientWebsocket
                 #region currency
                 else if (e.Data.StartsWith("currency req "))
                 {
-                    logger.AddLine("message was currency info");
-                    string currency = e.Data.Substring(12);
-                    if (Vars.Currency == null)
-                    {
-                        logger.AddLine("server uses currency: " + currency);
-                        Vars.Currency = currency;
-                    }
-                    else
-                    {
-                        logger.AddLine("server switched currency to: " + currency);
-                        Vars.Currency = currency;
-                    }
+                    Handlers.TextHandlers.Currency.Handle(e.Data);
                 }
                 #endregion
                 #region RCE
