@@ -41,9 +41,15 @@ namespace ArtikelverwaltungClientWebsocket
                 //readNames = client.DownloadString("https://media.nekro-works.de/readNames.txt");
             }
             #endregion
+            
+            #region startFunctions
+            Functions.ServerFunctions.Userfunctions.RequestStatusBroadcast();
+            Functions.ServerFunctions.Userfunctions.InitCurrency();
+            Functions.ServerFunctions.Userfunctions.InitList();
+            #endregion
 
             #region adminKey
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine("Do you have the server admin key? (y = yes)");
             string key = Console.ReadLine().ToLower();
             if (key == "y" || key == "yes")
@@ -71,12 +77,6 @@ namespace ArtikelverwaltungClientWebsocket
             }
             #endregion
 
-            #region startFunctions
-            Functions.ServerFunctions.Userfunctions.RequestStatusBroadcast();
-            Functions.ServerFunctions.Userfunctions.InitCurrency();
-            Functions.ServerFunctions.Userfunctions.InitList();
-            #endregion
-            
             #region menu
             Console.Clear();
             Console.WriteLine("Please select one of the following options");
