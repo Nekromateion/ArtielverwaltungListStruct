@@ -4,7 +4,9 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
     {
         internal static void InitList()
         {
-            
+            ConnectionManager.socket.Send("request data");
         }
+        
+        internal static void 
     }
 }
