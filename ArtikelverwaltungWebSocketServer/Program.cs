@@ -97,6 +97,7 @@ namespace ArtikelverwaltungWebSocketServer
                     #region broadCastStatus
                     else if (e.Data == "broadcast status")
                     {
+                        Console.WriteLine("client requested status broadcast");
                         Sessions.Broadcast("status " + connections + " " + activeConnections);
                     }
                     #endregion
