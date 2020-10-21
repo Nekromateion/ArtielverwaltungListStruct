@@ -57,7 +57,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
                     startTime = DateTime.Now.Ticks;
                     Console.Clear();
                     Utils.PrintLine();
-                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","-Name-",$"Price({Vars.Currency})","Count"});
+                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","->Name<-",$"Price({Vars.Currency})","Count"});
                     foreach (Article article in Data.Articles)
                     {
                         if (article.name.ToLower().Contains(toSearch))
@@ -74,7 +74,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
                     startTime = DateTime.Now.Ticks;
                     Console.Clear();
                     Utils.PrintLine();
-                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"-Price({Vars.Currency})-","Count"});
+                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"->Price({Vars.Currency})<-","Count"});
                     foreach (Article article in Data.Articles)
                     {
                         if (article.price == Convert.ToDouble(toSearch))
@@ -86,7 +86,20 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
                 }
                 else if (input == "3")
                 {
-                    
+                    Console.Write("Count: ");
+                    string toSearch = Console.ReadLine();
+                    startTime = DateTime.Now.Ticks;
+                    Console.Clear();
+                    Utils.PrintLine();
+                    Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({Vars.Currency})","->Count<-"});
+                    foreach (Article article in Data.Articles)
+                    {
+                        if (article.price == Convert.ToDouble(toSearch))
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new string[]{article.id.ToString(), article.name, article.price.ToString(), article.count.ToString()});
+                        }
+                    }
+                    Utils.PrintLine();
                 }
                 long endTime = DateTime.Now.Ticks;
                 logger.AddLine($"reading and printing {Data.Articles.Count} took: Action took: {(endTime / TimeSpan.TicksPerMillisecond) - (startTime / TimeSpan.TicksPerMillisecond)} milliseconds ({endTime-startTime} ticks)");
