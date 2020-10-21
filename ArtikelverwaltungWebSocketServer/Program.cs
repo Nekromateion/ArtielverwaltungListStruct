@@ -77,6 +77,7 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     #endregion
+                    #region addRequest
                     else if (e.Data.StartsWith("add "))
                     {
                         string data = e.Data.Substring(3);
@@ -87,7 +88,18 @@ namespace ArtikelverwaltungWebSocketServer
                         {
                             
                         }
+                        else
+                        {
+                            Send("");
+                        }
                     }
+                    #endregion
+                    #region broadCastStatus
+                    else if (e.Data == "broadcast status")
+                    {
+                        Sessions.Broadcast("status " + connections + " " + activeConnections);
+                    }
+                    #endregion
                 }
                 else
                 {
