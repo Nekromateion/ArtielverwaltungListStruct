@@ -80,23 +80,30 @@ namespace ArtikelverwaltungWebSocketServer
                     #region addRequest
                     else if (e.Data.StartsWith("add "))
                     {
-                        string data = e.Data.Substring(3);
-                        string[] info = data.Split('~');
-                        string key = info[0];
-                        string action = info[1];
-                        if (key == Vars.EditKey || key == Vars.AdminKey)
+                        try
                         {
-                            string[] request = action.Split('|');
-                            Article temp = new Article();
-                            temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
-                            temp.name = request[1].Replace("|", string.Empty);
-                            temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
-                            temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
-                            Data.Articles.Add(temp);
+                            string data = e.Data.Substring(3);
+                            string[] info = data.Split('~');
+                            string key = info[0];
+                            string action = info[1];
+                            if (key == Vars.EditKey || key == Vars.AdminKey)
+                            {
+                                string[] request = action.Split('|');
+                                Article temp = new Article();
+                                temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
+                                temp.name = request[1].Replace("|", string.Empty);
+                                temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                                temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                Data.Articles.Add(temp);
+                            }
+                            else
+                            {
+                                Send("2: Key rejected");
+                            }
                         }
-                        else
+                        catch (Exception)
                         {
-                            Send("2: Key rejected");
+                            Send("3: Something went wrong");
                         }
                     }
                     #endregion
