@@ -49,7 +49,7 @@ namespace ArtikelverwaltungClientWebsocket
             #endregion
 
             #region adminKey
-            //Console.Clear();
+            Console.Clear();
             Console.WriteLine("Do you have the server admin key? (y = yes)");
             string key = Console.ReadLine().ToLower();
             if (key == "y" || key == "yes")
