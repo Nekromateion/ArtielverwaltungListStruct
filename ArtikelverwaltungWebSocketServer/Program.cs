@@ -77,9 +77,12 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     #endregion
-                    else if (e.Data.StartsWith(""))
+                    else if (e.Data.StartsWith("add "))
                     {
-                        
+                        string data = e.Data.Substring(3);
+                        string[] info = data.Split('~');
+                        string key = info[0];
+                        string action = info[1];
                     }
                 }
                 else
@@ -129,10 +132,11 @@ namespace ArtikelverwaltungWebSocketServer
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
-            Console.Write("Please input the currency you want the server to use: ");
             while (Vars.Currency == null)
             {
+                Console.Write("Please input the currency you want the server to use: ");
                 Vars.Currency = Console.ReadLine();
+                Console.Clear();
             }
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             client.Connect();
