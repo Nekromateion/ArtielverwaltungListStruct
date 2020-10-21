@@ -42,6 +42,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ConnectionManager.cs" />
         <Compile Include="Functions\LocalFunctions\Userfunctions.cs" />
         <Compile Include="Functions\ServerFunctions\Adminfunctions.cs" />
         <Compile Include="Functions\ServerFunctions\Editfunctions.cs" />
