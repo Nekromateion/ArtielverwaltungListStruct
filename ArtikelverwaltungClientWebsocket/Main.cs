@@ -177,6 +177,7 @@ namespace ArtikelverwaltungClientWebsocket
             else
             {
                 logger.AddLine("Server sent a invalid message");
+                Console.WriteLine("Server sent a invalid message: " + e.Data);
             }
             #endregion
         }
