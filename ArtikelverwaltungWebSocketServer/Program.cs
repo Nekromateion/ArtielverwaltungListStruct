@@ -83,6 +83,10 @@ namespace ArtikelverwaltungWebSocketServer
                         string[] info = data.Split('~');
                         string key = info[0];
                         string action = info[1];
+                        if (key == Vars.EditKey || key == Vars.AdminKey)
+                        {
+                            
+                        }
                     }
                 }
                 else
