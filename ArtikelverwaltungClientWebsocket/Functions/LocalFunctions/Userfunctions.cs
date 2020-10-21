@@ -12,6 +12,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
         {
             long startTimeReadPrint = DateTime.Now.Ticks;
             logger.AddLine("called");
+            Console.Clear();
             Utils.PrintLine();
             Utils.PrintRow(ConsoleColor.White, new string[]{"ID", "Name", $"Price ({Vars.Currency})", "Count"});
             foreach (Article article in Data.Articles)
