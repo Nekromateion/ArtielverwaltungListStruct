@@ -48,6 +48,7 @@
         <Compile Include="Functions\ServerFunctions\Editfunctions.cs" />
         <Compile Include="Functions\ServerFunctions\Userfunctions.cs" />
         <Compile Include="Handlers\DataSync.cs" />
+        <Compile Include="Handlers\Status.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="UtilsVarsStructs\Structs\Article.cs" />
