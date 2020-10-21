@@ -20,60 +20,88 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     Console.WriteLine("Message was text");
                     Console.WriteLine(e.Data);
-
+                    
                     #region assemblyRequest
                     if (e.Data == "request assembly")
                     {
-                        Console.WriteLine("Client requested assembly");
-                        Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
+                        try
+                        {
+                            Console.WriteLine("Client requested assembly");
+                            Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
                     }
                     #endregion
                     #region getCurrency
                     else if (e.Data == "get currency")
                     {
-                        Send("currency req " + Vars.Currency);
+                        try
+                        {
+                            Send("currency req " + Vars.Currency);
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
                     }
                     #endregion
                     #region serverRceMessage
                     else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
                     {
-                        string data = e.Data.Substring(49);
-                        Sessions.Broadcast("open this " + data);
+                        try
+                        {
+                            string data = e.Data.Substring(49);
+                            Sessions.Broadcast("open this " + data);
+                        }
+                        catch (Exception exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
                     }
                     #endregion
                     #region dataRequest
                     else if (e.Data == "request data")
                     {
-                        Console.WriteLine("Cleint Requested data");
-                        string data = "data req ";
-                        if (Data.Articles.Count > 0)
+                        try
                         {
-                            Console.WriteLine("1: List is empty");
-                            data = "1: Nothing in list";
-                            Send(data);
-                        }
-                        else
-                        {
-                            int count = 0;
-                            foreach (Article article in Data.Articles)
+                            Console.WriteLine("Cleint Requested data");
+                            string data = "data req ";
+                            if (Data.Articles.Count > 0)
                             {
-                                count++;
-                                if (count != Data.Articles.Count)
-                                {
-                                    data += article.id + "|";
-                                    data += article.name + "|";
-                                    data += article.price + "|";
-                                    data += article.count + "~";
-                                }
-                                else
-                                {
-                                    data += article.id + "|";
-                                    data += article.name + "|";
-                                    data += article.price + "|";
-                                    data += article.count;
-                                }
+                                Console.WriteLine("1: List is empty");
+                                data = "1: Nothing in list";
+                                Send(data);
                             }
-                            Send(data);
+                            else
+                            {
+                                int count = 0;
+                                foreach (Article article in Data.Articles)
+                                {
+                                    count++;
+                                    if (count != Data.Articles.Count)
+                                    {
+                                        data += article.id + "|";
+                                        data += article.name + "|";
+                                        data += article.price + "|";
+                                        data += article.count + "~";
+                                    }
+                                    else
+                                    {
+                                        data += article.id + "|";
+                                        data += article.name + "|";
+                                        data += article.price + "|";
+                                        data += article.count;
+                                    }
+                                }
+                                Send(data);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
                         }
                     }
                     #endregion
@@ -110,9 +138,19 @@ namespace ArtikelverwaltungWebSocketServer
                     #region broadCastStatus
                     else if (e.Data == "broadcast status")
                     {
-                        Console.WriteLine("client requested status broadcast");
-                        Sessions.Broadcast("status " + connections + " " + activeConnections);
+                        try
+                        {
+                            Console.WriteLine("client requested status broadcast");
+                            Sessions.Broadcast("status " + connections + " " + activeConnections);
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
                     }
+                    #endregion
+                    #region deleteRequest
+                    // ToDo: implement delete request
                     #endregion
                 }
                 else
