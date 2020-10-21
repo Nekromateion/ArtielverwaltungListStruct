@@ -136,20 +136,7 @@ namespace ArtikelverwaltungClientWebsocket
                 #region dataSync
                 if (e.Data.StartsWith("data sync "))
                 {
-                    logger.AddLine("message was a data sync");
-                    string data = e.Data.Substring(9); // i will have to wait with continueing to work on this part since i dont know yet how i will send the data
-                    string[] splitArticles = data.Split('~');
-                    Data.Articles = new List<Article>();
-                    foreach (string article in splitArticles)
-                    {
-                        string[] splitData = article.Split('|');
-                        Article temp = new Article();
-                        temp.id = Convert.ToInt32(splitData[0].Replace("|", string.Empty).Replace("~", string.Empty));
-                        temp.name = splitData[1].Replace("|", string.Empty).Replace("~", string.Empty);
-                        temp.price = Convert.ToDouble(splitData[2].Replace("|", string.Empty).Replace("~", string.Empty));
-                        temp.count = Convert.ToInt32(splitData[3].Replace("|", string.Empty).Replace("~", string.Empty));
-                        Data.Articles.Add(temp);
-                    }
+                    Handlers.TextHandlers.DataSync.Handle(e.Data);
                 }
                 #endregion
                 #region status
