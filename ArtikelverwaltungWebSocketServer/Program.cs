@@ -183,7 +183,7 @@ namespace ArtikelverwaltungWebSocketServer
         public static void Main(string[] args)
         {
             WebSocketServer socket;
-            Console.Write("Do you want to start the server global or only local? (g = global | l = local)");
+            Console.Write("Do you want to start the server global or only local? (g = global | l = local) ");
             string input = Console.ReadLine();
             int port;
             if (input == "g")
