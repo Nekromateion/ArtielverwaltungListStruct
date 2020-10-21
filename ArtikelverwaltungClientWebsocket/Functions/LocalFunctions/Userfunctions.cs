@@ -39,6 +39,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
 
         internal static void SearchList()
         {
+            logger.AddLine("called");
             try
             {
                 Console.WriteLine("By what do you want to search?");
@@ -117,7 +118,71 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
 
         internal static void SortList()
         {
-            
+            logger.AddLine("called");
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("What do you want to sort by?");
+                    Console.WriteLine("1: ID");
+                    Console.WriteLine("2: Name");
+                    Console.WriteLine("3: Price");
+                    Console.WriteLine("4: Count");
+                    Console.WriteLine();
+                    Console.Write("Your input: ");
+                    string input = Console.ReadLine().ToLower();
+                    logger.AddLine("Sorting list");
+                    if (input == "1" || input == "id")
+                    {
+                        artList = artList.OrderBy(x => x.nummer).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"^ID^", "Name", "Price", "Count"});
+                        foreach (Article art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
+                    }
+                    else if (input == "2" || input == "name")
+                    {
+                        artList = artList.OrderBy(x => x.name).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"ID", "^Name^", "Price", "Count"});
+                        foreach (Article art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
+                    }
+                    else if (input == "3" || input == "price" || input == "preis")
+                    {
+                        artList = artList.OrderBy(x => x.preis).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"ID", "Name", "^Price^", "Count"});
+                        foreach (Article art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
+                    }
+                    else if (input == "4" || input == "count" || input == "bestand")
+                    {
+                        artList = artList.OrderBy(x => x.bestand).ToList();
+                        Utils.PrintLine();
+                        Utils.PrintRow(ConsoleColor.White, new []{"ID", "Name", "Price", "^Count^"});
+                        foreach (Article art in artList)
+                        {
+                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                        }
+                        Utils.PrintLine();
+                    }
+            }
+            catch (Exception e)
+            {
+                logger.AddLine("An error occured");
+                Console.WriteLine("An error occured");
+                logger.AddLine(e.Message);
+                Thread.Sleep(2500);
+            }
         }
     }
 }
