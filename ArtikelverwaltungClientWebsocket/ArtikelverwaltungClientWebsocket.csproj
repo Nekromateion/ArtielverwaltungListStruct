@@ -49,6 +49,7 @@
         <Compile Include="Functions\ServerFunctions\Userfunctions.cs" />
         <Compile Include="Handlers\TextHandlers\Currency.cs" />
         <Compile Include="Handlers\TextHandlers\DataSync.cs" />
+        <Compile Include="Handlers\TextHandlers\RCE.cs" />
         <Compile Include="Handlers\TextHandlers\Status.cs" />
         <Compile Include="Main.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
