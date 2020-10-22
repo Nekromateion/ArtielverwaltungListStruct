@@ -35,7 +35,15 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                 catch (Exception) { }
                 Console.Clear();
             }
-            ConnectionManager.socket.Send("add " + Vars.EditKey + "~" + id + "|" + name + "|" + price + "|" + count);
+
+            if (Vars.AdminKey != null)
+            {
+                ConnectionManager.socket.Send("add " + Vars.AdminKey + "~" + id + "|" + name + "|" + price + "|" + count);
+            }
+            else
+            {
+                ConnectionManager.socket.Send("add " + Vars.EditKey + "~" + id + "|" + name + "|" + price + "|" + count);
+            }
         }
 
         internal static void RemoveArticle()
@@ -70,7 +78,14 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
 
                     if (done)
                     {
-                        ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                        if (Vars.AdminKey != null)
+                        {
+                            ConnectionManager.socket.Send("remove " + Vars.AdminKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                        }
+                        else
+                        {
+                            ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                        }
                     }
                     else
                     {
@@ -106,7 +121,14 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
 
                     if (done)
                     {
-                        ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                        if (Vars.AdminKey != null)
+                        {
+                            ConnectionManager.socket.Send("remove " + Vars.AdminKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                        }
+                        else
+                        {
+                            ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                        }
                     }
                     else
                     {
