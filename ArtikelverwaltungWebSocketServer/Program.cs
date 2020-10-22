@@ -178,14 +178,44 @@ namespace ArtikelverwaltungWebSocketServer
                     #region closeServerRequest
                     else if (e.Data.StartsWith("close server "))
                     {
-                        
+                        string key = e.Data.Substring(12);
+                        if (key == Vars.AdminKey)
+                        {
+                            
+                        }
+                        else
+                        {
+                            Send("3: Key rejected");
+                        }
                     }
                     #endregion
                     #region saveServerList
-                    
+                    else if (e.Data.StartsWith("save server list "))
+                    {
+                        string key = e.Data.Substring(16);
+                        if (key == Vars.AdminKey)
+                        {
+                            
+                        }
+                        else
+                        {
+                            Send("3: Key rejected");
+                        }
+                    }
                     #endregion
                     #region clearList
-                    
+                    else if (e.Data.StartsWith("clear server list "))
+                    {
+                        string key = e.Data.Substring(17);
+                        if (key == Vars.AdminKey)
+                        {
+                            
+                        }
+                        else
+                        {
+                            Send("3: Key rejected");
+                        }
+                    }
                     #endregion
                     #endregion
 
@@ -269,12 +299,25 @@ namespace ArtikelverwaltungWebSocketServer
                     temp2.name = temp[1].Replace("|", string.Empty);
                     temp2.price = Convert.ToDouble(temp[2].Replace("|", string.Empty));
                     temp2.count = Convert.ToInt32(temp[3].Replace("|", string.Empty));
+                    Data.Articles.Add(temp2);
                 }
             }
-            while (Vars.Currency == null)
+            while (string.IsNullOrEmpty(Vars.Currency) || string.IsNullOrWhiteSpace(Vars.Currency))
             {
                 Console.Write("Please input the currency you want the server to use: ");
                 Vars.Currency = Console.ReadLine();
+                Console.Clear();
+            }
+            while (string.IsNullOrEmpty(Vars.AdminKey) || string.IsNullOrWhiteSpace(Vars.AdminKey))
+            {
+                Console.Write("Please set a admin key: ");
+                Vars.AdminKey = Console.ReadLine();
+                Console.Clear();
+            }
+            while (string.IsNullOrEmpty(Vars.EditKey) || string.IsNullOrWhiteSpace(Vars.EditKey))
+            {
+                Console.Write("Please set a edit key: ");
+                Vars.EditKey = Console.ReadLine();
                 Console.Clear();
             }
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
