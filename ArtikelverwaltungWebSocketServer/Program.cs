@@ -163,6 +163,7 @@ namespace ArtikelverwaltungWebSocketServer
                             }
                             else
                             {
+                                Console.WriteLine("Client used a incorrect key");
                                 Send("2: Key rejected");
                             }
                         }
@@ -178,9 +179,11 @@ namespace ArtikelverwaltungWebSocketServer
                     #region closeServerRequest
                     else if (e.Data.StartsWith("close server "))
                     {
+                        Console.WriteLine("client requested server close");
                         string key = e.Data.Substring(12);
                         if (key == Vars.AdminKey)
                         {
+                            Console.WriteLine("disconnecting sockets and closing server");
                             foreach (IWebSocketSession toClose in Sessions.Sessions)
                             {
                                 Sessions.CloseSession(toClose.ID);
@@ -190,16 +193,19 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                         else
                         {
-                            Send("3: Key rejected");
+                            Console.WriteLine("Client used a incorrect key");
+                            Send("2: Key rejected");
                         }
                     }
                     #endregion
                     #region saveServerList
                     else if (e.Data.StartsWith("save server list "))
                     {
+                        Console.WriteLine("Client requested list save");
                         string key = e.Data.Substring(16);
                         if (key == Vars.AdminKey)
                         {
+                            Console.WriteLine("Saving list to file");
                             int count = 0;
                             string toWrite = string.Empty;
                             foreach (Article article in Data.Articles)
@@ -218,21 +224,25 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                         else
                         {
-                            Send("3: Key rejected");
+                            Console.WriteLine("Client used a incorrect key");
+                            Send("2: Key rejected");
                         }
                     }
                     #endregion
                     #region clearList
                     else if (e.Data.StartsWith("clear server list "))
                     {
+                        Console.WriteLine("Client requested list clear");
                         string key = e.Data.Substring(17);
                         if (key == Vars.AdminKey)
                         {
-                            
+                            Console.WriteLine("Clearing list");
+                            Data.Articles = new List<Article>();
                         }
                         else
                         {
-                            Send("3: Key rejected");
+                            Console.WriteLine("Client used a incorrect key");
+                            Send("2: Key rejected");
                         }
                     }
                     #endregion
