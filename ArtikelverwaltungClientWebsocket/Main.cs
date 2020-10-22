@@ -25,22 +25,6 @@ namespace ArtikelverwaltungClientWebsocket
             ConnectionManager.socket.OnMessage += OnMessage;
             Console.WriteLine("Method setup done");
             logger.AddLine("method setup done");
-            Menu();
-        }
-
-        public static void Menu()
-        {
-            logger.AddLine("Called");
-
-            #region functionInputs
-            // ToDo: finish this
-            
-            //string[] readNames;
-            using (WebClient client = new WebClient())
-            {
-                //readNames = client.DownloadString("https://media.nekro-works.de/readNames.txt");
-            }
-            #endregion
             
             #region startFunctions
             Functions.ServerFunctions.Userfunctions.RequestStatusBroadcast();
@@ -76,6 +60,13 @@ namespace ArtikelverwaltungClientWebsocket
                 Console.Clear();
             }
             #endregion
+
+            while (true) Menu();
+        }
+
+        public static void Menu()
+        {
+            logger.AddLine("Called");
 
             #region menu
             Console.Clear();
