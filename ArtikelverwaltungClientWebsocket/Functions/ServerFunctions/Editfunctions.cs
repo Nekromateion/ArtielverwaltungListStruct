@@ -11,10 +11,10 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
         {
             bool didWork = false;
             logger.AddLine("called");
-            string id;
-            string name;
-            double price;
-            int count;
+            string id = String.Empty;
+            string name = string.Empty;
+            double price = 0;
+            int count = 0;
             while (!didWork)
             {
                 Console.Clear();
@@ -34,12 +34,28 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                 catch (Exception) { }
                 Console.Clear();
             }
-            ConnectionManager.socket.Send("add " + Vars.EditKey + "~" + );
+            ConnectionManager.socket.Send("add " + Vars.EditKey + "~" + id + "|" + name + "|" + price + "|" + count);
         }
 
         internal static void RemoveArticle()
         {
             logger.AddLine("called");
+            Console.Clear();
+            Console.WriteLine("Please select by what criteria you want to delete:");
+            Console.WriteLine("1: Name");
+            Console.WriteLine("2: ID");
+            Console.WriteLine("");
+            Console.Write("Your input: ");
+            string input = Console.ReadLine();
+            Console.Clear();
+            if (input == "1")
+            {
+                
+            }
+            else if (input == "2")
+            {
+                
+            }
         }
     }
 }
