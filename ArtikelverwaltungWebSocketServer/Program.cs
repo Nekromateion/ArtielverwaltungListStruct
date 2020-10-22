@@ -150,7 +150,34 @@ namespace ArtikelverwaltungWebSocketServer
                     }
                     #endregion
                     #region deleteRequest
-                    // ToDo: implement delete request
+                    if (e.Data.StartsWith("remove "))
+                    {
+                        try
+                        {
+                            string data = e.Data.Substring(3);
+                            string[] info = data.Split('~');
+                            string key = info[0];
+                            string action = info[1];
+                            if (key == Vars.EditKey || key == Vars.AdminKey)
+                            {
+                                string[] request = action.Split('|');
+                                Article temp = new Article();
+                                temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
+                                temp.name = request[1].Replace("|", string.Empty);
+                                temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                                temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                Data.Articles.Remove(temp);
+                            }
+                            else
+                            {
+                                Send("2: Key rejected");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
+                    }
                     #endregion
                 }
                 else
