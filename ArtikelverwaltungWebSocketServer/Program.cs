@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 
 namespace ArtikelverwaltungWebSocketServer
 {
@@ -174,7 +176,10 @@ namespace ArtikelverwaltungWebSocketServer
 
                     #region AdministrativeFunctions
                     #region closeServerRequest
-                    
+                    else if (e.Data.StartsWith("close server "))
+                    {
+                        
+                    }
                     #endregion
                     #region saveServerList
                     
@@ -250,6 +255,22 @@ namespace ArtikelverwaltungWebSocketServer
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
+            if (File.Exists("data.dat"))
+            {
+                FileInfo info = new FileInfo("data.dat");
+                Console.WriteLine($"Reading data from {info.LastWriteTime}");
+                string fileContetns = File.ReadAllText("data.dat");
+                string[] savedArticles = fileContetns.Split('~');
+                foreach (string loadArticle in savedArticles)
+                {
+                    string[] temp = loadArticle.Replace("~", string.Empty).Split('|');
+                    Article temp2 = new Article();
+                    temp2.id = Convert.ToInt32(temp[0].Replace("|", string.Empty));
+                    temp2.name = temp[1].Replace("|", string.Empty);
+                    temp2.price = Convert.ToDouble(temp[2].Replace("|", string.Empty));
+                    temp2.count = Convert.ToInt32(temp[3].Replace("|", string.Empty));
+                }
+            }
             while (Vars.Currency == null)
             {
                 Console.Write("Please input the currency you want the server to use: ");
