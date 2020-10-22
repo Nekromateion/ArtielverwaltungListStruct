@@ -11,10 +11,9 @@ namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
             logger.AddLine("message was status");
             string message = data.Substring(6);
             logger.AddLine("Status message: " + message);
-            Console.WriteLine("Status message: " + message);
             string[] numbers = data.Split(' ');
             Vars.ConnectedUsers = Convert.ToInt32(numbers[2].Replace(" ", string.Empty));
-            Console.Title = $"Article management v{Vars.Version} | Connected users: {Vars.ConnectedUsers}";
+            Console.Title = $"Article management version: {Vars.Version} | Connected users: {Vars.ConnectedUsers}";
         }
     }
 }
