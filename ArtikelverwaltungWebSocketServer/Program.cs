@@ -207,13 +207,14 @@ namespace ArtikelverwaltungWebSocketServer
                                 count++;
                                 if (Data.Articles.Count == count)
                                 {
-                                    
+                                    toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count;
                                 }
                                 else
                                 {
-                                    
+                                    toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count + "~";
                                 }
                             }
+                            File.WriteAllText("data.dat", toWrite);
                         }
                         else
                         {
