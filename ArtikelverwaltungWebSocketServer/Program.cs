@@ -56,7 +56,7 @@ namespace ArtikelverwaltungWebSocketServer
                             string data = e.Data.Substring(49);
                             Sessions.Broadcast("open this " + data);
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
                             Send("3: Something went wrong");
                         }
