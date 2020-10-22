@@ -8,16 +8,19 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
         internal static void CloseServer()
         {
             logger.AddLine("called");
+            ConnectionManager.socket.Send("close server " + Vars.AdminKey);
         }
 
         internal static void SaveList()
         {
             logger.AddLine("called");
+            ConnectionManager.socket.Send("save server list " + Vars.AdminKey);
         }
 
         internal static void ClearList()
         {
             logger.AddLine("called");
+            ConnectionManager.socket.Send("clear server list " + Vars.AdminKey);
         }
     }
 }
