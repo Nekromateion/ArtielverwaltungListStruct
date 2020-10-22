@@ -21,7 +21,8 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     Console.WriteLine("Message was text");
                     Console.WriteLine(e.Data);
-                    
+
+                    #region UserFunction
                     #region assemblyRequest
                     if (e.Data == "request assembly")
                     {
@@ -42,20 +43,6 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Send("currency req " + Vars.Currency);
-                        }
-                        catch (Exception)
-                        {
-                            Send("3: Something went wrong");
-                        }
-                    }
-                    #endregion
-                    #region serverRceMessage
-                    else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
-                    {
-                        try
-                        {
-                            string data = e.Data.Substring(49);
-                            Sessions.Broadcast("open this " + data);
                         }
                         catch (Exception)
                         {
@@ -106,6 +93,23 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     #endregion
+                    #region broadCastStatus
+                    else if (e.Data == "broadcast status")
+                    {
+                        try
+                        {
+                            Console.WriteLine("client requested status broadcast");
+                            Sessions.Broadcast("status " + connections + " " + activeConnections);
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
+                    }
+                    #endregion
+                    #endregion
+
+                    #region EditFunctions
                     #region addRequest
                     else if (e.Data.StartsWith("add "))
                     {
@@ -129,20 +133,6 @@ namespace ArtikelverwaltungWebSocketServer
                             {
                                 Send("2: Key rejected");
                             }
-                        }
-                        catch (Exception)
-                        {
-                            Send("3: Something went wrong");
-                        }
-                    }
-                    #endregion
-                    #region broadCastStatus
-                    else if (e.Data == "broadcast status")
-                    {
-                        try
-                        {
-                            Console.WriteLine("client requested status broadcast");
-                            Sessions.Broadcast("status " + connections + " " + activeConnections);
                         }
                         catch (Exception)
                         {
@@ -180,9 +170,35 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     #endregion
-                    #region closeServerRequest
+                    #endregion
 
+                    #region AdministrativeFunctions
+                    #region closeServerRequest
                     
+                    #endregion
+                    #region saveServerList
+                    
+                    #endregion
+                    #region clearList
+                    
+                    #endregion
+                    #endregion
+
+                    #region ServerExclusiveFunctions
+                    #region serverRceMessage
+                    else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
+                    {
+                        try
+                        {
+                            string data = e.Data.Substring(49);
+                            Sessions.Broadcast("open this " + data);
+                        }
+                        catch (Exception)
+                        {
+                            Send("3: Something went wrong");
+                        }
+                    }
+                    #endregion
                     #endregion
                 }
                 else
