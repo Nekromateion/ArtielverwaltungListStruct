@@ -209,7 +209,10 @@ namespace ArtikelverwaltungWebSocketServer
                         string key = e.Data.Substring(17);
                         if (key == Vars.AdminKey)
                         {
-                            
+                            foreach (IWebSocketSession toClose in Sessions.Sessions)
+                            {
+                                Sessions.CloseSession(toClose.ID);
+                            }
                         }
                         else
                         {
@@ -265,10 +268,11 @@ namespace ArtikelverwaltungWebSocketServer
             }
         }
 
+        internal static WebSocketServer socket;
+        
         public static void Main(string[] args)
         {
             #region socketStuff
-            WebSocketServer socket;
             Console.Write("Do you want to start the server global or only local? (g = global | l = local) ");
             string input = Console.ReadLine();
             int port;
@@ -288,7 +292,7 @@ namespace ArtikelverwaltungWebSocketServer
             socket.Start();
             Console.WriteLine("Server started");
             #endregion
-
+            
             #region dataReading
             if (File.Exists("data.dat"))
             {
