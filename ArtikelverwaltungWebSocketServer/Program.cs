@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -7,7 +9,6 @@ namespace ArtikelverwaltungWebSocketServer
 {
     internal class Program
     {
-
         public class Client : WebSocketBehavior
         {
             private static int connections = 0;
@@ -179,6 +180,10 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     #endregion
+                    #region closeServerRequest
+
+                    
+                    #endregion
                 }
                 else
                 {
@@ -188,6 +193,8 @@ namespace ArtikelverwaltungWebSocketServer
 
             protected override void OnOpen()
             {
+                IWebSocketSession client = Sessions.Sessions.Last();
+                Console.WriteLine($"{client.ID} connected from {client.Context.UserEndPoint}");
                 connections++;
                 activeConnections++;
                 Console.WriteLine($"New Connection Connections: [{connections}] Active: [{activeConnections}]");
