@@ -151,7 +151,7 @@ namespace ArtikelverwaltungClientWebsocket
             {
                 // might use this to make a forms version
                 // which would allow the user to set a image
-                // for the product 
+                // for the product
                 // yes yes real fancy stuffs
                 // note: just noticed -> ill do this another way (the thing with the files)
                 logger.AddLine("message was binary");
