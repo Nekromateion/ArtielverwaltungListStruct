@@ -181,7 +181,12 @@ namespace ArtikelverwaltungWebSocketServer
                         string key = e.Data.Substring(12);
                         if (key == Vars.AdminKey)
                         {
-                            
+                            foreach (IWebSocketSession toClose in Sessions.Sessions)
+                            {
+                                Sessions.CloseSession(toClose.ID);
+                            }
+                            socket.Stop();
+                            Environment.Exit(0xDEAD);
                         }
                         else
                         {
@@ -195,7 +200,20 @@ namespace ArtikelverwaltungWebSocketServer
                         string key = e.Data.Substring(16);
                         if (key == Vars.AdminKey)
                         {
-                            
+                            int count = 0;
+                            string toWrite = string.Empty;
+                            foreach (Article article in Data.Articles)
+                            {
+                                count++;
+                                if (Data.Articles.Count == count)
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    
+                                }
+                            }
                         }
                         else
                         {
@@ -209,10 +227,7 @@ namespace ArtikelverwaltungWebSocketServer
                         string key = e.Data.Substring(17);
                         if (key == Vars.AdminKey)
                         {
-                            foreach (IWebSocketSession toClose in Sessions.Sessions)
-                            {
-                                Sessions.CloseSession(toClose.ID);
-                            }
+                            
                         }
                         else
                         {
