@@ -34,7 +34,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                 catch (Exception) { }
                 Console.Clear();
             }
-            ConnectionManager.socket.Send("");
+            ConnectionManager.socket.Send("add " + Vars.EditKey + "~" + );
         }
 
         internal static void RemoveArticle()
