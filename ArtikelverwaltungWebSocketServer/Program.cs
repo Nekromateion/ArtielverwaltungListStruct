@@ -15,6 +15,8 @@ namespace ArtikelverwaltungWebSocketServer
         {
             private static int connections = 0;
             private static int activeConnections = 0;
+            private static string serverId = String.Empty;
+            private static bool isFirstConnection = true;
 
             protected override void OnMessage(MessageEventArgs e)
             {
@@ -33,9 +35,9 @@ namespace ArtikelverwaltungWebSocketServer
                             Console.WriteLine("Client requested assembly");
                             Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -46,9 +48,9 @@ namespace ArtikelverwaltungWebSocketServer
                         {
                             Send("currency req " + Vars.Currency);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -89,9 +91,9 @@ namespace ArtikelverwaltungWebSocketServer
                                 Send(data);
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -103,9 +105,9 @@ namespace ArtikelverwaltungWebSocketServer
                             Console.WriteLine("client requested status broadcast");
                             Sessions.Broadcast("status " + connections + " " + activeConnections);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -125,10 +127,20 @@ namespace ArtikelverwaltungWebSocketServer
                             {
                                 string[] request = action.Split('|');
                                 Article temp = new Article();
-                                temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
-                                temp.name = request[1].Replace("|", string.Empty);
-                                temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
-                                temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                if (request[0].Replace("|", String.Empty).ToLower() == "A")
+                                {
+                                    temp.id = Data.Articles.Count;
+                                    temp.name = request[1].Replace("|", string.Empty);
+                                    temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                                    temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                }
+                                else
+                                {
+                                    temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
+                                    temp.name = request[1].Replace("|", string.Empty);
+                                    temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                                    temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                }
                                 Data.Articles.Add(temp);
                             }
                             else
@@ -136,9 +148,9 @@ namespace ArtikelverwaltungWebSocketServer
                                 Send("2: Key rejected");
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -167,9 +179,9 @@ namespace ArtikelverwaltungWebSocketServer
                                 Send("2: Key rejected");
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -179,70 +191,91 @@ namespace ArtikelverwaltungWebSocketServer
                     #region closeServerRequest
                     else if (e.Data.StartsWith("close server "))
                     {
-                        Console.WriteLine("client requested server close");
-                        string key = e.Data.Substring(12);
-                        if (key == Vars.AdminKey)
+                        try
                         {
-                            Console.WriteLine("disconnecting sockets and closing server");
-                            foreach (IWebSocketSession toClose in Sessions.Sessions)
+                            Console.WriteLine("client requested server close");
+                            string key = e.Data.Substring(12);
+                            if (key == Vars.AdminKey)
                             {
-                                Sessions.CloseSession(toClose.ID);
+                                Console.WriteLine("disconnecting sockets and closing server");
+                                foreach (IWebSocketSession toClose in Sessions.Sessions)
+                                {
+                                    Sessions.CloseSession(toClose.ID);
+                                }
+                                socket.Stop();
+                                Environment.Exit(0xDEAD);
                             }
-                            socket.Stop();
-                            Environment.Exit(0xDEAD);
+                            else
+                            {
+                                Console.WriteLine("Client used a incorrect key");
+                                Send("2: Key rejected");
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("Client used a incorrect key");
-                            Send("2: Key rejected");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
                     #region saveServerList
                     else if (e.Data.StartsWith("save server list "))
                     {
-                        Console.WriteLine("Client requested list save");
-                        string key = e.Data.Substring(16);
-                        if (key == Vars.AdminKey)
+                        try
                         {
-                            Console.WriteLine("Saving list to file");
-                            int count = 0;
-                            string toWrite = string.Empty;
-                            foreach (Article article in Data.Articles)
+                            Console.WriteLine("Client requested list save");
+                            string key = e.Data.Substring(16);
+                            if (key == Vars.AdminKey)
                             {
-                                count++;
-                                if (Data.Articles.Count == count)
+                                Console.WriteLine("Saving list to file");
+                                int count = 0;
+                                string toWrite = string.Empty;
+                                foreach (Article article in Data.Articles)
                                 {
-                                    toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count;
+                                    count++;
+                                    if (Data.Articles.Count == count)
+                                    {
+                                        toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count;
+                                    }
+                                    else
+                                    {
+                                        toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count + "~";
+                                    }
                                 }
-                                else
-                                {
-                                    toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count + "~";
-                                }
+                                File.WriteAllText("data.dat", toWrite);
                             }
-                            File.WriteAllText("data.dat", toWrite);
+                            else
+                            {
+                                Console.WriteLine("Client used a incorrect key");
+                                Send("2: Key rejected");
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("Client used a incorrect key");
-                            Send("2: Key rejected");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
                     #region clearList
                     else if (e.Data.StartsWith("clear server list "))
                     {
-                        Console.WriteLine("Client requested list clear");
-                        string key = e.Data.Substring(17);
-                        if (key == Vars.AdminKey)
+                        try
                         {
-                            Console.WriteLine("Clearing list");
-                            Data.Articles = new List<Article>();
+                            Console.WriteLine("Client requested list clear");
+                            string key = e.Data.Substring(17);
+                            if (key == Vars.AdminKey)
+                            {
+                                Console.WriteLine("Clearing list");
+                                Data.Articles = new List<Article>();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Client used a incorrect key");
+                                Send("2: Key rejected");
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("Client used a incorrect key");
-                            Send("2: Key rejected");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -257,9 +290,9 @@ namespace ArtikelverwaltungWebSocketServer
                             string data = e.Data.Substring(49);
                             Sessions.Broadcast("open this " + data);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            Send("3: Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
                         }
                     }
                     #endregion
@@ -278,6 +311,10 @@ namespace ArtikelverwaltungWebSocketServer
                 connections++;
                 activeConnections++;
                 Console.WriteLine($"New Connection Connections: [{connections}] Active: [{activeConnections}]");
+                if (isFirstConnection)
+                {
+                    Sessions.SendTo(client.ID, client.ID);
+                }
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
             }
 
