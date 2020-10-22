@@ -267,6 +267,7 @@ namespace ArtikelverwaltungWebSocketServer
 
         public static void Main(string[] args)
         {
+            #region socketStuff
             WebSocketServer socket;
             Console.Write("Do you want to start the server global or only local? (g = global | l = local) ");
             string input = Console.ReadLine();
@@ -282,9 +283,13 @@ namespace ArtikelverwaltungWebSocketServer
                 socket = new WebSocketServer("ws://127.0.0.1");
                 port = 80;
             }
+            Console.Clear();
             socket.AddWebSocketService<Client>("/artikelverwaltung");
             socket.Start();
             Console.WriteLine("Server started");
+            #endregion
+
+            #region dataReading
             if (File.Exists("data.dat"))
             {
                 FileInfo info = new FileInfo("data.dat");
@@ -302,6 +307,13 @@ namespace ArtikelverwaltungWebSocketServer
                     Data.Articles.Add(temp2);
                 }
             }
+            else
+            {
+                Console.WriteLine("No past data found");
+            }
+            #endregion
+
+            #region variableInputs
             while (string.IsNullOrEmpty(Vars.Currency) || string.IsNullOrWhiteSpace(Vars.Currency))
             {
                 Console.Write("Please input the currency you want the server to use: ");
@@ -320,6 +332,9 @@ namespace ArtikelverwaltungWebSocketServer
                 Vars.EditKey = Console.ReadLine();
                 Console.Clear();
             }
+            #endregion
+
+            #region menuStuff
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             client.Connect();
             while (true)
@@ -332,6 +347,7 @@ namespace ArtikelverwaltungWebSocketServer
                     client.Send("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh " +  toOpen);
                 }
             }
+            #endregion
         }
     }
 }
