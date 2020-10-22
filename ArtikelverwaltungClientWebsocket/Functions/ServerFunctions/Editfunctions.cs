@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
 {
@@ -50,11 +51,75 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
             Console.Clear();
             if (input == "1")
             {
-                
+                try
+                {
+                    Console.Write("Name: ");
+                    string name = Console.ReadLine();
+                    Article toremove = new Article();
+                    bool done = false;
+                    int count = 0;
+                    foreach (Article article in Data.Articles)
+                    {
+                        if (article.name.ToLower().Contains(name.ToLower()) && !done)
+                        {
+                            toremove = Data.Articles[count];
+                            done = true;
+                        }
+                        count++;
+                    }
+
+                    if (done)
+                    {
+                        ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No item with that name was found in the list");
+                        Thread.Sleep(2500);
+                        Console.Clear();
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Error");
+                    Thread.Sleep(2500);
+                }
             }
             else if (input == "2")
             {
-                
+                try
+                {
+                    Console.Write("ID: ");
+                    string id = Console.ReadLine();
+                    Article toremove = new Article();
+                    bool done = false;
+                    int count = 0;
+                    foreach (Article article in Data.Articles)
+                    {
+                        if (article.id == Convert.ToInt32(id) && !done)
+                        {
+                            toremove = Data.Articles[count];
+                            done = true;
+                        }
+                        count++;
+                    }
+
+                    if (done)
+                    {
+                        ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No item with that id was found in the list");
+                        Thread.Sleep(2500);
+                        Console.Clear();
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Error");
+                    Thread.Sleep(2500);
+                }
             }
         }
     }
