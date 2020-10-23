@@ -18,7 +18,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
         public static Logger logger = new Logger();
     }
     
-    internal class Program
+    public class Program
     {
         public static ApplicationController controller { get; set; }
 
@@ -30,6 +30,7 @@ namespace ArtikelverwaltungClientWebsocketLoader
             string urlInput = Console.ReadLine();
             string url = "ws://" + urlInput + "/artikelverwaltung";
             SocketManager.Socket = new WebSocket(url);
+            SocketManager.Socket.Log.Level = LogLevel.Fatal;
             // ToDo: add the option for a centralized update server
             Console.WriteLine("Setting methods");
             logger.AddEmpty();
@@ -113,6 +114,6 @@ namespace ArtikelverwaltungClientWebsocketLoader
         }
 
         internal static byte[] assembly;
-        private static bool isLoaded = false;
+        public static bool isLoaded = false;
     }
 }

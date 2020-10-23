@@ -10,7 +10,7 @@ namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
         internal static void Handle(string data)
         {
             logger.AddLine("message was a data sync");
-            string content = data.Substring(9); // i will have to wait with continueing to work on this part since i dont know yet how i will send the data
+            string content = data.Substring(10);
             string[] splitArticles = content.Split('~');
             Data.Articles = new List<Article>();
             foreach (string article in splitArticles)

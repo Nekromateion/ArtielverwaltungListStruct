@@ -81,7 +81,7 @@ namespace ArtikelverwaltungClientWebsocket
             Console.WriteLine("1 : Read Current list");
             Console.WriteLine("2 : Search in list");
             Console.WriteLine("3 : Sort list");
-            if (Vars.EditKey != null)
+            if (Vars.EditKey != null || Vars.AdminKey != null)
             {
                 Console.WriteLine("4 : Add a new article");
                 Console.WriteLine("5 : Delete a article");
@@ -143,18 +143,26 @@ namespace ArtikelverwaltungClientWebsocket
                 {
                     Handlers.TextHandlers.RCE.Handle(e.Data);
                 }
+
+                #endregion
+
+                #region serverInvalidMessage
+                else
+                {
+                    logger.AddLine("Server sent a invalid message: " + e.Data);
+                    Console.WriteLine("Server sent a invalid message: " + e.Data);
+                }
                 #endregion
             }
             #endregion
             #region BinaryRequestHandle
             else if (e.IsBinary)
             {
-                // might use this to make a forms version
-                // which would allow the user to set a image
-                // for the product
-                // yes yes real fancy stuffs
-                // note: just noticed -> ill do this another way (the thing with the files)
                 logger.AddLine("message was binary");
+                if (ArtikelverwaltungClientWebsocketLoader.Program.isLoaded)
+                {
+                    Handlers.BinaryHandlers.BinaryHandler.Handle(e.RawData);
+                }
             }
             #endregion
             #region PingRequestHandle
@@ -167,8 +175,10 @@ namespace ArtikelverwaltungClientWebsocket
             #region OtherRequests
             else
             {
-                logger.AddLine("Server sent a invalid message: " + e.Data);
-                Console.WriteLine("Server sent a invalid message: " + e.Data);
+                logger.AddLine("Server sent a invalid message");
+                #if DEBUG
+                Console.WriteLine("Server sent a invalid message");
+                #endif
             }
             #endregion
         }

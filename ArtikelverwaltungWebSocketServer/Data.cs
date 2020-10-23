@@ -4,6 +4,6 @@ namespace ArtikelverwaltungWebSocketServer
 {
     public class Data
     {
-        public static List<Article> Articles = new List<Article>();
+        public static List<Article> Articles;
     }
 }

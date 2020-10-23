@@ -186,6 +186,8 @@ namespace ArtikelverwaltungClientWebsocket.Functions.LocalFunctions
                 logger.AddLine(e.Message);
                 Thread.Sleep(2500);
             }
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
         }
     }
 }

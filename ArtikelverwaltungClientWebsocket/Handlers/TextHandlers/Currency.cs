@@ -8,7 +8,7 @@
         internal static void Handle(string data)
         {
             logger.AddLine("message was currency info");
-            string currency = data.Substring(12);
+            string currency = data.Substring(13);
             if (Vars.Currency == null)
             {
                 logger.AddLine("server uses currency: " + currency);

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungClientWebs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtikelverwaltungWebSocketServer", "ArtikelverwaltungWebSocketServer\ArtikelverwaltungWebSocketServer.csproj", "{7B3B6385-9692-43C7-8C8D-3AF37B73BEC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleLoadAssembly", "ExampleLoadAssembly\ExampleLoadAssembly.csproj", "{7883EF99-2832-47DC-9D6C-EE6DBF211C34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{7B3B6385-9692-43C7-8C8D-3AF37B73BEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B3B6385-9692-43C7-8C8D-3AF37B73BEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B3B6385-9692-43C7-8C8D-3AF37B73BEC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7883EF99-2832-47DC-9D6C-EE6DBF211C34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7883EF99-2832-47DC-9D6C-EE6DBF211C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7883EF99-2832-47DC-9D6C-EE6DBF211C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7883EF99-2832-47DC-9D6C-EE6DBF211C34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

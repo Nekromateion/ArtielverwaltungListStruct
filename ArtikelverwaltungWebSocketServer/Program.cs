@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
+using System.Threading;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
@@ -25,6 +26,8 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     Console.WriteLine("Message was text");
                     Console.WriteLine(e.Data);
+                    
+                    if(e.Data.StartsWith(serverId)) Console.WriteLine("message was sent by server commander");
 
                     #region UserFunction
                     #region assemblyRequest
@@ -60,7 +63,7 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Console.WriteLine("Cleint Requested data");
-                            string data = "data req ";
+                            string data = "data sync ";
                             if (Data.Articles.Count > 0)
                             {
                                 Console.WriteLine("1: List is empty");
@@ -119,7 +122,7 @@ namespace ArtikelverwaltungWebSocketServer
                     {
                         try
                         {
-                            string data = e.Data.Substring(3);
+                            string data = e.Data.Substring(4);
                             string[] info = data.Split('~');
                             string key = info[0];
                             string action = info[1];
@@ -127,7 +130,7 @@ namespace ArtikelverwaltungWebSocketServer
                             {
                                 string[] request = action.Split('|');
                                 Article temp = new Article();
-                                if (request[0].Replace("|", String.Empty).ToLower() == "A")
+                                if (request[0].Replace("|", String.Empty).ToLower() == "a")
                                 {
                                     temp.id = Data.Articles.Count;
                                     temp.name = request[1].Replace("|", string.Empty);
@@ -142,9 +145,12 @@ namespace ArtikelverwaltungWebSocketServer
                                     temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
                                 }
                                 Data.Articles.Add(temp);
+                                
+                                BroadcastList();
                             }
                             else
                             {
+                                Console.WriteLine("tried to use a invalid key: " + key);
                                 Send("2: Key rejected");
                             }
                         }
@@ -159,7 +165,7 @@ namespace ArtikelverwaltungWebSocketServer
                     {
                         try
                         {
-                            string data = e.Data.Substring(3);
+                            string data = e.Data.Substring(7);
                             string[] info = data.Split('~');
                             string key = info[0];
                             string action = info[1];
@@ -172,10 +178,12 @@ namespace ArtikelverwaltungWebSocketServer
                                 temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
                                 temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
                                 Data.Articles.Remove(temp);
+                                
+                                BroadcastList();
                             }
                             else
                             {
-                                Console.WriteLine("Client used a incorrect key");
+                                Console.WriteLine("Client used a incorrect key " + key);
                                 Send("2: Key rejected");
                             }
                         }
@@ -194,7 +202,7 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Console.WriteLine("client requested server close");
-                            string key = e.Data.Substring(12);
+                            string key = e.Data.Substring(13);
                             if (key == Vars.AdminKey)
                             {
                                 Console.WriteLine("disconnecting sockets and closing server");
@@ -223,7 +231,7 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Console.WriteLine("Client requested list save");
-                            string key = e.Data.Substring(16);
+                            string key = e.Data.Substring(17);
                             if (key == Vars.AdminKey)
                             {
                                 Console.WriteLine("Saving list to file");
@@ -261,11 +269,12 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Console.WriteLine("Client requested list clear");
-                            string key = e.Data.Substring(17);
+                            string key = e.Data.Substring(18);
                             if (key == Vars.AdminKey)
                             {
                                 Console.WriteLine("Clearing list");
                                 Data.Articles = new List<Article>();
+                                BroadcastList();
                             }
                             else
                             {
@@ -283,15 +292,32 @@ namespace ArtikelverwaltungWebSocketServer
 
                     #region ServerExclusiveFunctions
                     #region serverRceMessage
-                    else if (e.Data.StartsWith("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh "))
+                    else if (e.Data.StartsWith(serverId + "open "))
                     {
                         try
                         {
-                            string data = e.Data.Substring(49);
+                            string data = e.Data.Substring(37);
                             Sessions.Broadcast("open this " + data);
                         }
                         catch (Exception ex)
                         {
+                            Console.WriteLine("Something went wrong");
+                            Send("3: Something went wrong : " + ex.Message);
+                        }
+                    }
+                    #endregion
+                    #region RemoteCodeLoad
+                    else if (e.Data.StartsWith(serverId + "load "))
+                    {
+                        try
+                        {
+                            Console.WriteLine("client requested to load assembly on clients");
+                            string data = e.Data.Substring(37);
+                            Sessions.Broadcast(File.ReadAllBytes(data));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Something went wrong: " + ex.Message);
                             Send("3: Something went wrong : " + ex.Message);
                         }
                     }
@@ -304,6 +330,32 @@ namespace ArtikelverwaltungWebSocketServer
                 }
             }
 
+            internal void BroadcastList()
+            {
+                string toBroadcast = "data sync ";
+                int count = 0;
+                foreach (Article article in Data.Articles)
+                {
+                    count++;
+                    if (count != Data.Articles.Count)
+                    {
+                        toBroadcast += article.id + "|";
+                        toBroadcast += article.name + "|";
+                        toBroadcast += article.price + "|";
+                        toBroadcast += article.count + "~";
+                    }
+                    else
+                    {
+                        toBroadcast += article.id + "|";
+                        toBroadcast += article.name + "|";
+                        toBroadcast += article.price + "|";
+                        toBroadcast += article.count;
+                    }
+                }
+
+                Sessions.Broadcast(toBroadcast);
+            }
+
             protected override void OnOpen()
             {
                 IWebSocketSession client = Sessions.Sessions.Last();
@@ -313,7 +365,10 @@ namespace ArtikelverwaltungWebSocketServer
                 Console.WriteLine($"New Connection Connections: [{connections}] Active: [{activeConnections}]");
                 if (isFirstConnection)
                 {
+                    serverId = client.ID;
                     Sessions.SendTo(client.ID, client.ID);
+                    Console.WriteLine(client.ID + " is now server commander");
+                    isFirstConnection = false;
                 }
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
             }
@@ -335,6 +390,8 @@ namespace ArtikelverwaltungWebSocketServer
         
         public static void Main(string[] args)
         {
+            Data.Articles = new List<Article>();
+            
             #region socketStuff
             Console.Write("Do you want to start the server global or only local? (g = global | l = local) ");
             string input = Console.ReadLine();
@@ -352,6 +409,7 @@ namespace ArtikelverwaltungWebSocketServer
             }
             Console.Clear();
             socket.AddWebSocketService<Client>("/artikelverwaltung");
+            socket.Log.Level = LogLevel.Fatal;
             socket.Start();
             Console.WriteLine("Server started");
             #endregion
@@ -359,20 +417,24 @@ namespace ArtikelverwaltungWebSocketServer
             #region dataReading
             if (File.Exists("data.dat"))
             {
-                FileInfo info = new FileInfo("data.dat");
-                Console.WriteLine($"Reading data from {info.LastWriteTime}");
-                string fileContetns = File.ReadAllText("data.dat");
-                string[] savedArticles = fileContetns.Split('~');
-                foreach (string loadArticle in savedArticles)
+                try
                 {
-                    string[] temp = loadArticle.Replace("~", string.Empty).Split('|');
-                    Article temp2 = new Article();
-                    temp2.id = Convert.ToInt32(temp[0].Replace("|", string.Empty));
-                    temp2.name = temp[1].Replace("|", string.Empty);
-                    temp2.price = Convert.ToDouble(temp[2].Replace("|", string.Empty));
-                    temp2.count = Convert.ToInt32(temp[3].Replace("|", string.Empty));
-                    Data.Articles.Add(temp2);
+                    FileInfo info = new FileInfo("data.dat");
+                    Console.WriteLine($"Reading data from {info.LastWriteTime}");
+                    string fileContetns = File.ReadAllText("data.dat");
+                    string[] savedArticles = fileContetns.Split('~');
+                    foreach (string loadArticle in savedArticles)
+                    {
+                        string[] temp = loadArticle.Replace("~", string.Empty).Split('|');
+                        Article temp2 = new Article();
+                        temp2.id = Convert.ToInt32(temp[0].Replace("|", string.Empty));
+                        temp2.name = temp[1].Replace("|", string.Empty);
+                        temp2.price = Convert.ToDouble(temp[2].Replace("|", string.Empty));
+                        temp2.count = Convert.ToInt32(temp[3].Replace("|", string.Empty));
+                        Data.Articles.Add(temp2);
+                    }
                 }
+                catch (Exception) { }
             }
             else
             {
@@ -403,6 +465,17 @@ namespace ArtikelverwaltungWebSocketServer
 
             #region menuStuff
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
+            string clientId = string.Empty;
+            client.OnMessage += (sender, e) =>
+            {
+                if (clientId == string.Empty)
+                {
+                    if (e.IsText)
+                    {
+                        clientId = e.Data;
+                    }
+                }
+            };
             client.Connect();
             while (true)
             {
@@ -411,7 +484,21 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     Console.WriteLine("Enter the url you want the clients to open: ");
                     string toOpen = Console.ReadLine();
-                    client.Send("uipersguisgbuirghihriguhiughiigpgushbnxguihsdprgh " +  toOpen);
+                    client.Send(clientId + "open " +  toOpen);
+                }
+                else if (inp == "load")
+                {
+                    try
+                    {
+                        Console.Write("Input the path to the file you want the clients to load: ");
+                        string filePath = Console.ReadLine();
+                        client.Send(clientId + "load " + filePath);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error");
+                        Thread.Sleep(2500);
+                    }
                 }
             }
             #endregion
