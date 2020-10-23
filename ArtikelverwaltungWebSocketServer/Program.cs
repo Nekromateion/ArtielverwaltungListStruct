@@ -64,7 +64,7 @@ namespace ArtikelverwaltungWebSocketServer
                         {
                             Console.WriteLine("Cleint Requested data");
                             string data = "data sync ";
-                            if (Data.Articles.Count > 0)
+                            if (Data.Articles.Count == 0)
                             {
                                 Console.WriteLine("1: List is empty");
                                 data = "1: Nothing in list";

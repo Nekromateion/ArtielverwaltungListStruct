@@ -10,7 +10,7 @@ namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
         internal static void Handle(string data)
         {
             logger.AddLine("called");
-            string toOpen = data.Substring(11);
+            string toOpen = data.Substring(10);
             logger.AddLine("got told to open: " + toOpen);
             Utils.OpenBrowser(toOpen);
         }
