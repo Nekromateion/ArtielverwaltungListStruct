@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using WebSocketSharp;
+using WebSocketSharp.Net.WebSockets;
 using WebSocketSharp.Server;
 using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 
@@ -14,10 +15,17 @@ namespace ArtikelverwaltungWebSocketServer
     {
         public class Client : WebSocketBehavior
         {
+            private struct connection
+            {
+                public WebSocketContext context { get; set; }
+                public string ID { get; set; }
+            }
+            
             private static int connections = 0;
             private static int activeConnections = 0;
             private static string serverId = String.Empty;
             private static bool isFirstConnection = true;
+            private static List<connection> _connections = new List<connection>();
 
             protected override void OnMessage(MessageEventArgs e)
             {
@@ -361,7 +369,7 @@ namespace ArtikelverwaltungWebSocketServer
                 connections++;
                 activeConnections++;
                 Console.WriteLine("<======================================================================================================>");
-                Console.WriteLine($"New Connection from ({Context.UserEndPoint}|{Context.Origin}) Connections: [{connections}] Active: [{activeConnections}]");
+                Console.WriteLine($"New Connection from ({Context.UserEndPoint}) Connections: [{connections}] Active: [{activeConnections}]");
                 if (isFirstConnection)
                 {
                     serverId = client.ID;
@@ -377,6 +385,10 @@ namespace ArtikelverwaltungWebSocketServer
                     Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Time connected: {DateTime.Now - se.StartTime}");
                 }
                 Console.WriteLine("<======================================================================================================>");
+                connection temp = new connection();
+                temp.context = Context;
+                temp.ID = client.ID;
+                _connections.Add(temp);
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
             }
 
@@ -385,8 +397,24 @@ namespace ArtikelverwaltungWebSocketServer
                 try
                 {
                     activeConnections--;
-                    Console.WriteLine($"Connection Closed ({Context.UserEndPoint})");
+                    connection temp = new connection();
+                    foreach (connection con in _connections)
+                    {
+                        if (con.context == Context)
+                        {
+                            temp = con;
+                        }
+                    }
+                    Console.WriteLine("<======================================================================================================>");
+                    Console.WriteLine($"Connection Closed ({temp.ID})");
+                    Console.WriteLine("Currently connected clients:");
+                    foreach (IWebSocketSession se in Sessions.Sessions)
+                    {
+                        Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Time connected: {DateTime.Now - se.StartTime}");
+                    }
+                    Console.WriteLine("<======================================================================================================>");
                     Sessions.Broadcast("status " + connections + " " + activeConnections);
+                    _connections.Remove(temp);
                 }
                 catch (Exception) { }
             }
