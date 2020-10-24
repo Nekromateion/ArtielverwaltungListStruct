@@ -362,21 +362,31 @@ namespace ArtikelverwaltungWebSocketServer
                 Console.WriteLine($"{client.ID} connected from {client.Context.UserEndPoint}");
                 connections++;
                 activeConnections++;
-                Console.WriteLine($"New Connection Connections: [{connections}] Active: [{activeConnections}]");
+                Console.WriteLine("<======================================================================================================>");
+                Console.WriteLine($"New Connection from ({Context.UserEndPoint}|{Context.Origin}) Connections: [{connections}] Active: [{activeConnections}]");
                 if (isFirstConnection)
                 {
                     serverId = client.ID;
                     Sessions.SendTo(client.ID, client.ID);
+                    Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                     Console.WriteLine(client.ID + " is now server commander");
+                    Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                     isFirstConnection = false;
                 }
+                Console.WriteLine("--------------------------------------------------------------------------------------------------------");
+                Console.WriteLine("Currently connected clients:");
+                foreach (IWebSocketSession se in Sessions.Sessions)
+                {
+                    Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Origin: {se.Context.Origin}");
+                }
+                Console.WriteLine("<======================================================================================================>");
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
             }
 
             protected override void OnClose(CloseEventArgs e)
             {
                 activeConnections--;
-                Console.WriteLine("Connection Closed");
+                Console.WriteLine($"Connection Closed ({Context.UserEndPoint}|{Context.Origin})");
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
             }
 
