@@ -67,8 +67,6 @@ namespace ArtikelverwaltungWebSocketServer
                             if (Data.Articles.Count == 0)
                             {
                                 Console.WriteLine("1: List is empty");
-                                data = "1: Nothing in list";
-                                Send(data);
                             }
                             else
                             {
@@ -370,14 +368,13 @@ namespace ArtikelverwaltungWebSocketServer
                     Sessions.SendTo(client.ID, client.ID);
                     Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                     Console.WriteLine(client.ID + " is now server commander");
-                    Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                     isFirstConnection = false;
                 }
                 Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                 Console.WriteLine("Currently connected clients:");
                 foreach (IWebSocketSession se in Sessions.Sessions)
                 {
-                    Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Origin: {se.Context.Origin}");
+                    Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Time connected: {DateTime.Now - se.StartTime}");
                 }
                 Console.WriteLine("<======================================================================================================>");
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
@@ -385,9 +382,13 @@ namespace ArtikelverwaltungWebSocketServer
 
             protected override void OnClose(CloseEventArgs e)
             {
-                activeConnections--;
-                Console.WriteLine($"Connection Closed ({Context.UserEndPoint}|{Context.Origin})");
-                Sessions.Broadcast("status " + connections + " " + activeConnections);
+                try
+                {
+                    activeConnections--;
+                    Console.WriteLine($"Connection Closed ({Context.UserEndPoint})");
+                    Sessions.Broadcast("status " + connections + " " + activeConnections);
+                }
+                catch (Exception) { }
             }
 
             protected override void OnError(ErrorEventArgs e)
