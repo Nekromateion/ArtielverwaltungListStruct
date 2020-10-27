@@ -427,7 +427,7 @@ namespace ArtikelverwaltungWebSocketServer
 
         internal static WebSocketServer socket;
 
-        internal static bool didMenu = false;
+        internal static bool isReady = false;
         
         public static void Main(string[] args)
         {
@@ -489,6 +489,10 @@ namespace ArtikelverwaltungWebSocketServer
             if (Console.ReadLine().ToLower() == "y")
             {
                 Discord.DiscordManager.Init();
+                while (!isReady)
+                {
+                    Thread.Sleep(10);
+                }
             }
             #endregion
 
@@ -513,8 +517,6 @@ namespace ArtikelverwaltungWebSocketServer
             }
             #endregion
 
-            didMenu = true;
-            
             #region menuStuff
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             string clientId = string.Empty;

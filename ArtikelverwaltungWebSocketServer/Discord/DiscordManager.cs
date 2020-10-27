@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -24,7 +25,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             Console.Write("Please input your Discord User ID to set yourself as the bot owner: ");
             Env.Vars.ownerId = Convert.ToUInt64(Console.ReadLine());
             Console.Clear();
-            Console.WriteLine("[Discord] Starting bot setup");
+            Console.WriteLine("[Discord] Starting bot setup"); 
             new DiscordManager().Start().GetAwaiter().GetResult();
         }
         
@@ -34,9 +35,8 @@ namespace ArtikelverwaltungWebSocketServer.Discord
 
             _Client.Log += Log;
             _Client.MessageReceived += OnMessage;
-
-            while (!Program.didMenu) { }
-
+            _Client.Ready += OnReady;
+            
             await _Client.LoginAsync(TokenType.Bot, Env.Vars.Token);
             await _Client.StartAsync();
 
@@ -87,6 +87,11 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                     await message.Channel.SendMessageAsync(text);
                 }
             }
+        }
+
+        private async Task OnReady()
+        {
+            Program.isReady = true;
         }
     }
 }

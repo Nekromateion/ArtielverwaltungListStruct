@@ -2,13 +2,15 @@
 
 namespace ArtikelverwaltungWebSocketServer.Discord.Env
 {
-        public class Utils
+    public class Utils
     {
         static int tableWidth = 90;
+
         public static string WriteLine(object obj)
         {
-            return (string)obj + Environment.NewLine;
+            return (string) obj + Environment.NewLine;
         }
+
         public static string PrintLine()
         {
             return (new string('-', tableWidth - 1));
@@ -26,7 +28,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord.Env
 
             return (row);
         }
-        
+
         static string AlignCentre(string text, int width)
         {
             text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
