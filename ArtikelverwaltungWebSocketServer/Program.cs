@@ -481,6 +481,15 @@ namespace ArtikelverwaltungWebSocketServer
             }
             #endregion
 
+            #region DiscordStuff
+            Console.Clear();
+            Console.Write("Do you wish to load the Discord bot version? (y = yes)");
+            if (Console.ReadLine().ToLower() == "y")
+            {
+                Discord.DiscordManager.Init();
+            }
+            #endregion
+
             #region variableInputs
             while (string.IsNullOrEmpty(Vars.Currency) || string.IsNullOrWhiteSpace(Vars.Currency))
             {
