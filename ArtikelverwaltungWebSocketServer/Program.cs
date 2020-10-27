@@ -426,6 +426,8 @@ namespace ArtikelverwaltungWebSocketServer
         }
 
         internal static WebSocketServer socket;
+
+        internal static bool didMenu = false;
         
         public static void Main(string[] args)
         {
@@ -511,6 +513,8 @@ namespace ArtikelverwaltungWebSocketServer
             }
             #endregion
 
+            didMenu = true;
+            
             #region menuStuff
             WebSocket client = new WebSocket($"ws://127.0.0.1:{port}/artikelverwaltung");
             string clientId = string.Empty;
