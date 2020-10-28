@@ -6,6 +6,6 @@ namespace ArtikelverwaltungWebSocketServer.Discord.Env
     {
         internal static string Token { get; set; }
         internal static ulong ownerId { get; set; }
-        internal static List<ulong> channelIds { get; set; }
+        internal static List<ulong> channelIds  = new List<ulong>();
     }
 }

@@ -49,6 +49,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             return Task.CompletedTask;
         }
 
+        
         private async Task OnMessage(SocketMessage message)
         {
             if (message.Content == "art!addchannel")
@@ -56,7 +57,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                 if (message.Author.Id == Env.Vars.ownerId)
                 {
                     Env.Vars.channelIds.Add(message.Channel.Id);
-                    await message.Channel.SendMessageAsync($"Added {message.Channel.Name}({message.Channel.Id}) to the list of permitted channels.");
+                    await message.Channel.SendMessageAsync($"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of permitted channels.");
                 }
                 else
                 {
@@ -67,24 +68,32 @@ namespace ArtikelverwaltungWebSocketServer.Discord
 
             if (Env.Vars.channelIds.Contains(message.Channel.Id))
             {
-                if (message.Content == "art!read")
-                {
-                    Console.WriteLine($"[Discord] User {message.Author.Discriminator}({message.Author.Id}) requested list.");
-                    string text = string.Empty;
-                    text += Env.Utils.PrintLine();
-                    text += Env.Utils.PrintRow(new[] {"ID", "Name", "Price", "Count"});
-                    foreach (Article art in Data.Articles)
-                    {
-                        text += Env.Utils.PrintRow(new[] {Convert.ToString(art.id), art.name, Convert.ToString(art.price), Convert.ToString(art.count)});
-                    }
+                if (message.Content.ToLower() == "art!read")
+                {Console.WriteLine($"[Discord] User {message.Author.Discriminator}({message.Author.Id}) requested list.");
+                    string toSend =
+                        
+                        await message.Channel.SendMessageAsync(toSend);
+                }
 
-                    if (text.Length > 1890)
+                if (message.Content.ToLower().StartsWith("art!sort "))
+                {
+                    string sortBy = message.Content.ToLower().Substring(9);
+                    if (sortBy == "id")
                     {
-                        await message.Channel.SendMessageAsync("List was too big to print in one message");
-                        text = text.Substring(0, 1890);
+                        
                     }
-                    text += Env.Utils.PrintLine();
-                    await message.Channel.SendMessageAsync(text);
+                    else if (sortBy == "name")
+                    {
+                        
+                    }
+                    else if (sortBy == "price")
+                    {
+                        
+                    }
+                    else if (sortBy == "count")
+                    {
+                        
+                    }
                 }
             }
         }

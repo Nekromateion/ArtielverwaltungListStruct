@@ -13,7 +13,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord.Env
 
         public static string PrintLine()
         {
-            return (new string('-', tableWidth - 1));
+            return (new string('-', tableWidth - 1)) + Environment.NewLine;
         }
 
         public static string PrintRow(params string[] columns)
@@ -26,7 +26,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord.Env
                 row += AlignCentre(column, width) + "|";
             }
 
-            return (row);
+            return (row) + Environment.NewLine;
         }
 
         static string AlignCentre(string text, int width)
