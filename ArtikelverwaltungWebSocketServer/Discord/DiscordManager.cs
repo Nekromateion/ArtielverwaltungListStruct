@@ -70,84 +70,142 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             return Task.CompletedTask;
         }
 
-        
+
         private async Task OnMessage(SocketMessage message)
         {
-            if (!message.Author.IsBot)
+            try
             {
-                if (message.Content == "art!addchannel")
+                if (!message.Author.IsBot)
                 {
-                    if (message.Author.Id == Env.Vars.ownerId)
+                    if (message.Content == "art!addchannel")
                     {
-                        Env.Vars.channelIds.Add(message.Channel.Id);
-                        Env.Vars.LogMessages.Add($"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] <@!{message.Author.Id}> added <#{message.Channel.Id}> to the command channel list");
-                        await message.Channel.SendMessageAsync($"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of permitted channels.");
-                    }
-                    else
-                    {
-                        await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
-                    }
-                }
-                else if (message.Content == "art!logchannel")
-                {
-                    if (message.Author.Id == Env.Vars.ownerId)
-                    {
-                        LogChannel tmp = new LogChannel();
-                        SocketGuildChannel t = message.Channel as SocketGuildChannel;
-                        tmp.ServerId = t.Guild.Id;
-                        tmp.ChannelId = message.Channel.Id;
-                        Env.Vars.locChannels.Add(tmp);
-                        Env.Vars.LogMessages.Add($"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] <@!{message.Author.Id}> added <#{message.Channel.Id}> to the log channel list");
-                        await message.Channel.SendMessageAsync($"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of log channels.");
-                    }
-                    else
-                    {
-                        await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
-                    }
-                }
-
-
-                if (Env.Vars.channelIds.Contains(message.Channel.Id))
-                {
-                    Env.Vars.LogMessages.Add($"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] Message from a command channel in <#{message.Channel.Id}> by <@!{message.Author.Id}> saying: {message.Content}");
-                    if (message.Content.ToLower() == "art!read")
-                    {
-                        Console.WriteLine($"[Discord] User {message.Author.Discriminator}({message.Author.Id}) requested list.");
-                        Env.Vars.LogMessages.Add();
-                        string toSend = Tools.ReadList(Data.Articles);
-
-                        await message.Channel.SendMessageAsync(toSend);
-                    }
-
-                    if (message.Content.ToLower().StartsWith("art!sort "))
-                    {
-                        string sortBy = message.Content.ToLower().Substring(9);
-                        if (sortBy == "id")
+                        if (message.Author.Id == Env.Vars.ownerId)
                         {
-                            string toSend = Tools.SortById(Data.Articles);
-                            await message.Channel.SendMessageAsync(toSend);
-                        }
-                        else if (sortBy == "name")
-                        {
-                            string toSend = Tools.SortByName(Data.Articles);
-                            await message.Channel.SendMessageAsync(toSend);
-                        }
-                        else if (sortBy == "price")
-                        {
-                            string toSend = Tools.SortByPrice(Data.Articles);
-                            await message.Channel.SendMessageAsync(toSend);
-                        }
-                        else if (sortBy == "count")
-                        {
-                            string toSend = Tools.SortByCount(Data.Articles);
-                            await message.Channel.SendMessageAsync(toSend);
+                            Env.Vars.channelIds.Add(message.Channel.Id);
+                            Env.Vars.LogMessages.Add(
+                                $"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] <@!{message.Author.Id}> added <#{message.Channel.Id}> to the command channel list");
+                            await message.Channel.SendMessageAsync(
+                                $"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of permitted channels.");
                         }
                         else
                         {
-                            await message.Channel.SendMessageAsync($"`{sortBy}` is not valid");
+                            await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
+                        }
+                    }
+                    else if (message.Content == "art!logchannel")
+                    {
+                        if (message.Author.Id == Env.Vars.ownerId)
+                        {
+                            LogChannel tmp = new LogChannel();
+                            SocketGuildChannel t = message.Channel as SocketGuildChannel;
+                            tmp.ServerId = t.Guild.Id;
+                            tmp.ChannelId = message.Channel.Id;
+                            Env.Vars.locChannels.Add(tmp);
+                            Env.Vars.LogMessages.Add(
+                                $"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] <@!{message.Author.Id}> added <#{message.Channel.Id}> to the log channel list");
+                            await message.Channel.SendMessageAsync(
+                                $"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of log channels.");
+                        }
+                        else
+                        {
+                            await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
+                        }
+                    }
+                    else if (message.Content.StartsWith("art!editor "))
+                    {
+                        if (message.Author.Id == Env.Vars.ownerId)
+                        {
+                            string toReturn = "Added users ";
+                            foreach (SocketUser user in message.MentionedUsers)
+                            {
+                                Env.Vars.editors.Add(user.Id);
+                                toReturn += " <@!" + user.Id + "> ";
+                            }
+
+                            if (toReturn.Length > 1890) toReturn = toReturn.Substring(0, 1950);
+                            toReturn += "to list of editors";
+                        }
+                        else
+                        {
+                            await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
+                        }
+                    }
+
+
+                    if (Env.Vars.channelIds.Contains(message.Channel.Id))
+                    {
+                        Env.Vars.LogMessages.Add($"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] Message from a command channel in <#{message.Channel.Id}> by <@!{message.Author.Id}> saying: {message.Content}");
+                        if (message.Content.ToLower() == "art!read" || message.Content.ToLower() == "art!list")
+                        {
+                            Console.WriteLine(
+                                $"[Discord] User {message.Author.Discriminator}({message.Author.Id}) requested list.");
+                            string toSend = Tools.ReadList(Data.Articles);
+                            await message.Channel.SendMessageAsync(toSend);
+                        }
+                        else if (message.Content.ToLower().StartsWith("art!sort "))
+                        {
+                            string sortBy = message.Content.ToLower().Split(' ')[1];
+                            if (sortBy == "id")
+                            {
+                                string toSend = Tools.SortById(Data.Articles);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else if (sortBy == "name")
+                            {
+                                string toSend = Tools.SortByName(Data.Articles);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else if (sortBy == "price")
+                            {
+                                string toSend = Tools.SortByPrice(Data.Articles);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else if (sortBy == "count")
+                            {
+                                string toSend = Tools.SortByCount(Data.Articles);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else
+                            {
+                                await message.Channel.SendMessageAsync($"`{sortBy}` is not a valid sorting term");
+                            }
+                        }
+                        else if (message.Content.ToLower().StartsWith("art!search "))
+                        {
+                            string searchBy = message.Content.ToLower().Split(' ')[1];
+                            string searchFor = message.Content.ToLower().Split(' ')[2];
+                            if (searchBy == "id")
+                            {
+                                string toSend = Tools.SearchById(Data.Articles, searchFor);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else if (searchBy == "name")
+                            {
+                                string toSend = Tools.SearchByName(Data.Articles, searchFor);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else if (searchBy == "price")
+                            {
+                                string toSend = Tools.SearchByPrice(Data.Articles, searchFor);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else if (searchBy == "count")
+                            {
+                                string toSend = Tools.SearchByCount(Data.Articles, searchFor);
+                                await message.Channel.SendMessageAsync(toSend);
+                            }
+                            else
+                            {
+                                await message.Channel.SendMessageAsync($"`{searchBy}` is not a valid search term");
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                await message.Channel.SendMessageAsync("An error occured, if you are the administrator please look at the log channel(s) for more information");
+                Env.Vars.LogMessages.Add($"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] ERROR OCCURED: {e.Message}");
             }
         }
 
