@@ -25,7 +25,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             Console.Write("Please input your Discord User ID to set yourself as the bot owner: ");
             Env.Vars.ownerId = Convert.ToUInt64(Console.ReadLine());
             Console.Clear();
-            Console.WriteLine("[Discord] Starting bot setup"); 
+            Console.WriteLine("[Discord] Starting bot setup");
             new DiscordManager().Start().GetAwaiter().GetResult();
         }
         
@@ -39,13 +39,31 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             
             await _Client.LoginAsync(TokenType.Bot, Env.Vars.Token);
             await _Client.StartAsync();
-
-            await Task.Delay(-1);
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    if (Env.Vars.locChannels.Count > 0)
+                    {
+                        if (Env.Vars.LogMessages.Count > 0)
+                        {
+                            foreach (LogChannel logChannel in Env.Vars.locChannels)
+                            {
+                                if (Env.Vars.LogMessages[0].Length > 1900) _Client.GetGuild(logChannel.ServerId).GetTextChannel(logChannel.ChannelId).SendMessageAsync(Env.Vars.LogMessages[0].Substring(1890) + " ...");
+                                else _Client.GetGuild(logChannel.ServerId).GetTextChannel(logChannel.ChannelId).SendMessageAsync(Env.Vars.LogMessages[0]);
+                                if(Env.Vars.locChannels.Count > 1) Thread.Sleep(200);
+                            }
+                        }
+                    }
+                    Thread.Sleep(200);
+                }
+            }).Start();
         }
         
         private Task Log(LogMessage msg)
         {
             Console.WriteLine($"[Discord] LOG: {msg.ToString()}");
+            Env.Vars.LogMessages.Add(msg.ToString());
             return Task.CompletedTask;
         }
 
@@ -69,10 +87,11 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             if (Env.Vars.channelIds.Contains(message.Channel.Id))
             {
                 if (message.Content.ToLower() == "art!read")
-                {Console.WriteLine($"[Discord] User {message.Author.Discriminator}({message.Author.Id}) requested list.");
-                    string toSend =
-                        
-                        await message.Channel.SendMessageAsync(toSend);
+                {
+                    Console.WriteLine($"[Discord] User {message.Author.Discriminator}({message.Author.Id}) requested list.");
+                    string toSend = Tools.ReadList(Data.Articles);
+
+                    await message.Channel.SendMessageAsync(toSend);
                 }
 
                 if (message.Content.ToLower().StartsWith("art!sort "))
@@ -80,19 +99,27 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                     string sortBy = message.Content.ToLower().Substring(9);
                     if (sortBy == "id")
                     {
-                        
+                        string toSend = Tools.SortById(Data.Articles);
+                        await message.Channel.SendMessageAsync(toSend);
                     }
                     else if (sortBy == "name")
                     {
-                        
+                        string toSend = Tools.SortByName(Data.Articles);
+                        await message.Channel.SendMessageAsync(toSend);
                     }
                     else if (sortBy == "price")
                     {
-                        
+                        string toSend = Tools.SortByPrice(Data.Articles);
+                        await message.Channel.SendMessageAsync(toSend);
                     }
                     else if (sortBy == "count")
                     {
-                        
+                        string toSend = Tools.SortByCount(Data.Articles);
+                        await message.Channel.SendMessageAsync(toSend);
+                    }
+                    else
+                    {
+                        await message.Channel.SendMessageAsync($"`{sortBy}` is not valid");
                     }
                 }
             }

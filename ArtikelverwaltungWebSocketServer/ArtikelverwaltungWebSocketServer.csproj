@@ -94,6 +94,7 @@
         <Compile Include="DataVars\Data.cs" />
         <Compile Include="DataVars\Vars.cs" />
         <Compile Include="Discord\DiscordManager.cs" />
+        <Compile Include="Discord\Env\LogChannel.cs" />
         <Compile Include="Discord\Env\Utils.cs" />
         <Compile Include="Discord\Env\Vars.cs" />
         <Compile Include="Discord\Tools.cs" />
