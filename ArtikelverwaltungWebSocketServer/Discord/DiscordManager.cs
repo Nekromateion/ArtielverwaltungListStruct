@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
@@ -53,6 +54,8 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                                 else _Client.GetGuild(logChannel.ServerId).GetTextChannel(logChannel.ChannelId).SendMessageAsync(Env.Vars.LogMessages[0]);
                                 if(Env.Vars.locChannels.Count > 1) Thread.Sleep(200);
                             }
+
+                            Env.Vars.LogMessages.Remove(Env.Vars.LogMessages[0]);
                         }
                     }
                     Thread.Sleep(200);
@@ -63,18 +66,37 @@ namespace ArtikelverwaltungWebSocketServer.Discord
         private Task Log(LogMessage msg)
         {
             Console.WriteLine($"[Discord] LOG: {msg.ToString()}");
-            Env.Vars.LogMessages.Add(msg.ToString());
+            Env.Vars.LogMessages.Add("[Discord] " + msg.ToString());
             return Task.CompletedTask;
         }
 
         
         private async Task OnMessage(SocketMessage message)
         {
+            if (!message.Author.IsBot)
+            {
+                            Env.Vars.LogMessages.Add($"[Discord] Message in {message.Channel.Id} by <@!{message.Author.Id}> saying: {message.Content}");
             if (message.Content == "art!addchannel")
             {
                 if (message.Author.Id == Env.Vars.ownerId)
                 {
                     Env.Vars.channelIds.Add(message.Channel.Id);
+                    await message.Channel.SendMessageAsync($"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of permitted channels.");
+                }
+                else
+                {
+                    await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
+                }
+            }
+            else if (message.Content == "art!logchannel")
+            {
+                if (message.Author.Id == Env.Vars.ownerId)
+                {
+                    LogChannel tmp = new LogChannel();
+                    SocketGuildChannel t = message.Channel as SocketGuildChannel;
+                    tmp.ServerId = t.Guild.Id;
+                    tmp.ChannelId = message.Channel.Id;
+                    Env.Vars.locChannels.Add(tmp);
                     await message.Channel.SendMessageAsync($"Added <#{message.Channel.Id}>({message.Channel.Id}) to the list of permitted channels.");
                 }
                 else
@@ -122,6 +144,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                         await message.Channel.SendMessageAsync($"`{sortBy}` is not valid");
                     }
                 }
+            }
             }
         }
 
