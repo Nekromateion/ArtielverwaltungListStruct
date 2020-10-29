@@ -173,7 +173,7 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                         else if (message.Content.ToLower().StartsWith("art!search "))
                         {
                             string searchBy = message.Content.ToLower().Split(' ')[1];
-                            string searchFor = message.Content.ToLower().Split(' ')[2];
+                            string searchFor = message.Content.ToLower().Substring(message.Content.ToLower().Split(' ')[0].Length + 1 + message.Content.ToLower().Split(' ')[1].Length + 1);
                             if (searchBy == "id")
                             {
                                 string toSend = Tools.SearchById(Data.Articles, searchFor);
