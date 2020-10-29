@@ -201,27 +201,124 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                         }
                         else if (message.Content.ToLower().StartsWith("art!set "))
                         {
-                            string setBy = message.Content.ToLower().Split(' ')[1];
-                            string value = message.Content.ToLower().Substring(message.Content.ToLower().Split(' ')[0].Length + 1 + message.Content.ToLower().Split(' ')[1].Length + 1);
-                            if (setBy == "id")
+                            if (Env.Vars.editors.Contains(message.Author.Id))
                             {
-                                string toReturn = Tools.SetId(Env.Vars.temporaryArticles, value, message.Author);
-                                await message.Channel.SendMessageAsync(toReturn);
+                                string setBy = message.Content.ToLower().Split(' ')[1];
+                                string value = message.Content.ToLower().Substring(message.Content.ToLower().Split(' ')[0].Length + 1 + message.Content.ToLower().Split(' ')[1].Length + 1);
+                                if (setBy == "id")
+                                {
+                                    string toReturn = Tools.SetId(Env.Vars.temporaryArticles, value, message.Author);
+                                    await message.Channel.SendMessageAsync(toReturn);
+                                }
+                                else if (setBy == "name")
+                                {
+                                    string toReturn = Tools.SetName(Env.Vars.temporaryArticles, value, message.Author);
+                                    await message.Channel.SendMessageAsync(toReturn);
+                                }
+                                else if (setBy == "price")
+                                {
+                                    string toReturn = Tools.SetPrice(Env.Vars.temporaryArticles, value, message.Author);
+                                    await message.Channel.SendMessageAsync(toReturn);
+                                }
+                                else if (setBy == "count")
+                                {
+                                    string toReturn = Tools.SetCount(Env.Vars.temporaryArticles, value, message.Author);
+                                    await message.Channel.SendMessageAsync(toReturn);
+                                }
                             }
-                            else if (setBy == "name")
+                            else
                             {
-                                string toReturn = Tools.SetName(Env.Vars.temporaryArticles, value, message.Author);
-                                await message.Channel.SendMessageAsync(toReturn);
+                                await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
                             }
-                            else if (setBy == "price")
+                        }
+                        else if (message.Content.ToLower().StartsWith("art!submit"))
+                        {
+                            if (Env.Vars.editors.Contains(message.Author.Id))
                             {
-                                string toReturn = Tools.SetPrice(Env.Vars.temporaryArticles, value, message.Author);
-                                await message.Channel.SendMessageAsync(toReturn);
+                                bool isFound = false;
+                                UserAdd art = new UserAdd();
+                                foreach (UserAdd t in Env.Vars.temporaryArticles)
+                                {
+                                    if (t.UserId == message.Author.Id)
+                                    {
+                                        isFound = true;
+                                        art = t;
+                                    }
+                                }
+
+                                if (isFound)
+                                {
+                                    if (art.Id != null && art.name != null && art.price != null && art.Count != null)
+                                    {
+                                        string toSend = "Added article:" + Environment.NewLine;
+                                        toSend += "```" + Environment.NewLine;
+                                        toSend += $"Id: {art.Id}" + Environment.NewLine;
+                                        toSend += $"Name: {art.name}" + Environment.NewLine;
+                                        toSend += $"Price: {art.price}" + Environment.NewLine;
+                                        toSend += $"Count: {art.Count}" + "```" + Environment.NewLine;
+                                        toSend += $"Article by <@!{message.Author.Id}>";
+                                        Article temp = new Article();
+                                        temp.id = art.Id;
+                                        temp.name = art.name;
+                                        temp.price = art.price;
+                                        temp.count = art.Count;
+                                        Data.Articles.Add(temp);
+                                        Env.Vars.LogMessages.Add(
+                                            $"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] <@!{message.Author.Id}> added article {art.Id}");
+                                        await message.Channel.SendMessageAsync(toSend);
+                                        Env.Vars.temporaryArticles.Remove(art);
+                                    }
+                                    else
+                                    {
+                                        await message.Channel.SendMessageAsync(
+                                            "Your cached article is incomplete please make sure you filled out all fields before submitting");
+                                    }
+                                }
+                                else
+                                {
+                                    await message.Channel.SendMessageAsync(
+                                        "There was no cached article found for you please start creating one.");
+                                }
                             }
-                            else if (setBy == "count")
+                            else
                             {
-                                string toReturn = Tools.SetCount(Env.Vars.temporaryArticles, value, message.Author);
-                                await message.Channel.SendMessageAsync(toReturn);
+                                await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
+                            }
+                        }
+                        else if (message.Content.ToLower().StartsWith("art!myarticle"))
+                        {
+                            if (Env.Vars.editors.Contains(message.Author.Id))
+                            {
+                                bool isFound = false;
+                                UserAdd art = new UserAdd();
+                                foreach (UserAdd t in Env.Vars.temporaryArticles)
+                                {
+                                    if (t.UserId == message.Author.Id)
+                                    {
+                                        isFound = true;
+                                        art = t;
+                                    }
+                                }
+
+                                if (isFound)
+                                {
+                                    string toSend = "Cached article:" + Environment.NewLine;
+                                    toSend += "```" + Environment.NewLine;
+                                    toSend += $"Id: {art.Id}" + Environment.NewLine;
+                                    toSend += $"Name: {art.name}" + Environment.NewLine;
+                                    toSend += $"Price: {art.price}" + Environment.NewLine;
+                                    toSend += $"Count: {art.Count}" + "```" + Environment.NewLine;
+                                    toSend += $"Article by <@!{message.Author.Id}>";
+                                    await message.Channel.SendMessageAsync(toSend);
+                                }
+                                else
+                                {
+                                    await message.Channel.SendMessageAsync("You have no cached article please create one.");
+                                }
+                            }
+                            else
+                            {
+                                await message.Channel.SendMessageAsync("https://media.nekro-works.de/rump-image.jpg");
                             }
                         }
                     }

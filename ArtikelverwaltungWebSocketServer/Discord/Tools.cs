@@ -212,14 +212,105 @@ namespace ArtikelverwaltungWebSocketServer.Discord
 
         internal static string SetId(List<UserAdd> tempArts, string value, SocketUser user)
         {
-            ulong tmp = tempArts.Where(x => x.UserId == user.Id).ToList().FirstOrDefault().UserId;
-            if (tmp != null)
+            bool isFound = false;
+            foreach (UserAdd t in tempArts)
             {
-                
+                if (t.UserId == user.Id) isFound = true;
+            }
+            if (isFound)
+            {
+                UserAdd content = tempArts.Where(x => x.UserId == user.Id).ToList().FirstOrDefault();
+                content.Id = Convert.ToInt32(value);
+                tempArts.Remove(content);
+                tempArts.Add(content);
+                Env.Vars.temporaryArticles = tempArts;
+                return "Set value ID of cached content for you to " + value;
             }
             else
             {
-                
+                UserAdd content = new UserAdd();
+                content.UserId = user.Id;
+                content.Id = Convert.ToInt32(value);
+                Env.Vars.temporaryArticles.Add(content);
+                return "There was no entry in the cache found for you, so a new one has been created." + Environment.NewLine + "Set value ID for your cache to " + value;
+            }
+        }
+        
+        internal static string SetName(List<UserAdd> tempArts, string value, SocketUser user)
+        {
+            bool isFound = false;
+            foreach (UserAdd t in tempArts)
+            {
+                if (t.UserId == user.Id) isFound = true;
+            }
+            if (isFound)
+            {
+                UserAdd content = tempArts.Where(x => x.UserId == user.Id).ToList().FirstOrDefault();
+                content.name = value;
+                tempArts.Remove(content);
+                tempArts.Add(content);
+                Env.Vars.temporaryArticles = tempArts;
+                return "Set value Name of cached content for you to " + value;
+            }
+            else
+            {
+                UserAdd content = new UserAdd();
+                content.UserId = user.Id;
+                content.name = value;
+                Env.Vars.temporaryArticles.Add(content);
+                return "There was no entry in the cache found for you, so a new one has been created." + Environment.NewLine + "Set value Name for your cache to " + value;
+            }
+        }
+        
+        internal static string SetPrice(List<UserAdd> tempArts, string value, SocketUser user)
+        {
+            bool isFound = false;
+            foreach (UserAdd t in tempArts)
+            {
+                if (t.UserId == user.Id) isFound = true;
+            }
+            if (isFound)
+            {
+                UserAdd content = tempArts.Where(x => x.UserId == user.Id).ToList().FirstOrDefault();
+                content.price = Convert.ToDouble(value);
+                tempArts.Remove(content);
+                tempArts.Add(content);
+                Env.Vars.temporaryArticles = tempArts;
+                return "Set value Price of cached content for you to " + value;
+            }
+            else
+            {
+                UserAdd content = new UserAdd();
+                content.UserId = user.Id;
+                content.price = Convert.ToDouble(value);
+                Env.Vars.temporaryArticles.Add(content);
+                return "There was no entry in the cache found for you, so a new one has been created." + Environment.NewLine + "Set value Price for your cache to " + value;
+            }
+        }
+        
+        internal static string SetCount(List<UserAdd> tempArts, string value, SocketUser user)
+        {
+            bool isFound = false;
+            foreach (UserAdd t in tempArts)
+            {
+                if (t.UserId == user.Id) isFound = true;
+            }
+            if (isFound)
+            {
+                UserAdd content = tempArts.Where(x => x.UserId == user.Id).ToList().FirstOrDefault();
+                content.Count = Convert.ToInt32(value);
+                tempArts.Remove(content);
+                tempArts.Add(content);
+                Env.Vars.temporaryArticles = tempArts;
+                return "Set value Count of cached content for you to " + value;
+            }
+            else
+            {
+                UserAdd content = new UserAdd();
+                content.UserId = user.Id;
+                content.Count = Convert.ToInt32(value);
+                Env.Vars.temporaryArticles.Add(content);
+                return "There was no entry in the cache found for you, so a new one has been created." + Environment.NewLine + "Set value Count for your cache to " + value;
             }
         }
     }
