@@ -2,10 +2,10 @@
 {
     public struct UserAdd
     {
-        public static ulong UserId { get; set; }
-        public static int Id { get; set; }
-        public static string name { get; set; }
-        public static double price { get; set; }
-        public static int Count { get; set; }
+        public ulong UserId { get; set; }
+        public int Id { get; set; }
+        public string name { get; set; }
+        public double price { get; set; }
+        public int Count { get; set; }
     }
 }

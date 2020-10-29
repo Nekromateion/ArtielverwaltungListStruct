@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Discord.WebSocket;
 
 namespace ArtikelverwaltungWebSocketServer.Discord
 {
@@ -207,6 +208,19 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             text += "```";
             if (foundCount == 0) text = "No results found for your search quarry";
             return text;
+        }
+
+        internal static string SetId(List<UserAdd> tempArts, string value, SocketUser user)
+        {
+            ulong tmp = tempArts.Where(x => x.UserId == user.Id).ToList().FirstOrDefault().UserId;
+            if (tmp != null)
+            {
+                
+            }
+            else
+            {
+                
+            }
         }
     }
 }

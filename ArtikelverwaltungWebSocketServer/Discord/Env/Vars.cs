@@ -10,5 +10,6 @@ namespace ArtikelverwaltungWebSocketServer.Discord.Env
         internal static List<ulong> channelIds  = new List<ulong>();
         internal static List<LogChannel> locChannels = new List<LogChannel>();
         internal static List<string> LogMessages = new List<string>();
+        internal static List<UserAdd> temporaryArticles = new List<UserAdd>();
     }
 }

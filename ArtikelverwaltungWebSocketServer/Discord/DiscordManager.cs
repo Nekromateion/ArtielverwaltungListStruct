@@ -199,6 +199,31 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                                 await message.Channel.SendMessageAsync($"`{searchBy}` is not a valid search term");
                             }
                         }
+                        else if (message.Content.ToLower().StartsWith("art!set "))
+                        {
+                            string setBy = message.Content.ToLower().Split(' ')[1];
+                            string value = message.Content.ToLower().Substring(message.Content.ToLower().Split(' ')[0].Length + 1 + message.Content.ToLower().Split(' ')[1].Length + 1);
+                            if (setBy == "id")
+                            {
+                                string toReturn = Tools.SetId(Env.Vars.temporaryArticles, value, message.Author);
+                                await message.Channel.SendMessageAsync(toReturn);
+                            }
+                            else if (setBy == "name")
+                            {
+                                string toReturn = Tools.SetName(Env.Vars.temporaryArticles, value, message.Author);
+                                await message.Channel.SendMessageAsync(toReturn);
+                            }
+                            else if (setBy == "price")
+                            {
+                                string toReturn = Tools.SetPrice(Env.Vars.temporaryArticles, value, message.Author);
+                                await message.Channel.SendMessageAsync(toReturn);
+                            }
+                            else if (setBy == "count")
+                            {
+                                string toReturn = Tools.SetCount(Env.Vars.temporaryArticles, value, message.Author);
+                                await message.Channel.SendMessageAsync(toReturn);
+                            }
+                        }
                     }
                 }
             }
