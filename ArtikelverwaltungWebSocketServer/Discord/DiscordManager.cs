@@ -172,31 +172,34 @@ namespace ArtikelverwaltungWebSocketServer.Discord
                         }
                         else if (message.Content.ToLower().StartsWith("art!search "))
                         {
-                            string searchBy = message.Content.ToLower().Split(' ')[1];
-                            string searchFor = message.Content.ToLower().Substring(message.Content.ToLower().Split(' ')[0].Length + 1 + message.Content.ToLower().Split(' ')[1].Length + 1);
-                            if (searchBy == "id")
+                            try
                             {
-                                string toSend = Tools.SearchById(Data.Articles, searchFor);
-                                await message.Channel.SendMessageAsync(toSend);
+                                string searchBy = message.Content.ToLower().Split(' ')[1];
+                                string searchFor = message.Content.ToLower().Substring(message.Content.ToLower().Split(' ')[0].Length + 1 + message.Content.ToLower().Split(' ')[1].Length + 1);
+                                if (searchBy == "id")
+                                {
+                                    string toSend = Tools.SearchById(Data.Articles, searchFor);
+                                    await message.Channel.SendMessageAsync(toSend);
+                                }
+                                else if (searchBy == "name")
+                                {
+                                    string toSend = Tools.SearchByName(Data.Articles, searchFor);
+                                    await message.Channel.SendMessageAsync(toSend);
+                                }
+                                else if (searchBy == "price")
+                                {
+                                    string toSend = Tools.SearchByPrice(Data.Articles, searchFor);
+                                    await message.Channel.SendMessageAsync(toSend);
+                                }
+                                else if (searchBy == "count")
+                                {
+                                    string toSend = Tools.SearchByCount(Data.Articles, searchFor);
+                                    await message.Channel.SendMessageAsync(toSend);
+                                }
                             }
-                            else if (searchBy == "name")
+                            catch (Exception e)
                             {
-                                string toSend = Tools.SearchByName(Data.Articles, searchFor);
-                                await message.Channel.SendMessageAsync(toSend);
-                            }
-                            else if (searchBy == "price")
-                            {
-                                string toSend = Tools.SearchByPrice(Data.Articles, searchFor);
-                                await message.Channel.SendMessageAsync(toSend);
-                            }
-                            else if (searchBy == "count")
-                            {
-                                string toSend = Tools.SearchByCount(Data.Articles, searchFor);
-                                await message.Channel.SendMessageAsync(toSend);
-                            }
-                            else
-                            {
-                                await message.Channel.SendMessageAsync($"`{searchBy}` is not a valid search term");
+                                Console.WriteLine(e);
                             }
                         }
                         else if (message.Content.ToLower().StartsWith("art!set "))
@@ -326,6 +329,8 @@ namespace ArtikelverwaltungWebSocketServer.Discord
             }
             catch (Exception e)
             {
+                Console.WriteLine("[Discord] ERROR");
+                Console.WriteLine(e);
                 await message.Channel.SendMessageAsync("An error occured, if you are the administrator please look at the log channel(s) for more information");
                 Env.Vars.LogMessages.Add($"[Discord] [{DateTime.Now.ToString("HH.mm.ss.ffffff")}] ERROR OCCURED: {e.Message}");
             }
