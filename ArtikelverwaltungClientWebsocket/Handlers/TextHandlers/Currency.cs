@@ -1,5 +1,4 @@
 ﻿using ArtikelverwalktungClientWebsocket;
-using ArtikelverwaltungClientWebsocket;
 using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars;
 
 namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
@@ -8,11 +7,11 @@ namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
     {
         private static readonly Logger Logger =
             LogHandler.Logger;
-        
+
         internal static void Handle(string data)
         {
             Logger.AddLine("message was currency info");
-            string currency = data.Substring(13);
+            var currency = data.Substring(13);
             if (Vars.Currency == null)
             {
                 Logger.AddLine("server uses currency: " + currency);

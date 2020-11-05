@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using ArtikelverwalktungClientWebsocket;
-using ArtikelverwaltungClientWebsocket;
 
 namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils
 {
@@ -10,7 +9,8 @@ namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils
     {
         private static readonly Logger Logger =
             LogHandler.Logger;
-        static int tableWidth = 90;
+
+        private static readonly int tableWidth = 90;
 
         private static void WriteLine(object obj, ConsoleColor? color = null)
         {
@@ -20,6 +20,7 @@ namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils
             Console.WriteLine(obj);
             Console.ResetColor();
         }
+
         public static void PrintLine(ConsoleColor? color = null)
         {
             Logger.AddLine("called");
@@ -29,32 +30,24 @@ namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils
         public static void PrintRow(ConsoleColor? color = null, params string[] columns)
         {
             Logger.AddLine("called");
-            int width = (tableWidth - columns.Length) / columns.Length;
-            string row = "|";
+            var width = (tableWidth - columns.Length) / columns.Length;
+            var row = "|";
 
-            foreach (string column in columns)
-            {
-                row += AlignCentre(column, width) + "|";
-            }
+            foreach (var column in columns) row += AlignCentre(column, width) + "|";
 
             WriteLine(row, color);
         }
-        
-        static string AlignCentre(string text, int width)
+
+        private static string AlignCentre(string text, int width)
         {
             Logger.AddLine("called");
             text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
 
             if (string.IsNullOrEmpty(text))
-            {
                 return new string(' ', width);
-            }
-            else
-            {
-                return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
-            }
+            return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
         }
-        
+
         public static void OpenBrowser(string url)
         {
             Logger.AddLine("called");
@@ -67,7 +60,7 @@ namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {

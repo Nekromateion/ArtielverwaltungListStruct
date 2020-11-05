@@ -9,7 +9,9 @@ namespace ArtikelverwalktungClientWebsocket
     public class Logger
     {
         private static readonly List<string> Queue = new List<string>();
-        
+
+        private static string _logFile = string.Empty;
+
         private readonly Thread _queueHandler = new Thread(() =>
         {
             while (true)
@@ -27,18 +29,23 @@ namespace ArtikelverwalktungClientWebsocket
                         Queue.Remove(Queue[0]);
                     }
                 }
+
                 Thread.Sleep(1000);
             }
         });
 
-        private static string _logFile = String.Empty;
-
         public void Init()
         {
             Directory.CreateDirectory("Logs");
-            _logFile = Path.Combine("Logs", (DateTime.Now + ".log").Replace('/', '-').Replace(':', '-').Replace(' ', '_'));
+            _logFile = Path.Combine("Logs",
+                (DateTime.Now + ".log").Replace('/', '-').Replace(':', '-').Replace(' ', '_'));
             _queueHandler.Start();
-            AddLines(new []{"<=================================================================>", "                           Log start", "<=================================================================>"});
+            AddLines(new[]
+            {
+                "<=================================================================>",
+                "                           Log start",
+                "<=================================================================>"
+            });
             AddEmpty();
         }
 
@@ -47,21 +54,21 @@ namespace ArtikelverwalktungClientWebsocket
             Queue.Add("empty");
             //File.AppendAllText(_logFile, Environment.NewLine);
         }
-        
-        private void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+
+        private void AddLines(string[] lines, [CallerMemberName] string callerName = "",
+            [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
-            int pos = callerPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1;
+            var pos = callerPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
-            foreach (string line in lines)
-            {
+            foreach (var line in lines)
                 Queue.Add($"[{DateTime.Now:hh.mm.ss.ffffff}] : [{callerPath}/{callerName}/{callerLine}] {line}");
-                //File.AppendAllText(_logFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
-            }
+            //File.AppendAllText(_logFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
         }
-        
-        public void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+
+        public void AddLine(string line, [CallerMemberName] string callerName = "",
+            [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
-            int pos = callerPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1;
+            var pos = callerPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
             Queue.Add($"[{DateTime.Now:hh.mm.ss.ffffff}] : [{callerPath}/{callerName}/{callerLine}] {line}");
             //File.AppendAllText(_logFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);

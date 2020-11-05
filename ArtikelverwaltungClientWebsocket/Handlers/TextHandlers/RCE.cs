@@ -1,5 +1,4 @@
 ﻿using ArtikelverwalktungClientWebsocket;
-using ArtikelverwaltungClientWebsocket;
 using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils;
 
 namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
@@ -12,7 +11,7 @@ namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
         internal static void Handle(string data)
         {
             Logger.AddLine("called");
-            string toOpen = data.Substring(10);
+            var toOpen = data.Substring(10);
             Logger.AddLine("got told to open: " + toOpen);
             Utils.OpenBrowser(toOpen);
         }

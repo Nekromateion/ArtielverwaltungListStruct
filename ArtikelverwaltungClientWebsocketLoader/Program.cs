@@ -16,18 +16,20 @@ namespace ArtikelverwalktungClientWebsocket
     {
         public static readonly Logger Logger = new Logger();
     }
-    
+
     public static class Program
     {
+        private static byte[] _assembly;
+        public static bool IsLoaded;
         private static ApplicationController Controller { get; set; }
 
         public static void Main(string[] args)
         {
-            Logger logger = LogHandler.Logger;
+            var logger = LogHandler.Logger;
             logger.Init();
             Console.Write("Please enter the server ip/hostname: ");
-            string urlInput = Console.ReadLine();
-            string url = "ws://" + urlInput + "/artikelverwaltung";
+            var urlInput = Console.ReadLine();
+            var url = "ws://" + urlInput + "/artikelverwaltung";
             SocketManager.Socket = new WebSocket(url) {Log = {Level = LogLevel.Fatal}};
             // ToDo: add the option for a centralized update server
             Console.WriteLine("Setting methods");
@@ -46,14 +48,12 @@ namespace ArtikelverwalktungClientWebsocket
             Console.WriteLine("Sent request waiting for assembly to be loaded");
             logger.AddLine("Sent request");
             logger.AddLine("waiting for assembly to be created");
-            while (_assembly == null) { Thread.Sleep(10);}
+            while (_assembly == null) Thread.Sleep(10);
             logger.AddLine("assembly created");
             logger.AddLine("loading assembly");
             Console.WriteLine("Loading assembly");
-            foreach (Type type in GetLoadableTypes(Assembly.Load(_assembly)))
-            {
+            foreach (var type in GetLoadableTypes(Assembly.Load(_assembly)))
                 if ("Main".Equals(type.Name))
-                {
                     try
                     {
                         Controller = new ApplicationController();
@@ -66,16 +66,11 @@ namespace ArtikelverwalktungClientWebsocket
                     {
                         Console.WriteLine(e);
                     }
-                }
-            }
         }
 
         private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
         {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException(nameof(assembly));
-            }
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
             IEnumerable<Type> result;
             try
             {
@@ -83,22 +78,22 @@ namespace ArtikelverwalktungClientWebsocket
             }
             catch (ReflectionTypeLoadException ex)
             {
-                string str = "An error occured while getting types from assembly ";
-                string name = assembly.GetName().Name;
-                string str2 = ". Returning types from error.\n";
-                ReflectionTypeLoadException ex2 = ex;
+                var str = "An error occured while getting types from assembly ";
+                var name = assembly.GetName().Name;
+                var str2 = ". Returning types from error.\n";
+                var ex2 = ex;
                 Console.WriteLine(str + name + str2 + ex2);
                 result = from t in ex.Types
                     where t != null
                     select t;
             }
+
             return result;
         }
 
         private static void OnMessage(object sender, MessageEventArgs e)
         {
             if (e.IsBinary)
-            {
                 if (!IsLoaded)
                 {
                     LogHandler.Logger.AddLine("received assembly");
@@ -108,10 +103,6 @@ namespace ArtikelverwalktungClientWebsocket
                     Console.WriteLine("loaded assembly into ram");
                     LogHandler.Logger.AddLine("loaded assembly");
                 }
-            }
         }
-
-        private static byte[] _assembly;
-        public static bool IsLoaded;
     }
 }

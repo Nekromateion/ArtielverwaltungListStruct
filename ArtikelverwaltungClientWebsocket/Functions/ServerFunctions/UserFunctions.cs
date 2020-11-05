@@ -1,5 +1,4 @@
 using ArtikelverwalktungClientWebsocket;
-using ArtikelverwaltungClientWebsocket;
 
 namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
 {
@@ -7,6 +6,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
     {
         private static readonly Logger Logger =
             LogHandler.Logger;
+
         internal static void InitList()
         {
             Logger.AddLine("called");

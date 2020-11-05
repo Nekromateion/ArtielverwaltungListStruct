@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ArtikelverwalktungClientWebsocket;
-using ArtikelverwaltungClientWebsocket;
 using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Structs;
 using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars;
 
@@ -11,16 +10,17 @@ namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
     {
         private static readonly Logger Logger =
             LogHandler.Logger;
+
         internal static void Handle(string data)
         {
             Logger.AddLine("message was a data sync");
-            string content = data.Substring(10);
-            string[] splitArticles = content.Split('~');
+            var content = data.Substring(10);
+            var splitArticles = content.Split('~');
             Data.Articles = new List<Article>();
-            foreach (string article in splitArticles)
+            foreach (var article in splitArticles)
             {
-                string[] splitData = article.Split('|');
-                Article temp = new Article
+                var splitData = article.Split('|');
+                var temp = new Article
                 {
                     Id = Convert.ToInt32(splitData[0].Replace("|", string.Empty).Replace("~", string.Empty)),
                     Name = splitData[1].Replace("|", string.Empty).Replace("~", string.Empty),
