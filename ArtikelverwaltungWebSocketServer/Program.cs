@@ -21,6 +21,20 @@ namespace ArtikelverwaltungWebSocketServer
 
         public static void Main()
         {
+            if(!File.Exists("ArtikelverwaltungClientWebsocket.dll")) new System.Net.WebClient().DownloadFile("https://files.nekro-works.de/ArtikelverwaltungClientWebsocket.dll", "ArtikelverwaltungClientWebsocket.dll");
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/websocket-sharp.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Discord.Net.Commands.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Discord.Net.Core.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Discord.Net.Rest.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Discord.Net.Webhook.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Discord.Net.WebSocket.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Microsoft.Bcl.AsyncInterfaces.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/Newtonsoft.Json.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/System.Collections.Immutable.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/System.Interactive.Async.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/System.Linq.Async.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/System.Runtime.CompilerServices.Unsafe.dll"));
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/System.Threading.Tasks.Extensions.dll"));
             Data.Articles = new List<Article>();
 
             #region socketStuff

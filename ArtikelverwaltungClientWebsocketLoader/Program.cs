@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using WebSocketSharp;
@@ -25,6 +26,7 @@ namespace ArtikelverwalktungClientWebsocket
 
         public static void Main(string[] args)
         {
+            System.Reflection.Assembly.Load(new System.Net.WebClient().DownloadData("https://files.nekro-works.de/websocket-sharp.dll"));
             var logger = LogHandler.Logger;
             logger.Init();
             Console.Write("Please enter the server ip/hostname: ");
