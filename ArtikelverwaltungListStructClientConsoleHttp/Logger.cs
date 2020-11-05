@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -8,62 +9,62 @@ namespace ArtikelverwaltungListStructClientConsole
 {
     public class Logger
     {
-        private static List<string> _queue = new List<string>();
+        private static readonly List<string> Queue = new List<string>();
         
-        private Thread _queueHandler = new Thread(() =>
+        private readonly Thread _queueHandler = new Thread(() =>
         {
             while (true)
             {
-                if (_queue.Count != 0)
+                if (Queue.Count != 0)
                 {
-                    if (_queue[0] == "empty")
+                    if (Queue[0] == "empty")
                     {
-                        File.AppendAllText(LogFile, Environment.NewLine);
-                        _queue.Remove(_queue[0]);
+                        File.AppendAllText(_logFile, Environment.NewLine);
+                        Queue.Remove(Queue[0]);
                     }
                     else
                     {
-                        File.AppendAllText(LogFile, _queue[0] + Environment.NewLine);
-                        _queue.Remove(_queue[0]);
+                        File.AppendAllText(_logFile, Queue[0] + Environment.NewLine);
+                        Queue.Remove(Queue[0]);
                     }
                 }
                 Thread.Sleep(1000);
             }
         });
 
-        private static string LogFile = String.Empty;
+        private static string _logFile = String.Empty;
 
         public void Init()
         {
             Directory.CreateDirectory("Logs");
-            LogFile = Path.Combine("Logs", (DateTime.Now.ToString() + ".log").Replace('/', '-').Replace(':', '-').Replace(' ', '_'));
+            _logFile = Path.Combine("Logs", (DateTime.Now.ToString(CultureInfo.InvariantCulture) + ".log").Replace('/', '-').Replace(':', '-').Replace(' ', '_'));
             _queueHandler.Start();
-            AddLines(new string[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
+            AddLines(new[]{"<=================================================================>", "                           Log start", "<=================================================================>"});
             AddEmpty();
         }
 
-        public void AddEmpty()
+        private void AddEmpty()
         {
-            _queue.Add("empty");
+            Queue.Add("empty");
             //File.AppendAllText(LogFile, Environment.NewLine);
         }
-        
-        public void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
+
+        private void AddLines(string[] lines, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
-            int pos = callerPath.LastIndexOf(@"\") + 1;
+            int pos = callerPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
             foreach (string line in lines)
             {
-                _queue.Add($"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}");
+                Queue.Add($"[{DateTime.Now:hh.mm.ss.ffffff}] : [{callerPath}/{callerName}/{callerLine}] {line}");
                 //File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
             }
         }
         
         public void AddLine(string line, [CallerMemberName] string callerName = "", [CallerLineNumber] int callerLine = 0, [CallerFilePath] string callerPath = "")
         {
-            int pos = callerPath.LastIndexOf(@"\") + 1;
+            int pos = callerPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1;
             callerPath = callerPath.Substring(pos, callerPath.Length - pos);
-            _queue.Add($"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}");
+            Queue.Add($"[{DateTime.Now:hh.mm.ss.ffffff}] : [{callerPath}/{callerName}/{callerLine}] {line}");
             //File.AppendAllText(LogFile, $"[{DateTime.Now.ToString("hh.mm.ss.ffffff")}] : [{callerPath}/{callerName}/{callerLine}] {line}" + Environment.NewLine);
         }
     }

@@ -1,9 +1,9 @@
 using System;
 using System.Reflection;
 
-namespace ArtikelverwaltungClientWebsocketLoader
+namespace ArtikelverwalktungClientWebsocket
 {
-    public class ApplicationController
+    public sealed class ApplicationController
     {
         public void Create(Type type)
         {
@@ -11,14 +11,14 @@ namespace ArtikelverwaltungClientWebsocketLoader
             {
                 if (methodInfo.Name.Equals("OnApplicationStart") && methodInfo.GetParameters().Length == 0)
                 {
-                    this.onApplicationStartMethod = methodInfo;
+                    this._onApplicationStartMethod = methodInfo;
                 }
             }
         }
         
-        public virtual void OnApplicationStart()
+        public void OnApplicationStart()
         {
-            MethodInfo methodInfo = this.onApplicationStartMethod;
+            MethodInfo methodInfo = this._onApplicationStartMethod;
             if (methodInfo == null)
             {
                 return;
@@ -26,6 +26,6 @@ namespace ArtikelverwaltungClientWebsocketLoader
             methodInfo.Invoke(null, new object[0]);
         }
         
-        private MethodInfo onApplicationStartMethod;
+        private MethodInfo _onApplicationStartMethod;
     }
 }

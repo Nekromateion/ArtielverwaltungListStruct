@@ -1,17 +1,19 @@
-﻿using System;
+﻿using ArtikelverwalktungClientWebsocket;
+using ArtikelverwaltungClientWebsocket;
+using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils;
 
 namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
 {
-    public class RCE
+    public static class Rce
     {
-        private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
-            ArtikelverwaltungClientWebsocketLoader.LogHandler.logger;
+        private static readonly Logger Logger =
+            LogHandler.Logger;
 
         internal static void Handle(string data)
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             string toOpen = data.Substring(10);
-            logger.AddLine("got told to open: " + toOpen);
+            Logger.AddLine("got told to open: " + toOpen);
             Utils.OpenBrowser(toOpen);
         }
     }

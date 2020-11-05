@@ -2,8 +2,8 @@
 
 namespace ArtikelverwaltungClientWebsocket
 {
-    public class ConnectionManager
+    public static class ConnectionManager
     {
-        public static WebSocket socket;
+        public static WebSocket Socket;
     }
 }

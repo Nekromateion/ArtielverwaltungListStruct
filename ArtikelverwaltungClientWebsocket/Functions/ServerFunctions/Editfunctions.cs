@@ -1,17 +1,21 @@
 using System;
 using System.Threading;
+using ArtikelverwalktungClientWebsocket;
+using ArtikelverwaltungClientWebsocket;
+using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Structs;
+using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars;
 
 namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
 {
-    public class Editfunctions
+    public static class Editfunctions
     {
-        private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
-            ArtikelverwaltungClientWebsocketLoader.LogHandler.logger;
+        private static readonly Logger Logger =
+            LogHandler.Logger;
         
         internal static void AddArticle()
         {
             bool didWork = false;
-            logger.AddLine("called");
+            Logger.AddLine("called");
             string id = String.Empty;
             string name = string.Empty;
             double price = 0;
@@ -32,23 +36,27 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                     count = Convert.ToInt32(Console.ReadLine());
                     didWork = true;
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // ignored
+                }
+
                 Console.Clear();
             }
 
             if (Vars.AdminKey != null)
             {
-                ConnectionManager.socket.Send("add " + Vars.AdminKey + "~" + id + "|" + name + "|" + price + "|" + count);
+                ConnectionManager.Socket.Send("add " + Vars.AdminKey + "~" + id + "|" + name + "|" + price + "|" + count);
             }
             else
             {
-                ConnectionManager.socket.Send("add " + Vars.EditKey + "~" + id + "|" + name + "|" + price + "|" + count);
+                ConnectionManager.Socket.Send("add " + Vars.EditKey + "~" + id + "|" + name + "|" + price + "|" + count);
             }
         }
 
         internal static void RemoveArticle()
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             Console.Clear();
             Console.WriteLine("Please select by what criteria you want to delete:");
             Console.WriteLine("1: Name");
@@ -68,7 +76,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                     int count = 0;
                     foreach (Article article in Data.Articles)
                     {
-                        if (article.name.ToLower().Contains(name.ToLower()) && !done)
+                        if (name != null && article.Name.ToLower().Contains(name.ToLower()) && !done)
                         {
                             toremove = Data.Articles[count];
                             done = true;
@@ -80,11 +88,11 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                     {
                         if (Vars.AdminKey != null)
                         {
-                            ConnectionManager.socket.Send("remove " + Vars.AdminKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                            ConnectionManager.Socket.Send("remove " + Vars.AdminKey + "~" + toremove.Id + "|" + toremove.Name + "|" + toremove.Price + "|" + toremove.Count);
                         }
                         else
                         {
-                            ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                            ConnectionManager.Socket.Send("remove " + Vars.EditKey + "~" + toremove.Id + "|" + toremove.Name + "|" + toremove.Price + "|" + toremove.Count);
                         }
                     }
                     else
@@ -111,7 +119,7 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                     int count = 0;
                     foreach (Article article in Data.Articles)
                     {
-                        if (article.id == Convert.ToInt32(id) && !done)
+                        if (article.Id == Convert.ToInt32(id) && !done)
                         {
                             toremove = Data.Articles[count];
                             done = true;
@@ -123,11 +131,11 @@ namespace ArtikelverwaltungClientWebsocket.Functions.ServerFunctions
                     {
                         if (Vars.AdminKey != null)
                         {
-                            ConnectionManager.socket.Send("remove " + Vars.AdminKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                            ConnectionManager.Socket.Send("remove " + Vars.AdminKey + "~" + toremove.Id + "|" + toremove.Name + "|" + toremove.Price + "|" + toremove.Count);
                         }
                         else
                         {
-                            ConnectionManager.socket.Send("remove " + Vars.EditKey + "~" + toremove.id + "|" + toremove.name + "|" + toremove.price + "|" + toremove.count);
+                            ConnectionManager.Socket.Send("remove " + Vars.EditKey + "~" + toremove.Id + "|" + toremove.Name + "|" + toremove.Price + "|" + toremove.Count);
                         }
                     }
                     else

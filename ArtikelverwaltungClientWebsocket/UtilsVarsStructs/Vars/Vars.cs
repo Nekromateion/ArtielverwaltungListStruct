@@ -1,6 +1,6 @@
-namespace ArtikelverwaltungClientWebsocket
+namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars
 {
-    public class Vars
+    public static class Vars
     {
         public static string Version = "b1";
         public static string AdminKey { get; set; }

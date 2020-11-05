@@ -1,6 +1,6 @@
 ﻿namespace ArtikelverwaltungClientWebsocket.Handlers.BinaryHandlers
 {
-    public class BinaryHandler
+    public static class BinaryHandler
     {
         internal static void Handle(byte[] data)
         {

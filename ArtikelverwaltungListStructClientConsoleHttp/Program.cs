@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using ArtikelverwaltungListStruct;
 using ArtikelverwaltungListStructClientConsole;
 
 namespace ArtikelverwaltungListStructClientConsoleHttp
@@ -348,10 +347,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     {
                         string[] list = artikel.Split('|');
                         Artikel temp = new Artikel();
-                        temp.nummer = Convert.ToInt32(list[1].Replace("~", string.Empty).Replace("|", String.Empty));
-                        temp.name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
-                        temp.preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
-                        temp.bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.Nummer = Convert.ToInt32(list[1].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.Name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                        temp.Preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.Bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
                         artList.Add(temp);
                     }
                     _logger.AddLine("added all articles to the list");
@@ -366,45 +365,45 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     _logger.AddLine("Sorting list");
                     if (input == "1" || input == "id")
                     {
-                        artList = artList.OrderBy(x => x.nummer).ToList();
+                        artList = artList.OrderBy(x => x.Nummer).ToList();
                         Utils.PrintLine();
                         Utils.PrintRow(ConsoleColor.White, new []{"^ID^", "Name", "Price", "Count"});
                         foreach (Artikel art in artList)
                         {
-                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                            Utils.PrintRow(ConsoleColor.White, new []{art.Nummer.ToString(), art.Name, art.Preis.ToString(), art.Bestand.ToString()});
                         }
                         Utils.PrintLine();
                     }
                     else if (input == "2" || input == "name")
                     {
-                        artList = artList.OrderBy(x => x.name).ToList();
+                        artList = artList.OrderBy(x => x.Name).ToList();
                         Utils.PrintLine();
                         Utils.PrintRow(ConsoleColor.White, new []{"ID", "^Name^", "Price", "Count"});
                         foreach (Artikel art in artList)
                         {
-                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                            Utils.PrintRow(ConsoleColor.White, new []{art.Nummer.ToString(), art.Name, art.Preis.ToString(), art.Bestand.ToString()});
                         }
                         Utils.PrintLine();
                     }
                     else if (input == "3" || input == "price" || input == "preis")
                     {
-                        artList = artList.OrderBy(x => x.preis).ToList();
+                        artList = artList.OrderBy(x => x.Preis).ToList();
                         Utils.PrintLine();
                         Utils.PrintRow(ConsoleColor.White, new []{"ID", "Name", "^Price^", "Count"});
                         foreach (Artikel art in artList)
                         {
-                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                            Utils.PrintRow(ConsoleColor.White, new []{art.Nummer.ToString(), art.Name, art.Preis.ToString(), art.Bestand.ToString()});
                         }
                         Utils.PrintLine();
                     }
                     else if (input == "4" || input == "count" || input == "bestand")
                     {
-                        artList = artList.OrderBy(x => x.bestand).ToList();
+                        artList = artList.OrderBy(x => x.Bestand).ToList();
                         Utils.PrintLine();
                         Utils.PrintRow(ConsoleColor.White, new []{"ID", "Name", "Price", "^Count^"});
                         foreach (Artikel art in artList)
                         {
-                            Utils.PrintRow(ConsoleColor.White, new []{art.nummer.ToString(), art.name, art.preis.ToString(), art.bestand.ToString()});
+                            Utils.PrintRow(ConsoleColor.White, new []{art.Nummer.ToString(), art.Name, art.Preis.ToString(), art.Bestand.ToString()});
                         }
                         Utils.PrintLine();
                     }
@@ -444,10 +443,10 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                     {
                         Artikel temp = new Artikel();
                         string[] list = artikel.Split('|');
-                        temp.nummer = Convert.ToInt32(list[1].Replace("~", string.Empty).Replace("|", String.Empty));
-                        temp.name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
-                        temp.preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
-                        temp.bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.Nummer = Convert.ToInt32(list[1].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.Name = list[0].Replace("~", string.Empty).Replace("|", String.Empty);
+                        temp.Preis = Convert.ToDouble(list[2].Replace("~", string.Empty).Replace("|", String.Empty));
+                        temp.Bestand = Convert.ToInt32(list[3].Replace("~", string.Empty).Replace("|", String.Empty));
                         all.Add(temp);
                     }
                     Console.WriteLine("By what do you want to search?");
@@ -467,9 +466,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
                         foreach (Artikel artikel in all)
                         {
-                            if (artikel.name.ToLower().Contains(toSearch))
+                            if (artikel.Name.ToLower().Contains(toSearch))
                             {
-                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
+                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.Nummer.ToString(), artikel.Name, artikel.Preis.ToString(), artikel.Bestand.ToString()});
                             }
                         }
                         Utils.PrintLine();
@@ -483,9 +482,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
                         foreach (Artikel artikel in all)
                         {
-                            if (artikel.preis == Convert.ToDouble(toSearch))
+                            if (artikel.Preis == Convert.ToDouble(toSearch))
                             {
-                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
+                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.Nummer.ToString(), artikel.Name, artikel.Preis.ToString(), artikel.Bestand.ToString()});
                             }
                         }
                         Utils.PrintLine();
@@ -499,9 +498,9 @@ namespace ArtikelverwaltungListStructClientConsoleHttp
                         Utils.PrintRow(ConsoleColor.White, new string[]{"ID","Name",$"Price({_currency})","Count"});
                         foreach (Artikel artikel in all)
                         {
-                            if (artikel.bestand == Convert.ToInt32(toSearch))
+                            if (artikel.Bestand == Convert.ToInt32(toSearch))
                             {
-                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.nummer.ToString(), artikel.name, artikel.preis.ToString(), artikel.bestand.ToString()});
+                                Utils.PrintRow(ConsoleColor.White, new string[]{artikel.Nummer.ToString(), artikel.Name, artikel.Preis.ToString(), artikel.Bestand.ToString()});
                             }
                         }
                         Utils.PrintLine();

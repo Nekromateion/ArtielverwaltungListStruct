@@ -45,10 +45,10 @@
         <Compile Include="BinaryLoader\ApplicationController.cs" />
         <Compile Include="BinaryLoader\Loader.cs" />
         <Compile Include="ConnectionManager.cs" />
-        <Compile Include="Functions\LocalFunctions\Userfunctions.cs" />
-        <Compile Include="Functions\ServerFunctions\Adminfunctions.cs" />
+        <Compile Include="Functions\LocalFunctions\UserFunctions.cs" />
+        <Compile Include="Functions\ServerFunctions\AdminFunctions.cs" />
         <Compile Include="Functions\ServerFunctions\Editfunctions.cs" />
-        <Compile Include="Functions\ServerFunctions\Userfunctions.cs" />
+        <Compile Include="Functions\ServerFunctions\UserFunctions.cs" />
         <Compile Include="Handlers\BinaryHandlers\BinaryHandler.cs" />
         <Compile Include="Handlers\TextHandlers\Currency.cs" />
         <Compile Include="Handlers\TextHandlers\DataSync.cs" />

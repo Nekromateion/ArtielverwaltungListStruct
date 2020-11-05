@@ -1,17 +1,20 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using ArtikelverwalktungClientWebsocket;
+using ArtikelverwaltungClientWebsocket;
 
-namespace ArtikelverwaltungClientWebsocket
+namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Utils
 {
-    public class Utils
+    public static class Utils
     {
-        private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
-            ArtikelverwaltungClientWebsocketLoader.LogHandler.logger;
+        private static readonly Logger Logger =
+            LogHandler.Logger;
         static int tableWidth = 90;
-        public static void WriteLine(object obj, ConsoleColor? color = null)
+
+        private static void WriteLine(object obj, ConsoleColor? color = null)
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             if (color != null)
                 Console.ForegroundColor = color.Value;
             Console.WriteLine(obj);
@@ -19,13 +22,13 @@ namespace ArtikelverwaltungClientWebsocket
         }
         public static void PrintLine(ConsoleColor? color = null)
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             WriteLine(new string('-', tableWidth - 1), color);
         }
 
         public static void PrintRow(ConsoleColor? color = null, params string[] columns)
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             int width = (tableWidth - columns.Length) / columns.Length;
             string row = "|";
 
@@ -39,7 +42,7 @@ namespace ArtikelverwaltungClientWebsocket
         
         static string AlignCentre(string text, int width)
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
 
             if (string.IsNullOrEmpty(text))
@@ -54,7 +57,7 @@ namespace ArtikelverwaltungClientWebsocket
         
         public static void OpenBrowser(string url)
         {
-            logger.AddLine("called");
+            Logger.AddLine("called");
             try
             {
                 Process.Start(url);

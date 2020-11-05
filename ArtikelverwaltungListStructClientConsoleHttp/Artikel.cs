@@ -1,10 +1,10 @@
-﻿namespace ArtikelverwaltungListStruct
+﻿namespace ArtikelverwaltungListStructClientConsole
 {
     public struct Artikel
     {
-        public int nummer { get; set; }
-        public string name { get; set; }
-        public double preis { get; set; }
-        public int bestand { get; set; }
+        public int Nummer { get; set; }
+        public string Name { get; set; }
+        public double Preis { get; set; }
+        public int Bestand { get; set; }
     }
 }

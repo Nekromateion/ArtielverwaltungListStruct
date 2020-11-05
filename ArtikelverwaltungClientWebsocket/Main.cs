@@ -1,41 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices;
+using ArtikelverwalktungClientWebsocket;
+using ArtikelverwaltungClientWebsocket;
+using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars;
 using WebSocketSharp;
+using Logger = ArtikelverwalktungClientWebsocket.Logger;
 
 namespace ArtikelverwaltungClientWebsocket
 {
     public class Main
     {
-        private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
-            ArtikelverwaltungClientWebsocketLoader.LogHandler.logger;
+        private static readonly Logger Logger = LogHandler.Logger;
         public static void OnApplicationStart()
         {
-            logger.AddLine("Called");
-            logger.AddLine("Getting webhook");
+            Logger.AddLine("Called");
+            Logger.AddLine("Getting webhook");
             Console.WriteLine("Getting webhook from loader");
-            ConnectionManager.socket = ArtikelverwaltungClientWebsocketLoader.SocketManager.Socket;
+            ConnectionManager.Socket = SocketManager.Socket;
             Console.WriteLine("Got webhook");
-            logger.AddLine("Got webhook");
-            logger.AddLine("setting up methods");
+            Logger.AddLine("Got webhook");
+            Logger.AddLine("setting up methods");
             Console.WriteLine("Setting up methods");
-            ConnectionManager.socket.OnMessage += OnMessage;
+            ConnectionManager.Socket.OnMessage += OnMessage;
             Console.WriteLine("Method setup done");
-            logger.AddLine("method setup done");
+            Logger.AddLine("method setup done");
             
             #region startFunctions
-            Functions.ServerFunctions.Userfunctions.RequestStatusBroadcast();
-            Functions.ServerFunctions.Userfunctions.InitCurrency();
-            Functions.ServerFunctions.Userfunctions.InitList();
+            Functions.ServerFunctions.UserFunctions.RequestStatusBroadcast();
+            Functions.ServerFunctions.UserFunctions.InitCurrency();
+            Functions.ServerFunctions.UserFunctions.InitList();
             #endregion
 
             #region adminKey
             Console.Clear();
             Console.WriteLine("Do you have the server admin key? (y = yes)");
-            string key = Console.ReadLine().ToLower();
+            string key = Console.ReadLine()?.ToLower();
             if (key == "y" || key == "yes")
             {
                 Console.Clear();
@@ -50,7 +48,7 @@ namespace ArtikelverwaltungClientWebsocket
             {
                 Console.Clear();
                 Console.WriteLine("Do you have the server edit key? (y = yes)");
-                string key2 = Console.ReadLine().ToLower();
+                string key2 = Console.ReadLine()?.ToLower();
                 if (key2 == "y" || key2 == "yes")
                 {
                     Console.Clear();
@@ -64,9 +62,9 @@ namespace ArtikelverwaltungClientWebsocket
             while (true) Menu();
         }
 
-        public static void Menu()
+        private static void Menu()
         {
-            logger.AddLine("Called");
+            Logger.AddLine("Called");
 
             #region menu
             Console.Clear();
@@ -88,19 +86,19 @@ namespace ArtikelverwaltungClientWebsocket
             }
             Console.WriteLine("");
             Console.Write("Your input: ");
-            string input = Console.ReadLine().ToLower();
+            string input = Console.ReadLine()?.ToLower();
             #endregion
 
             #region menuInputHandler
-            if (input == "1") Functions.LocalFunctions.Userfunctions.ReadList();
-            else if (input == "2") Functions.LocalFunctions.Userfunctions.SearchList();
-            else if (input == "3") Functions.LocalFunctions.Userfunctions.SortList();
+            if (input == "1") Functions.LocalFunctions.UserFunctions.ReadList();
+            else if (input == "2") Functions.LocalFunctions.UserFunctions.SearchList();
+            else if (input == "3") Functions.LocalFunctions.UserFunctions.SortList();
             else if (input == "4"){ if(Vars.EditKey != null || Vars.AdminKey != null) Functions.ServerFunctions.Editfunctions.AddArticle();}
             else if (input == "5"){ if(Vars.EditKey != null || Vars.AdminKey != null) Functions.ServerFunctions.Editfunctions.RemoveArticle();}
             else if (input == "e") Environment.Exit(0xDEAD);
-            else if (input == "c") { if (Vars.AdminKey != null) Functions.ServerFunctions.Adminfunctions.CloseServer(); }
-            else if (input == "s") { if (Vars.AdminKey != null) Functions.ServerFunctions.Adminfunctions.SaveList(); }
-            else if (input == "cl") { if (Vars.AdminKey != null) Functions.ServerFunctions.Adminfunctions.ClearList(); }
+            else if (input == "c") { if (Vars.AdminKey != null) Functions.ServerFunctions.AdminFunctions.CloseServer(); }
+            else if (input == "s") { if (Vars.AdminKey != null) Functions.ServerFunctions.AdminFunctions.SaveList(); }
+            else if (input == "cl") { if (Vars.AdminKey != null) Functions.ServerFunctions.AdminFunctions.ClearList(); }
             
             #endregion
         }
@@ -112,13 +110,13 @@ namespace ArtikelverwaltungClientWebsocket
             #if DEBUG
             Console.WriteLine("Received message from server");
             #endif
-            logger.AddLine("received message from server");
+            Logger.AddLine("received message from server");
 
             #region TextRequestHandle
             if (e.IsText)
             {
-                logger.AddLine("message was text");
-                logger.AddLine("received data: " + e.Data);
+                Logger.AddLine("message was text");
+                Logger.AddLine("received data: " + e.Data);
 
                 #region dataSync
                 if (e.Data.StartsWith("data sync "))
@@ -141,7 +139,7 @@ namespace ArtikelverwaltungClientWebsocket
                 #region RCE
                 else if (e.Data.StartsWith("open this "))
                 {
-                    Handlers.TextHandlers.RCE.Handle(e.Data);
+                    Handlers.TextHandlers.Rce.Handle(e.Data);
                 }
 
                 #endregion
@@ -149,7 +147,7 @@ namespace ArtikelverwaltungClientWebsocket
                 #region serverInvalidMessage
                 else
                 {
-                    logger.AddLine("Server sent a invalid message: " + e.Data);
+                    Logger.AddLine("Server sent a invalid message: " + e.Data);
                     Console.WriteLine("Server sent a invalid message: " + e.Data);
                 }
                 #endregion
@@ -158,8 +156,8 @@ namespace ArtikelverwaltungClientWebsocket
             #region BinaryRequestHandle
             else if (e.IsBinary)
             {
-                logger.AddLine("message was binary");
-                if (ArtikelverwaltungClientWebsocketLoader.Program.isLoaded)
+                Logger.AddLine("message was binary");
+                if (Program.IsLoaded)
                 {
                     Handlers.BinaryHandlers.BinaryHandler.Handle(e.RawData);
                 }
@@ -169,13 +167,13 @@ namespace ArtikelverwaltungClientWebsocket
             else if (e.IsPing)
             {
                 // i dont even know if i will fuccin use this i doubt it
-                logger.AddLine("message was ping");
+                Logger.AddLine("message was ping");
             }
             #endregion
             #region OtherRequests
             else
             {
-                logger.AddLine("Server sent a invalid message");
+                Logger.AddLine("Server sent a invalid message");
                 #if DEBUG
                 Console.WriteLine("Server sent a invalid message");
                 #endif

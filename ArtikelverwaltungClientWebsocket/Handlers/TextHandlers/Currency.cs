@@ -1,22 +1,26 @@
-﻿namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
+﻿using ArtikelverwalktungClientWebsocket;
+using ArtikelverwaltungClientWebsocket;
+using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars;
+
+namespace ArtikelverwaltungClientWebsocket.Handlers.TextHandlers
 {
-    public class Currency
+    public static class Currency
     {
-        private static ArtikelverwaltungClientWebsocketLoader.Logger logger =
-            ArtikelverwaltungClientWebsocketLoader.LogHandler.logger;
+        private static readonly Logger Logger =
+            LogHandler.Logger;
         
         internal static void Handle(string data)
         {
-            logger.AddLine("message was currency info");
+            Logger.AddLine("message was currency info");
             string currency = data.Substring(13);
             if (Vars.Currency == null)
             {
-                logger.AddLine("server uses currency: " + currency);
+                Logger.AddLine("server uses currency: " + currency);
                 Vars.Currency = currency;
             }
             else
             {
-                logger.AddLine("server switched currency to: " + currency);
+                Logger.AddLine("server switched currency to: " + currency);
                 Vars.Currency = currency;
             }
         }

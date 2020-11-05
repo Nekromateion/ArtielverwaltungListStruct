@@ -18,14 +18,14 @@ namespace ArtikelverwaltungWebSocketServer
             private struct connection
             {
                 public WebSocketContext context { get; set; }
-                public string ID { get; set; }
+                public string Id { get; set; }
             }
             
             private static int connections = 0;
             private static int activeConnections = 0;
             private static string serverId = String.Empty;
             private static bool isFirstConnection = true;
-            private static List<connection> _connections = new List<connection>();
+            private static readonly List<connection> Connections = new List<connection>();
 
             protected override void OnMessage(MessageEventArgs e)
             {
@@ -44,7 +44,7 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Console.WriteLine("Client requested assembly");
-                            Send(System.IO.File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
+                            Send(File.ReadAllBytes("ArtikelverwaltungClientWebsocket.dll"));
                         }
                         catch (Exception ex)
                         {
@@ -178,11 +178,13 @@ namespace ArtikelverwaltungWebSocketServer
                             if (key == Vars.EditKey || key == Vars.AdminKey)
                             {
                                 string[] request = action.Split('|');
-                                Article temp = new Article();
-                                temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
-                                temp.name = request[1].Replace("|", string.Empty);
-                                temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
-                                temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                Article temp = new Article
+                                {
+                                    id = Convert.ToInt32(request[0].Replace("|", string.Empty)),
+                                    name = request[1].Replace("|", string.Empty),
+                                    price = Convert.ToDouble(request[2].Replace("|", string.Empty)),
+                                    count = Convert.ToInt32(request[3].Replace("|", string.Empty))
+                                };
                                 Data.Articles.Remove(temp);
                                 
                                 BroadcastList();
@@ -336,7 +338,7 @@ namespace ArtikelverwaltungWebSocketServer
                 }
             }
 
-            internal void BroadcastList()
+            private void BroadcastList()
             {
                 string toBroadcast = "data sync ";
                 int count = 0;
@@ -387,8 +389,8 @@ namespace ArtikelverwaltungWebSocketServer
                 Console.WriteLine("<======================================================================================================>");
                 connection temp = new connection();
                 temp.context = Context;
-                temp.ID = client.ID;
-                _connections.Add(temp);
+                temp.Id = client.ID;
+                Connections.Add(temp);
                 Sessions.Broadcast("status " + connections + " " + activeConnections);
             }
 
@@ -398,7 +400,7 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     activeConnections--;
                     connection temp = new connection();
-                    foreach (connection con in _connections)
+                    foreach (connection con in Connections)
                     {
                         if (con.context == Context)
                         {
@@ -406,7 +408,7 @@ namespace ArtikelverwaltungWebSocketServer
                         }
                     }
                     Console.WriteLine("<======================================================================================================>");
-                    Console.WriteLine($"Connection Closed ({temp.ID})");
+                    Console.WriteLine($"Connection Closed ({temp.Id})");
                     Console.WriteLine("Currently connected clients:");
                     foreach (IWebSocketSession se in Sessions.Sessions)
                     {
@@ -414,7 +416,7 @@ namespace ArtikelverwaltungWebSocketServer
                     }
                     Console.WriteLine("<======================================================================================================>");
                     Sessions.Broadcast("status " + connections + " " + activeConnections);
-                    _connections.Remove(temp);
+                    Connections.Remove(temp);
                 }
                 catch (Exception) { }
             }
@@ -425,7 +427,7 @@ namespace ArtikelverwaltungWebSocketServer
             }
         }
 
-        internal static WebSocketServer socket;
+        private static WebSocketServer socket;
 
         internal static bool isReady = false;
         

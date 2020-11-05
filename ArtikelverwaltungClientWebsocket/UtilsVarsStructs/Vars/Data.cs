@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Structs;
 
-namespace ArtikelverwaltungClientWebsocket
+namespace ArtikelverwaltungClientWebsocket.UtilsVarsStructs.Vars
 {
-    public class Data
+    public static class Data
     {
         public static List<Article> Articles = new List<Article>();
     }
