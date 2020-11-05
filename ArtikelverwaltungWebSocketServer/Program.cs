@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Threading;
+using ArtikelverwaltungWebSocketServer.DataVars;
+using ArtikelverwaltungWebSocketServer.Structs;
 using WebSocketSharp;
 using WebSocketSharp.Net.WebSockets;
 using WebSocketSharp.Server;
@@ -13,19 +14,19 @@ namespace ArtikelverwaltungWebSocketServer
 {
     internal class Program
     {
-        public class Client : WebSocketBehavior
+        private class Client : WebSocketBehavior
         {
-            private struct connection
+            private struct Connection
             {
-                public WebSocketContext context { get; set; }
+                public WebSocketContext Context { get; set; }
                 public string Id { get; set; }
             }
             
-            private static int connections = 0;
-            private static int activeConnections = 0;
-            private static string serverId = String.Empty;
-            private static bool isFirstConnection = true;
-            private static readonly List<connection> Connections = new List<connection>();
+            private static int _connections;
+            private static int _activeConnections;
+            private static string _serverId = String.Empty;
+            private static bool _isFirstConnection = true;
+            private static readonly List<Connection> Connections = new List<Connection>();
 
             protected override void OnMessage(MessageEventArgs e)
             {
@@ -35,7 +36,7 @@ namespace ArtikelverwaltungWebSocketServer
                     Console.WriteLine("Message was text");
                     Console.WriteLine(e.Data);
                     
-                    if(e.Data.StartsWith(serverId)) Console.WriteLine("message was sent by server commander");
+                    if(e.Data.StartsWith(_serverId)) Console.WriteLine("message was sent by server commander");
 
                     #region UserFunction
                     #region assemblyRequest
@@ -70,7 +71,7 @@ namespace ArtikelverwaltungWebSocketServer
                     {
                         try
                         {
-                            Console.WriteLine("Cleint Requested data");
+                            Console.WriteLine("Client Requested data");
                             string data = "data sync ";
                             if (Data.Articles.Count == 0)
                             {
@@ -84,17 +85,17 @@ namespace ArtikelverwaltungWebSocketServer
                                     count++;
                                     if (count != Data.Articles.Count)
                                     {
-                                        data += article.id + "|";
-                                        data += article.name + "|";
-                                        data += article.price + "|";
-                                        data += article.count + "~";
+                                        data += article.Id + "|";
+                                        data += article.Name + "|";
+                                        data += article.Price + "|";
+                                        data += article.Count + "~";
                                     }
                                     else
                                     {
-                                        data += article.id + "|";
-                                        data += article.name + "|";
-                                        data += article.price + "|";
-                                        data += article.count;
+                                        data += article.Id + "|";
+                                        data += article.Name + "|";
+                                        data += article.Price + "|";
+                                        data += article.Count;
                                     }
                                 }
                                 Send(data);
@@ -112,7 +113,7 @@ namespace ArtikelverwaltungWebSocketServer
                         try
                         {
                             Console.WriteLine("client requested status broadcast");
-                            Sessions.Broadcast("status " + connections + " " + activeConnections);
+                            Sessions.Broadcast("status " + _connections + " " + _activeConnections);
                         }
                         catch (Exception ex)
                         {
@@ -138,17 +139,17 @@ namespace ArtikelverwaltungWebSocketServer
                                 Article temp = new Article();
                                 if (request[0].Replace("|", String.Empty).ToLower() == "a")
                                 {
-                                    temp.id = Data.Articles.Count;
-                                    temp.name = request[1].Replace("|", string.Empty);
-                                    temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
-                                    temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                    temp.Id = Data.Articles.Count;
+                                    temp.Name = request[1].Replace("|", string.Empty);
+                                    temp.Price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                                    temp.Count = Convert.ToInt32(request[3].Replace("|", string.Empty));
                                 }
                                 else
                                 {
-                                    temp.id = Convert.ToInt32(request[0].Replace("|", string.Empty));
-                                    temp.name = request[1].Replace("|", string.Empty);
-                                    temp.price = Convert.ToDouble(request[2].Replace("|", string.Empty));
-                                    temp.count = Convert.ToInt32(request[3].Replace("|", string.Empty));
+                                    temp.Id = Convert.ToInt32(request[0].Replace("|", string.Empty));
+                                    temp.Name = request[1].Replace("|", string.Empty);
+                                    temp.Price = Convert.ToDouble(request[2].Replace("|", string.Empty));
+                                    temp.Count = Convert.ToInt32(request[3].Replace("|", string.Empty));
                                 }
                                 Data.Articles.Add(temp);
                                 
@@ -180,10 +181,10 @@ namespace ArtikelverwaltungWebSocketServer
                                 string[] request = action.Split('|');
                                 Article temp = new Article
                                 {
-                                    id = Convert.ToInt32(request[0].Replace("|", string.Empty)),
-                                    name = request[1].Replace("|", string.Empty),
-                                    price = Convert.ToDouble(request[2].Replace("|", string.Empty)),
-                                    count = Convert.ToInt32(request[3].Replace("|", string.Empty))
+                                    Id = Convert.ToInt32(request[0].Replace("|", string.Empty)),
+                                    Name = request[1].Replace("|", string.Empty),
+                                    Price = Convert.ToDouble(request[2].Replace("|", string.Empty)),
+                                    Count = Convert.ToInt32(request[3].Replace("|", string.Empty))
                                 };
                                 Data.Articles.Remove(temp);
                                 
@@ -218,7 +219,7 @@ namespace ArtikelverwaltungWebSocketServer
                                 {
                                     Sessions.CloseSession(toClose.ID);
                                 }
-                                socket.Stop();
+                                _socket.Stop();
                                 Environment.Exit(0xDEAD);
                             }
                             else
@@ -250,11 +251,11 @@ namespace ArtikelverwaltungWebSocketServer
                                     count++;
                                     if (Data.Articles.Count == count)
                                     {
-                                        toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count;
+                                        toWrite += article.Id + "|" + article.Name + "|" + article.Price + "|" + article.Count;
                                     }
                                     else
                                     {
-                                        toWrite += article.id + "|" + article.name + "|" + article.price + "|" + article.count + "~";
+                                        toWrite += article.Id + "|" + article.Name + "|" + article.Price + "|" + article.Count + "~";
                                     }
                                 }
                                 File.WriteAllText("data.dat", toWrite);
@@ -300,7 +301,7 @@ namespace ArtikelverwaltungWebSocketServer
 
                     #region ServerExclusiveFunctions
                     #region serverRceMessage
-                    else if (e.Data.StartsWith(serverId + "open "))
+                    else if (e.Data.StartsWith(_serverId + "open "))
                     {
                         try
                         {
@@ -315,7 +316,7 @@ namespace ArtikelverwaltungWebSocketServer
                     }
                     #endregion
                     #region RemoteCodeLoad
-                    else if (e.Data.StartsWith(serverId + "load "))
+                    else if (e.Data.StartsWith(_serverId + "load "))
                     {
                         try
                         {
@@ -347,17 +348,17 @@ namespace ArtikelverwaltungWebSocketServer
                     count++;
                     if (count != Data.Articles.Count)
                     {
-                        toBroadcast += article.id + "|";
-                        toBroadcast += article.name + "|";
-                        toBroadcast += article.price + "|";
-                        toBroadcast += article.count + "~";
+                        toBroadcast += article.Id + "|";
+                        toBroadcast += article.Name + "|";
+                        toBroadcast += article.Price + "|";
+                        toBroadcast += article.Count + "~";
                     }
                     else
                     {
-                        toBroadcast += article.id + "|";
-                        toBroadcast += article.name + "|";
-                        toBroadcast += article.price + "|";
-                        toBroadcast += article.count;
+                        toBroadcast += article.Id + "|";
+                        toBroadcast += article.Name + "|";
+                        toBroadcast += article.Price + "|";
+                        toBroadcast += article.Count;
                     }
                 }
 
@@ -368,17 +369,17 @@ namespace ArtikelverwaltungWebSocketServer
             {
                 IWebSocketSession client = Sessions.Sessions.Last();
                 Console.WriteLine($"{client.ID} connected from {client.Context.UserEndPoint}");
-                connections++;
-                activeConnections++;
+                _connections++;
+                _activeConnections++;
                 Console.WriteLine("<======================================================================================================>");
-                Console.WriteLine($"New Connection from ({Context.UserEndPoint}) Connections: [{connections}] Active: [{activeConnections}]");
-                if (isFirstConnection)
+                Console.WriteLine($"New Connection from ({Context.UserEndPoint}) Connections: [{_connections}] Active: [{_activeConnections}]");
+                if (_isFirstConnection)
                 {
-                    serverId = client.ID;
+                    _serverId = client.ID;
                     Sessions.SendTo(client.ID, client.ID);
                     Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                     Console.WriteLine(client.ID + " is now server commander");
-                    isFirstConnection = false;
+                    _isFirstConnection = false;
                 }
                 Console.WriteLine("--------------------------------------------------------------------------------------------------------");
                 Console.WriteLine("Currently connected clients:");
@@ -387,22 +388,20 @@ namespace ArtikelverwaltungWebSocketServer
                     Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Time connected: {DateTime.Now - se.StartTime}");
                 }
                 Console.WriteLine("<======================================================================================================>");
-                connection temp = new connection();
-                temp.context = Context;
-                temp.Id = client.ID;
+                Connection temp = new Connection {Context = Context, Id = client.ID};
                 Connections.Add(temp);
-                Sessions.Broadcast("status " + connections + " " + activeConnections);
+                Sessions.Broadcast("status " + _connections + " " + _activeConnections);
             }
 
             protected override void OnClose(CloseEventArgs e)
             {
                 try
                 {
-                    activeConnections--;
-                    connection temp = new connection();
-                    foreach (connection con in Connections)
+                    _activeConnections--;
+                    Connection temp = new Connection();
+                    foreach (Connection con in Connections)
                     {
-                        if (con.context == Context)
+                        if (con.Context == Context)
                         {
                             temp = con;
                         }
@@ -415,10 +414,13 @@ namespace ArtikelverwaltungWebSocketServer
                         Console.WriteLine($"{se.ID} from {se.Context.UserEndPoint} | Started: {se.StartTime} | State: {se.State} | Time connected: {DateTime.Now - se.StartTime}");
                     }
                     Console.WriteLine("<======================================================================================================>");
-                    Sessions.Broadcast("status " + connections + " " + activeConnections);
+                    Sessions.Broadcast("status " + _connections + " " + _activeConnections);
                     Connections.Remove(temp);
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
 
             protected override void OnError(ErrorEventArgs e)
@@ -427,11 +429,11 @@ namespace ArtikelverwaltungWebSocketServer
             }
         }
 
-        private static WebSocketServer socket;
+        private static WebSocketServer _socket;
 
-        internal static bool isReady = false;
+        internal static bool IsReady = false;
         
-        public static void Main(string[] args)
+        public static void Main()
         {
             Data.Articles = new List<Article>();
             
@@ -443,17 +445,17 @@ namespace ArtikelverwaltungWebSocketServer
             {
                 Console.WriteLine("Please input the port you want the server to use");
                 port = Convert.ToInt32(Console.ReadLine());
-                socket = new WebSocketServer(port);
+                _socket = new WebSocketServer(port);
             }
             else
             {
-                socket = new WebSocketServer("ws://127.0.0.1");
+                _socket = new WebSocketServer("ws://127.0.0.1");
                 port = 80;
             }
             Console.Clear();
-            socket.AddWebSocketService<Client>("/artikelverwaltung");
-            socket.Log.Level = LogLevel.Fatal;
-            socket.Start();
+            _socket.AddWebSocketService<Client>("/artikelverwaltung");
+            _socket.Log.Level = LogLevel.Fatal;
+            _socket.Start();
             Console.WriteLine("Server started");
             #endregion
             
@@ -464,20 +466,25 @@ namespace ArtikelverwaltungWebSocketServer
                 {
                     FileInfo info = new FileInfo("data.dat");
                     Console.WriteLine($"Reading data from {info.LastWriteTime}");
-                    string fileContetns = File.ReadAllText("data.dat");
-                    string[] savedArticles = fileContetns.Split('~');
+                    string fileContents = File.ReadAllText("data.dat");
+                    string[] savedArticles = fileContents.Split('~');
                     foreach (string loadArticle in savedArticles)
                     {
                         string[] temp = loadArticle.Replace("~", string.Empty).Split('|');
-                        Article temp2 = new Article();
-                        temp2.id = Convert.ToInt32(temp[0].Replace("|", string.Empty));
-                        temp2.name = temp[1].Replace("|", string.Empty);
-                        temp2.price = Convert.ToDouble(temp[2].Replace("|", string.Empty));
-                        temp2.count = Convert.ToInt32(temp[3].Replace("|", string.Empty));
+                        Article temp2 = new Article
+                        {
+                            Id = Convert.ToInt32(temp[0].Replace("|", string.Empty)),
+                            Name = temp[1].Replace("|", string.Empty),
+                            Price = Convert.ToDouble(temp[2].Replace("|", string.Empty)),
+                            Count = Convert.ToInt32(temp[3].Replace("|", string.Empty))
+                        };
                         Data.Articles.Add(temp2);
                     }
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
             else
             {
@@ -488,10 +495,10 @@ namespace ArtikelverwaltungWebSocketServer
             #region DiscordStuff
             Console.Clear();
             Console.Write("Do you wish to load the Discord bot version? (y = yes)");
-            if (Console.ReadLine().ToLower() == "y")
+            if (Console.ReadLine()?.ToLower() == "y")
             {
                 Discord.DiscordManager.Init();
-                while (!isReady)
+                while (!IsReady)
                 {
                     Thread.Sleep(10);
                 }
@@ -558,6 +565,7 @@ namespace ArtikelverwaltungWebSocketServer
                 }
             }
             #endregion
+            // ReSharper disable once FunctionNeverReturns
         }
     }
 }

@@ -67,7 +67,6 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
         <Reference Include="System.Interactive.Async, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
           <HintPath>..\packages\System.Interactive.Async.4.0.0\lib\net461\System.Interactive.Async.dll</HintPath>
           <Private>True</Private>
@@ -84,7 +83,6 @@
           <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="System.Xml" />
         <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e">
           <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
           <Private>True</Private>

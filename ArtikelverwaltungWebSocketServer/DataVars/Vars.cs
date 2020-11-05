@@ -1,6 +1,6 @@
-﻿namespace ArtikelverwaltungWebSocketServer
+﻿namespace ArtikelverwaltungWebSocketServer.DataVars
 {
-    public class Vars
+    public static class Vars
     {
         public static string Currency { get; set; }
         

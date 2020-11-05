@@ -1,4 +1,4 @@
-﻿namespace ArtikelverwaltungWebSocketServer.Discord
+﻿namespace ArtikelverwaltungWebSocketServer.Discord.Env
 {
     public struct LogChannel
     {

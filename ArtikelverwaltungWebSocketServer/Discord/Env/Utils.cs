@@ -2,14 +2,9 @@
 
 namespace ArtikelverwaltungWebSocketServer.Discord.Env
 {
-    public class Utils
+    public static class Utils
     {
         static int tableWidth = 90;
-
-        public static string WriteLine(object obj)
-        {
-            return (string) obj + Environment.NewLine;
-        }
 
         public static string PrintLine()
         {
